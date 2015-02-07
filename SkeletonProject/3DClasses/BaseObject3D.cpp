@@ -1,14 +1,18 @@
 //=============================================================================
 //                              BaseObject3D
 //
-// Writen by Adi Bar-Lev, 2013
+// Written by Adi Bar-Lev, 2013
 // EGP 300-101, Graphics Programming II  - skeleton project
 //
-// Base class that can handle 3D rendergin via Vertex and Index buffer
+// Base class that can handle 3D rendering via Vertex and Index buffer
 //=============================================================================
 #include "BaseObject3D.h"
 #include "Vertex.h"
 #include "../GfxStats.h"
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 //=============================================================================
 BaseObject3D::BaseObject3D(void)
 {
@@ -26,19 +30,30 @@ BaseObject3D::~BaseObject3D(void)
 }
 
 //-----------------------------------------------------------------------------
-void BaseObject3D::Create( IDirect3DDevice9* gd3dDevice )
+void BaseObject3D::Create( IDirect3DDevice9* gd3dDevice, PrimitiveType createPrimitive )
 {
+	switch (createPrimitive)
+	{
+	case CUBE:
     buildDemoCubeVertexBuffer( gd3dDevice );
     buildDemoCubeIndexBuffer( gd3dDevice );
+		break;
+	case CYLINDER:
+		buildDemoCylinderVertexBuffer(gd3dDevice);
+		buildDemoCylinderIndexBuffer(gd3dDevice);
+		break;
+	default:
+		break;
+	}
 }
 
 //-----------------------------------------------------------------------------
 void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
     D3DXMATRIX& view, D3DXMATRIX& projection )
 {
-    // Update the statistics singlton class
-    GfxStats::GetInstance()->addVertices(8);
-    GfxStats::GetInstance()->addTriangles(12);
+    // Update the statistics singleton class
+	GfxStats::GetInstance()->addVertices(getVertexCount());
+	GfxStats::GetInstance()->addTriangles(getTriangleCount());
 
     // Set the buffers and format
     HR(gd3dDevice->SetStreamSource(0, m_VertexBuffer, 0, sizeof(VertexPos)));
@@ -57,6 +72,8 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
 //-----------------------------------------------------------------------------
 void BaseObject3D::buildDemoCubeVertexBuffer( IDirect3DDevice9* gd3dDevice )
 {
+	mNumVertices = 8;
+
 	// Obtain a pointer to a new vertex buffer.
 	HR(gd3dDevice->CreateVertexBuffer(8 * sizeof(VertexPos), D3DUSAGE_WRITEONLY,
 		0, D3DPOOL_MANAGED, &m_VertexBuffer, 0));
@@ -82,6 +99,8 @@ void BaseObject3D::buildDemoCubeVertexBuffer( IDirect3DDevice9* gd3dDevice )
 //-----------------------------------------------------------------------------
 void BaseObject3D::buildDemoCubeIndexBuffer( IDirect3DDevice9* gd3dDevice )
 {
+	mNumTriangles = 36 / 3;
+
 	// Obtain a pointer to a new index buffer.
 	HR(gd3dDevice->CreateIndexBuffer(36 * sizeof(WORD), D3DUSAGE_WRITEONLY,
 		D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_IndexBuffer, 0));
@@ -119,4 +138,94 @@ void BaseObject3D::buildDemoCubeIndexBuffer( IDirect3DDevice9* gd3dDevice )
 
 	HR(m_IndexBuffer->Unlock());
 }
+
+void BaseObject3D::buildDemoCylinderVertexBuffer(IDirect3DDevice9* gd3dDevice)
+{
+	mNumVertices = (mCylinder_NumSections + 1 ) *2; //2 vertices for each section plus a vertex in the center on the top and bottom.
+
+	// Obtain a pointer to a new vertex buffer.
+	HR(gd3dDevice->CreateVertexBuffer(mNumVertices * sizeof(VertexPos), D3DUSAGE_WRITEONLY,
+		0, D3DPOOL_MANAGED, &m_VertexBuffer, 0));
+
+	// Now lock it to obtain a pointer to its internal data, and write the
+	// cylinder's vertex data.
+	VertexPos* v = 0;
+	HR(m_VertexBuffer->Lock(0, 0, (void**)&v, 0));
+
+
+	float degreesPerSegment = 360.0f / mCylinder_NumSections;
+	float radsPerSegment = (float)(degreesPerSegment * M_PI / 180.0f);
+	float theta, x, z;
+	for (int i = 0; i < mCylinder_NumSections; i++)
+	{
+		theta = i*radsPerSegment;
+		x = cos(theta);
+		z = sin(theta);
+		v[i] = VertexPos(x, mCylinder_Height*0.5f, z);
+		v[i + 1] = VertexPos(x, mCylinder_Height*-0.5f, z);
+	}
+
+	v[mNumVertices-2] = VertexPos(0, mCylinder_Height*0.5f, 0);//top center vertex
+	v[mNumVertices-1] = VertexPos(0, mCylinder_Height*-0.5f, 0);//bottom center vertex
+	
+
+	HR(m_VertexBuffer->Unlock());
+}
+void BaseObject3D::buildDemoCylinderIndexBuffer(IDirect3DDevice9* gd3dDevice)
+{
+	mNumTriangles = mCylinder_NumSections * 4;//4 triangles per section
+
+	// Obtain a pointer to a new index buffer.
+	//number of triangles times 3 to get number of indices in total
+	HR(gd3dDevice->CreateIndexBuffer(mNumTriangles*3 * sizeof(WORD), D3DUSAGE_WRITEONLY,
+		D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_IndexBuffer, 0));
+
+	// Now lock it to obtain a pointer to its internal data, and write the
+	// cylinder's index data.
+
+	WORD* k = 0;
+
+	HR(m_IndexBuffer->Lock(0, 0, (void**)&k, 0));
+	
+
+	//for (int i = 0; i < mNumTriangles*3; i++) k[i] = 0;//initialize all values with 0
+	/*
+	for (int i = 0; i < mNumVertices; i++)//connect every vertex to the top and bottom
+	{
+		int triIndex = i * 3;// *2;//3 indices per triangle, doing 2 triangles
+		k[triIndex] = i;
+		k[triIndex + 1] = mNumVertices - 2;
+		k[triIndex + 2] = mNumVertices - 1;
+	}
+	*/
+
+	//*
+	int triIndex;
+	int vertIndex;
+	//TODO: CONSIDER: break vertex generation into 2 parts, top and bottom, this could make index generation easier by having i and i+mCylinder_NumSections instead of even/odd indexes
+	for (int i = 0; i < mCylinder_NumSections; i++)
+	{
+		triIndex = i * 3;// *2;//3 indices per triangle, doing 2 triangles
+		vertIndex = i *2;
+
+		//Top, connect every even vertex to the second to last vertex
+		k[triIndex + 0] = mNumVertices - 2;//center of top
+		k[triIndex + 1] = vertIndex;//current section index
+		k[triIndex + 2] = vertIndex +2;//next section index
+
+		/*
+		//Bottom, connect every odd vertex to the last vertex
+		k[triIndex + 3] = mNumVertices - 1;//center of bottom
+		k[triIndex + 4] = vertIndex +1;
+		k[triIndex + 5] = vertIndex +1 +2;
+		//*/
+	}
+	//*/
+
+	//Sections
+
+
+	HR(m_IndexBuffer->Unlock());
+}
+
 //=============================================================================

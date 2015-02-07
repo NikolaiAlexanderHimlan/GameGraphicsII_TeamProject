@@ -52,9 +52,12 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraRotationY = 1.2 * D3DX_PI;
 	mCameraHeight    = 5.0f;
 
-    // repleace or add to the following object creation
+    // replace or add to the following object creation
     m_Objects.push_back( new BaseObject3D );
     m_Objects[0]->Create( gd3dDevice );
+
+	//m_Objects.push_back( new BaseObject3D );
+	//m_Objects[0]->Create(gd3dDevice, BaseObject3D::CYLINDER);
 
 	onResetDevice();
 
@@ -133,7 +136,7 @@ void SkeletonClass::drawScene()
 
 	HR(gd3dDevice->BeginScene());
 
-    // Set render statws for the entire scene here:
+    // Set render states for the entire scene here:
 //	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
 	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 

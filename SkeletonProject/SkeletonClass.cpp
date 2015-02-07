@@ -53,11 +53,27 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraHeight    = 5.0f;
 
     // replace or add to the following object creation
-    m_Objects.push_back( new BaseObject3D );
-    m_Objects[0]->Create( gd3dDevice );
+	BaseObject3D* addObject;
 
-	//m_Objects.push_back( new BaseObject3D );
-	//m_Objects[0]->Create(gd3dDevice, BaseObject3D::CYLINDER);
+	addObject = new BaseObject3D;
+	addObject->Create( gd3dDevice );
+	addObject->setWorldPosition(Vector3f(0.0f, 0.0f, 0.0f));
+	m_Objects.push_back( addObject );
+
+	addObject = new BaseObject3D;
+	addObject->Create(gd3dDevice, BaseObject3D::CONE);
+	addObject->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
+	m_Objects.push_back(addObject);
+
+	addObject = new BaseObject3D;
+	addObject->Create(gd3dDevice, BaseObject3D::CYLINDER);
+	addObject->setWorldPosition(Vector3f(0.0f, -5.0f, -5.0f));
+	m_Objects.push_back(addObject);
+
+	addObject = new BaseObject3D;
+	addObject->Create(gd3dDevice, BaseObject3D::SPHERE);
+	addObject->setWorldPosition(Vector3f(5.0f, 5.0f, 5.0f));
+	m_Objects.push_back(addObject);
 
 	onResetDevice();
 

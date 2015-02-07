@@ -30,10 +30,17 @@ BaseObject3D::~BaseObject3D(void)
 }
 
 //-----------------------------------------------------------------------------
+void BaseObject3D::setWorldPosition(const Vector3f& newPosition)
+{
+	m_World = *D3DXMatrixTranslation(&m_World, newPosition.x, newPosition.y, newPosition.z);
+}
+
+//-----------------------------------------------------------------------------
 void BaseObject3D::Create( IDirect3DDevice9* gd3dDevice, PrimitiveType createPrimitive )
 {
 	switch (createPrimitive)
 	{
+	default://default to cube if no other
 	case CUBE:
     buildDemoCubeVertexBuffer( gd3dDevice );
     buildDemoCubeIndexBuffer( gd3dDevice );
@@ -41,8 +48,6 @@ void BaseObject3D::Create( IDirect3DDevice9* gd3dDevice, PrimitiveType createPri
 	case CYLINDER:
 		buildDemoCylinderVertexBuffer(gd3dDevice);
 		buildDemoCylinderIndexBuffer(gd3dDevice);
-		break;
-	default:
 		break;
 	}
 }
@@ -66,7 +71,7 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
 	HR(gd3dDevice->SetTransform(D3DTS_PROJECTION, &projection));	
     
     // Send to render
-    HR(gd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12));
+    HR(gd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, getVertexCount(), 0, getTriangleCount()));
 }
 
 //-----------------------------------------------------------------------------
@@ -139,9 +144,10 @@ void BaseObject3D::buildDemoCubeIndexBuffer( IDirect3DDevice9* gd3dDevice )
 	HR(m_IndexBuffer->Unlock());
 }
 
+//-----------------------------------------------------------------------------
 void BaseObject3D::buildDemoCylinderVertexBuffer(IDirect3DDevice9* gd3dDevice)
 {
-	mNumVertices = (mCylinder_NumSections + 1 ) *2; //2 vertices for each section plus a vertex in the center on the top and bottom.
+	mNumVertices = (mPrimitive_NumSections + 1 ) *2; //2 vertices for each section plus a vertex in the center on the top and bottom.
 
 	// Obtain a pointer to a new vertex buffer.
 	HR(gd3dDevice->CreateVertexBuffer(mNumVertices * sizeof(VertexPos), D3DUSAGE_WRITEONLY,
@@ -153,27 +159,38 @@ void BaseObject3D::buildDemoCylinderVertexBuffer(IDirect3DDevice9* gd3dDevice)
 	HR(m_VertexBuffer->Lock(0, 0, (void**)&v, 0));
 
 
-	float degreesPerSegment = 360.0f / mCylinder_NumSections;
+	//put top and bottom center vertex at the end
+	v[mNumVertices - 2] = VertexPos(0, mPrimitive_Height*-0.5f, 0);//bottom center vertex
+	v[mNumVertices - 1] = VertexPos(0, mPrimitive_Height*0.5f, 0);//top center vertex
+
+	//generate section vertices
+	float degreesPerSegment = 360.0f / mPrimitive_NumSections;
 	float radsPerSegment = (float)(degreesPerSegment * M_PI / 180.0f);
 	float theta, x, z;
-	for (int i = 0; i < mCylinder_NumSections; i++)
+	//generate bottom vertices
+	for (int i = 0; i < mPrimitive_NumSections; i++)
 	{
 		theta = i*radsPerSegment;
 		x = cos(theta);
 		z = sin(theta);
-		v[i] = VertexPos(x, mCylinder_Height*0.5f, z);
-		v[i + 1] = VertexPos(x, mCylinder_Height*-0.5f, z);
+		v[i] = VertexPos(x, mPrimitive_Height*-0.5f, z);
 	}
-
-	v[mNumVertices-2] = VertexPos(0, mCylinder_Height*0.5f, 0);//top center vertex
-	v[mNumVertices-1] = VertexPos(0, mCylinder_Height*-0.5f, 0);//bottom center vertex
+	//generate top vertices
+	int topVertexStart = mPrimitive_NumSections;
+	for (int i = 0; i < mPrimitive_NumSections; i++)
+	{
+		theta = i*radsPerSegment;
+		x = cos(theta);
+		z = sin(theta);
+		v[i + topVertexStart] = VertexPos(x, mPrimitive_Height*0.5f, z);
+	}
 	
 
 	HR(m_VertexBuffer->Unlock());
 }
 void BaseObject3D::buildDemoCylinderIndexBuffer(IDirect3DDevice9* gd3dDevice)
 {
-	mNumTriangles = mCylinder_NumSections * 4;//4 triangles per section
+	mNumTriangles = mPrimitive_NumSections * 4;//4 triangles per section
 
 	// Obtain a pointer to a new index buffer.
 	//number of triangles times 3 to get number of indices in total
@@ -202,27 +219,73 @@ void BaseObject3D::buildDemoCylinderIndexBuffer(IDirect3DDevice9* gd3dDevice)
 	//*
 	int triIndex;
 	int vertIndex;
-	//TODO: CONSIDER: break vertex generation into 2 parts, top and bottom, this could make index generation easier by having i and i+mCylinder_NumSections instead of even/odd indexes
-	for (int i = 0; i < mCylinder_NumSections; i++)
+	int topVertexStart = mPrimitive_NumSections;
+	int topTriStart = topVertexStart * 3;
+	//TODO: do last section manually (due to wrap around)
+	//generate top/bottom indices
+	for (int i = 0; i < mPrimitive_NumSections-1; i++)
 	{
-		triIndex = i * 3;// *2;//3 indices per triangle, doing 2 triangles
-		vertIndex = i *2;
+		triIndex = i * 3;//3 indices per triangle
+		vertIndex = i;
 
-		//Top, connect every even vertex to the second to last vertex
+		//Top
 		k[triIndex + 0] = mNumVertices - 2;//center of top
 		k[triIndex + 1] = vertIndex;//current section index
-		k[triIndex + 2] = vertIndex +2;//next section index
+		k[triIndex + 2] = vertIndex +1;//next section index
 
-		/*
-		//Bottom, connect every odd vertex to the last vertex
-		k[triIndex + 3] = mNumVertices - 1;//center of bottom
-		k[triIndex + 4] = vertIndex +1;
-		k[triIndex + 5] = vertIndex +1 +2;
-		//*/
+		//Bottom
+		k[triIndex + 0 + topTriStart] = mNumVertices - 1;//center of bottom
+		k[triIndex + 2 + topTriStart] = vertIndex +topVertexStart;
+		k[triIndex + 1 + topTriStart] = vertIndex +1 +topVertexStart;
 	}
-	//*/
+	//*wrap top/bottom indices
+	{
+		vertIndex = mPrimitive_NumSections - 1;
+		triIndex = vertIndex * 3;// *2;//3 indices per triangle, doing 2 triangles
 
-	//Sections
+		//Top
+		k[triIndex + 0] = mNumVertices - 2;//center of top
+		k[triIndex + 1] = vertIndex;//current section index
+		k[triIndex + 2] = 0;//first section index
+
+		//Bottom
+		k[triIndex + 0 + topTriStart] = mNumVertices - 1;//center of bottom
+		k[triIndex + 2 + topTriStart] = vertIndex + topVertexStart;
+		k[triIndex + 1 + topTriStart] = 0 + topVertexStart;//first section index
+	}//*/
+	//generate sides indices
+	int sideTriStart = topTriStart * 2;//skip the indices from the top/bottom
+	for (int i = 0; i < mPrimitive_NumSections - 1; i++)
+	{
+		triIndex = i * 3 + sideTriStart;//3 indices per triangle, doing 2 triangles
+		vertIndex = i;
+
+		//Top
+		k[triIndex + 0] = vertIndex + topVertexStart;//opposite index
+		k[triIndex + 2] = vertIndex;//current section index
+		k[triIndex + 1] = vertIndex + 1;//next section index
+
+		//Bottom
+		k[triIndex + 0 + topTriStart] = vertIndex + 1;//opposite index
+		k[triIndex + 1 + topTriStart] = vertIndex + topVertexStart;//current section index
+		k[triIndex + 2 + topTriStart] = vertIndex + 1 + topVertexStart;//next section index
+	}
+	//*wrap side indices
+	{
+		vertIndex = mPrimitive_NumSections - 1;
+		triIndex = vertIndex * 3 + sideTriStart;//3 indices per triangle, doing 2 triangles
+
+		//Top
+		k[triIndex + 0] = vertIndex + topVertexStart;//opposite index
+		k[triIndex + 2] = vertIndex;//current section index
+		k[triIndex + 1] = 0;//first section index
+
+		//Bottom
+		k[triIndex + 0 + topTriStart] = 0;//opposite index
+		k[triIndex + 1 + topTriStart] = vertIndex + topVertexStart;//current section index
+		k[triIndex + 2 + topTriStart] = 0 + topVertexStart;//first section index
+	}//*/
+	//*/
 
 
 	HR(m_IndexBuffer->Unlock());

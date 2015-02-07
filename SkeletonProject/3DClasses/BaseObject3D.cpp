@@ -53,6 +53,9 @@ void BaseObject3D::Create( IDirect3DDevice9* gd3dDevice, PrimitiveType createPri
 		buildDemoCylinderVertexBuffer(gd3dDevice);
 		buildDemoCylinderIndexBuffer(gd3dDevice);
 		break;
+	case SPHERE:
+		buildDemoSphereVertexBuffer( gd3dDevice );
+		buildDemoSphereIndexBuffer( gd3dDevice );
 	}
 }
 
@@ -414,4 +417,13 @@ void BaseObject3D::buildDemoCylinderIndexBuffer(IDirect3DDevice9* gd3dDevice)
 	HR(m_IndexBuffer->Unlock());
 }
 
+//-----------------------------------------------------------------------------
+void BaseObject3D::buildDemoSphereVertexBuffer(IDirect3DDevice9* gd3dDevice)
+{
+	//TODO: generate sphere verts
+}
+void BaseObject3D::buildDemoSphereIndexBuffer(IDirect3DDevice9* gd3dDevice)
+{
+	//TODO: generate sphere indices
+}
 //=============================================================================

@@ -48,6 +48,8 @@ protected:
 	virtual void buildDemoCylinderVertexBuffer( IDirect3DDevice9* gd3dDevice );
 	virtual void buildDemoCylinderIndexBuffer(IDirect3DDevice9* gd3dDevice);
 
+	virtual void buildDemoSphereVertexBuffer( IDirect3DDevice9* gd3dDevice );
+	virtual void buildDemoSphereIndexBuffer( IDirect3DDevice9* gd3dDevice );
 public:
 	enum PrimitiveType
 	{

@@ -45,6 +45,10 @@ void BaseObject3D::Create( IDirect3DDevice9* gd3dDevice, PrimitiveType createPri
     buildDemoCubeVertexBuffer( gd3dDevice );
     buildDemoCubeIndexBuffer( gd3dDevice );
 		break;
+	case CONE:
+		buildDemoConeVertexBuffer( gd3dDevice );
+		buildDemoConeIndexBuffer( gd3dDevice );
+		break;
 	case CYLINDER:
 		buildDemoCylinderVertexBuffer(gd3dDevice);
 		buildDemoCylinderIndexBuffer(gd3dDevice);
@@ -140,6 +144,125 @@ void BaseObject3D::buildDemoCubeIndexBuffer( IDirect3DDevice9* gd3dDevice )
 	// Bottom face.
 	k[30] = 4; k[31] = 0; k[32] = 3;
 	k[33] = 4; k[34] = 3; k[35] = 7;
+
+	HR(m_IndexBuffer->Unlock());
+}
+
+//-----------------------------------------------------------------------------
+void BaseObject3D::buildDemoConeVertexBuffer(IDirect3DDevice9* gd3dDevice)
+{
+	mNumVertices = mPrimitive_NumSections + 2; //1 vertex for each section plus a vertex in the center on the top and bottom.
+
+	// Obtain a pointer to a new vertex buffer.
+	HR(gd3dDevice->CreateVertexBuffer(mNumVertices * sizeof(VertexPos), D3DUSAGE_WRITEONLY,
+		0, D3DPOOL_MANAGED, &m_VertexBuffer, 0));
+
+	// Now lock it to obtain a pointer to its internal data, and write the
+	// cylinder's vertex data.
+	VertexPos* v = 0;
+	HR(m_VertexBuffer->Lock(0, 0, (void**)&v, 0));
+
+	//put top and bottom center vertex at the end
+	v[mNumVertices - 2] = VertexPos(0, mPrimitive_Height*-0.5f, 0);//bottom center vertex
+	v[mNumVertices - 1] = VertexPos(0, mPrimitive_Height*0.5f, 0);//top center vertex
+
+	float degreesPerSegment = 360.0f / mPrimitive_NumSections;
+	float radsPerSegment = (float)(degreesPerSegment * M_PI / 180.0f);
+	float theta, x, z;
+	for (int i = 0; i < mPrimitive_NumSections; i++)
+	{
+		theta = i*radsPerSegment;
+		x = cos(theta);
+		z = sin(theta);
+		v[i] = VertexPos(x, mPrimitive_Height*-0.5f, z);
+	}
+
+
+	HR(m_VertexBuffer->Unlock());
+}
+void BaseObject3D::buildDemoConeIndexBuffer(IDirect3DDevice9* gd3dDevice)
+{
+	mNumTriangles = mPrimitive_NumSections * 2;//2 triangles per section
+
+	// Obtain a pointer to a new index buffer.
+	//number of triangles times 3 to get number of indices in total
+	HR(gd3dDevice->CreateIndexBuffer(mNumTriangles * 3 * sizeof(WORD), D3DUSAGE_WRITEONLY,
+		D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_IndexBuffer, 0));
+
+	// Now lock it to obtain a pointer to its internal data, and write the
+	// cylinder's index data.
+
+	WORD* k = 0;
+
+	HR(m_IndexBuffer->Lock(0, 0, (void**)&k, 0));
+
+
+	/*connecting every vertex to 0
+	int vertIndex;
+	for (int i = 0; i < mNumVertices; i++)
+	{
+		vertIndex = i * 3;//give each vertex a triangle
+		k[vertIndex] = i;
+		k[vertIndex + 1] = 0;
+		k[vertIndex + 2] = 0;
+	}
+	//*/
+
+	/*Hard-coded indices (4 sections)
+	// Section 1 face.
+	k[0] = 0; k[1] = 1; k[2] = 4;
+	// Section 1 bottom.
+	k[3] = 0; k[4] = 1; k[5] = 5;
+
+	// Section 2 face.
+	k[6] = 1; k[7] = 2; k[8] = 4;
+	// Section 2 bottom.
+	k[9] = 1; k[10] = 2; k[11] = 5;
+
+	// Section 3 face.
+	k[12] = 2; k[13] = 3; k[14] = 4;
+	// Section 3 bottom.
+	k[15] = 2; k[16] = 3; k[17] = 5;
+
+	// Section 4 face.
+	k[18] = 3; k[19] = 0; k[20] = 4;
+	// Section 4 bottom.
+	k[21] = 3; k[22] = 0; k[23] = 5;
+	//*/
+
+	//*
+	int triIndex;
+	//do last section manually (due to wrap around)
+	for (int i = 0; i < mPrimitive_NumSections-1; i++)
+	{
+		triIndex = i * 3 * 2;//3 indices per triangle, doing 2 triangles
+
+		//bottom triangles
+		k[triIndex + 0] = i;//vertex i
+		k[triIndex + 1] = i + 1;//connect to next vertex section
+		k[triIndex + 2] = mNumVertices - 2;//connect to top
+
+		//side triangles
+		k[triIndex + 4] = i;//vertex i
+		k[triIndex + 3] = i + 1;//connect to next vertex section
+		k[triIndex + 5] = mNumVertices - 1;//connect to bottom
+	}
+
+	//last section wrap around
+	int lastIndex = mPrimitive_NumSections - 1;
+	triIndex = lastIndex * 3 * 2;
+
+	//bottom triangles
+	k[triIndex + 0] = lastIndex;//vertex section vertex
+	k[triIndex + 1] = 0;//wrap around back to first index
+	k[triIndex + 2] = mNumVertices - 2;//connect to top
+
+	//side triangles
+	k[triIndex + 4] = lastIndex;//vertex i
+	k[triIndex + 3] = 0;//wrap around back to first index
+	k[triIndex + 5] = mNumVertices - 1;//connect to bottom
+	//*/
+
 
 	HR(m_IndexBuffer->Unlock());
 }

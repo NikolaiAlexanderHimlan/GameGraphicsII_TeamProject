@@ -42,6 +42,9 @@ protected:
     virtual void buildDemoCubeVertexBuffer( IDirect3DDevice9* gd3dDevice );
     virtual void buildDemoCubeIndexBuffer( IDirect3DDevice9* gd3dDevice );
 
+	virtual void buildDemoConeVertexBuffer( IDirect3DDevice9* gd3dDevice );
+	virtual void buildDemoConeIndexBuffer( IDirect3DDevice9* gd3dDevice );
+
 	virtual void buildDemoCylinderVertexBuffer( IDirect3DDevice9* gd3dDevice );
 	virtual void buildDemoCylinderIndexBuffer(IDirect3DDevice9* gd3dDevice);
 

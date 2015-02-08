@@ -56,6 +56,7 @@ void BaseObject3D::Create( IDirect3DDevice9* gd3dDevice, PrimitiveType createPri
 	case SPHERE:
 		buildDemoSphereVertexBuffer( gd3dDevice );
 		buildDemoSphereIndexBuffer( gd3dDevice );
+		break;
 	}
 }
 
@@ -78,7 +79,15 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
 	HR(gd3dDevice->SetTransform(D3DTS_PROJECTION, &projection));	
     
     // Send to render
-    HR(gd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, getVertexCount(), 0, getTriangleCount()));
+	if (mRenderVerts)
+	{
+		//doesn't work
+		HR(gd3dDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, getVertexCount()));
+	}
+	else
+	{
+		HR(gd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, getVertexCount(), 0, getTriangleCount()));
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -297,8 +306,8 @@ void BaseObject3D::buildDemoCylinderVertexBuffer(IDirect3DDevice9* gd3dDevice)
 	for (int i = 0; i < mPrimitive_NumSections; i++)
 	{
 		theta = i*radsPerSegment;
-		x = cos(theta);
-		z = sin(theta);
+		x = cos(theta) * mPrimitive_Radius;
+		z = sin(theta) * mPrimitive_Radius;
 		v[i] = VertexPos(x, mPrimitive_Height*-0.5f, z);
 	}
 	//generate top vertices
@@ -306,8 +315,8 @@ void BaseObject3D::buildDemoCylinderVertexBuffer(IDirect3DDevice9* gd3dDevice)
 	for (int i = 0; i < mPrimitive_NumSections; i++)
 	{
 		theta = i*radsPerSegment;
-		x = cos(theta);
-		z = sin(theta);
+		x = cos(theta) * mPrimitive_Radius;
+		z = sin(theta) * mPrimitive_Radius;
 		v[i + topVertexStart] = VertexPos(x, mPrimitive_Height*0.5f, z);
 	}
 	
@@ -420,10 +429,132 @@ void BaseObject3D::buildDemoCylinderIndexBuffer(IDirect3DDevice9* gd3dDevice)
 //-----------------------------------------------------------------------------
 void BaseObject3D::buildDemoSphereVertexBuffer(IDirect3DDevice9* gd3dDevice)
 {
-	//TODO: generate sphere verts
+	//mRenderVerts = true;
+	mNumVertices = (int)pow(mPrimitive_NumSections, 2); //8 sections vertically and horizontally
+
+	// Obtain a pointer to a new vertex buffer.
+	HR(gd3dDevice->CreateVertexBuffer(mNumVertices * sizeof(VertexPos), D3DUSAGE_WRITEONLY,
+		0, D3DPOOL_MANAGED, &m_VertexBuffer, 0));
+
+	// Now lock it to obtain a pointer to its internal data, and write the
+	// cylinder's vertex data.
+	VertexPos* v = 0;
+	HR(m_VertexBuffer->Lock(0, 0, (void**)&v, 0));
+
+	/*cylinder verts
+	//put top and bottom center vertex at the end
+	v[mNumVertices - 2] = VertexPos(0, mPrimitive_Height*-0.5f, 0);//bottom center vertex
+	v[mNumVertices - 1] = VertexPos(0, mPrimitive_Height*0.5f, 0);//top center vertex
+
+	//generate section vertices
+	float degreesPerSegment = 360.0f / mPrimitive_NumSections;
+	float radsPerSegment = (float)(degreesPerSegment * M_PI / 180.0f);
+	float theta, theta2, x, y, z;
+	//generate bottom vertices
+	for (int i = 0; i < mPrimitive_NumSections; i++)
+	{
+		theta2 = radsPerSegment;
+		theta = i*radsPerSegment;
+		x = cos(theta) * mPrimitive_Radius;
+		y = cos(theta2) * mPrimitive_Radius;
+		z = sin(theta) * mPrimitive_Radius;
+		v[i] = VertexPos(x, y, z);
+	}
+	//generate top vertices
+	int topVertexStart = mPrimitive_NumSections;
+	for (int i = 0; i < mPrimitive_NumSections; i++)
+	{
+		theta = i*radsPerSegment;
+		x = cos(theta) * mPrimitive_Radius;
+		z = sin(theta) * mPrimitive_Radius;
+		v[i + topVertexStart] = VertexPos(x, mPrimitive_Height*0.5f, z);
+	}//*/
+
+	//*sphere verts based on cylinder verts
+	//put top and bottom center vertex at the end
+	v[mNumVertices - 2] = VertexPos(0, mPrimitive_Height*-0.5f, 0);//bottom center vertex
+	v[mNumVertices - 1] = VertexPos(0, mPrimitive_Height*0.5f, 0);//top center vertex
+
+	//generate section vertices
+	float degreesPerSegment = 360.0f / mPrimitive_NumSections;
+	float radsPerSegment = (float)(degreesPerSegment * M_PI / 180.0f);
+	float radiusPerSection = mPrimitive_Radius / mPrimitive_NumSections;
+	float radiusHorz, radiusVert;
+	float theta, theta2, x, y, z;
+	for (int i = 0; i < mPrimitive_NumSections; i++)//horizontal ring of vertices
+	{
+		int j = 0;//vertical ring of vertices
+		radiusHorz = mPrimitive_Radius - abs(mPrimitive_Radius - (i * radiusPerSection));//radius of the horizontal ring, the value within the absolute should go from largest->smallest->largest, subtracting that value from the max radius inverts it so it goes smallest->largest->smallest
+		radiusVert = mPrimitive_Radius - radiusHorz;//radius of the vertical ring is inversely proportional to the radius of the horizontal ring
+
+		theta = i*radsPerSegment;//horizontal angle
+		theta2 = j*radsPerSegment;//vertical angle
+		
+		x = cos(theta) * radiusHorz;//position on the horizontal ring
+		y = cos(theta2) * radiusVert;//position on the vertical ring
+		z = sin(theta) * radiusHorz;//position on the horizontal and vertical rings
+		
+		v[i] = VertexPos(x, y, z);
+	}
+	//generate top vertices
+	int topVertexStart = mPrimitive_NumSections;
+	for (int i = 0; i < mPrimitive_NumSections; i++)
+	{
+	theta = i*radsPerSegment;
+	x = cos(theta) * mPrimitive_Radius;
+	z = sin(theta) * mPrimitive_Radius;
+	v[i + topVertexStart] = VertexPos(x, mPrimitive_Height*0.5f, z);
+	}//*/
+
+	/*first attempt at sphere
+	float degreesPerSegment = 360.0f / mPrimitive_NumSections;
+	float radsPerSegment = (float)(degreesPerSegment * M_PI / 180.0f);
+	float radSections = mPrimitive_Radius / mPrimitive_NumSections;//amount of the radius covered by each section
+	float thetaX, thetaY, x, y, z, xRadius, yRadius;
+	int horizontalIndex;
+	//TODO: cleanup multiple verts on the ends
+	for (int i = 0; i < mPrimitive_NumSections; i++)
+	{
+		horizontalIndex = i*mPrimitive_NumSections;
+		xRadius = i*radSections;//horizontal radius for the current section
+		thetaX = i*radsPerSegment;//how far around the circle we have gone horizontally
+		for (int j = 0; j < mPrimitive_NumSections; j++)
+		{
+			yRadius = j*radSections;//vertical radius for the current section
+			thetaY = j*radsPerSegment;//how far around the circle we have gone vertically
+			x = cos(thetaX);
+			y = sin(thetaX);
+			v[j + horizontalIndex] = VertexPos(x, y, mPrimitive_Height*-0.5f);
+		}
+	}//*/
+
+
+	HR(m_VertexBuffer->Unlock());
 }
 void BaseObject3D::buildDemoSphereIndexBuffer(IDirect3DDevice9* gd3dDevice)
 {
-	//TODO: generate sphere indices
+	//mNumTriangles = (int)pow(mPrimitive_NumSections, 2); //8 sections vertically and horizontally
+	mNumTriangles = mNumVertices;
+
+	// Obtain a pointer to a new index buffer.
+	//number of triangles times 3 to get number of indices in total
+	HR(gd3dDevice->CreateIndexBuffer(mNumTriangles * 3 * sizeof(WORD), D3DUSAGE_WRITEONLY,
+		D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_IndexBuffer, 0));
+
+	// Now lock it to obtain a pointer to its internal data, and write the
+	// cylinder's index data.
+
+	WORD* k = 0;
+
+	HR(m_IndexBuffer->Lock(0, 0, (void**)&k, 0));
+
+	//*
+	for (int i = 0; i < mNumTriangles*3; i++)
+	{
+		k[i] = i;//HACK: make it visible
+	}//*/
+
+
+	HR(m_VertexBuffer->Unlock());
 }
 //=============================================================================

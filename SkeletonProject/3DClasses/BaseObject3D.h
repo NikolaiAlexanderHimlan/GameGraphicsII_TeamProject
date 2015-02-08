@@ -22,6 +22,8 @@ typedef D3DXVECTOR3 Vector3f;
 class BaseObject3D
 {
 private:
+	bool mRenderVerts = false;
+
 	int mNumTriangles;
 	int mNumVertices;
 

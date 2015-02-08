@@ -430,7 +430,7 @@ void BaseObject3D::buildDemoCylinderIndexBuffer(IDirect3DDevice9* gd3dDevice)
 void BaseObject3D::buildDemoSphereVertexBuffer(IDirect3DDevice9* gd3dDevice)
 {
 	//mRenderVerts = true;
-	mNumVertices = (int)pow(mPrimitive_NumSections, 2); //8 sections vertically and horizontally
+	mNumVertices = mPrimitive_NumSections * mPrimitive_NumSections; //8 sections vertically and horizontally
 
 	// Obtain a pointer to a new vertex buffer.
 	HR(gd3dDevice->CreateVertexBuffer(mNumVertices * sizeof(VertexPos), D3DUSAGE_WRITEONLY,
@@ -470,7 +470,7 @@ void BaseObject3D::buildDemoSphereVertexBuffer(IDirect3DDevice9* gd3dDevice)
 		v[i + topVertexStart] = VertexPos(x, mPrimitive_Height*0.5f, z);
 	}//*/
 
-	//*sphere verts based on cylinder verts
+	/*sphere verts based on cylinder verts
 	//put top and bottom center vertex at the end
 	v[mNumVertices - 2] = VertexPos(0, mPrimitive_Height*-0.5f, 0);//bottom center vertex
 	v[mNumVertices - 1] = VertexPos(0, mPrimitive_Height*0.5f, 0);//top center vertex
@@ -528,13 +528,36 @@ void BaseObject3D::buildDemoSphereVertexBuffer(IDirect3DDevice9* gd3dDevice)
 		}
 	}//*/
 
+	//*OpenGL tested Sphere verts, Solution 1: http://stackoverflow.com/a/13846592
+	float const R = (float)(1. / (float)(mPrimitive_NumSections - 1));
+	float const S = (float)(1. / (float)(mPrimitive_NumSections - 1));
+
+	int vertCounter = 0;
+	float x, y, z;
+	for (int r = 0; r < mPrimitive_NumSections; r++)
+	{
+		for (int s = 0; s < mPrimitive_NumSections; s++)
+		{
+			x = cosf(2 * (float)M_PI * s * S) * sinf((float)M_PI * r * R);
+			y = sinf((float)-M_PI_2 + (float)M_PI * r * R);
+			z = sinf(2 * (float)M_PI * s * S) * sinf((float)M_PI * r * R);
+
+			x *= mPrimitive_Radius;
+			y *= mPrimitive_Radius;
+			z *= mPrimitive_Radius;
+
+			v[vertCounter++] = VertexPos(x, y, z);
+		}
+	}
+	//*/
+
 
 	HR(m_VertexBuffer->Unlock());
 }
 void BaseObject3D::buildDemoSphereIndexBuffer(IDirect3DDevice9* gd3dDevice)
 {
 	//mNumTriangles = (int)pow(mPrimitive_NumSections, 2); //8 sections vertically and horizontally
-	mNumTriangles = mNumVertices;
+	mNumTriangles = mNumVertices * 2;//2 triangles are generated for each vertex
 
 	// Obtain a pointer to a new index buffer.
 	//number of triangles times 3 to get number of indices in total
@@ -548,11 +571,27 @@ void BaseObject3D::buildDemoSphereIndexBuffer(IDirect3DDevice9* gd3dDevice)
 
 	HR(m_IndexBuffer->Lock(0, 0, (void**)&k, 0));
 
-	//*
-	for (int i = 0; i < mNumTriangles*3; i++)
+
+	//*Solution 1: http://stackoverflow.com/a/13846592
+	int indexCounter = 0;
+	for (int r = 0; r < mPrimitive_NumSections; r++)
 	{
-		k[i] = i;//HACK: make it visible
-	}//*/
+		for (int s = 0; s < mPrimitive_NumSections; s++)
+		{
+			{//Generate Index Buffer
+				int curRow = r * mPrimitive_NumSections;
+				int nextRow = (r + 1) * mPrimitive_NumSections;
+
+				k[indexCounter++] = curRow + s;
+				k[indexCounter++] = nextRow + s;
+				k[indexCounter++] = nextRow + (s + 1);
+
+				k[indexCounter++] = curRow + s;
+				k[indexCounter++] = nextRow + (s + 1);
+				k[indexCounter++] = curRow + (s + 1);
+			}
+		}
+	}
 
 
 	HR(m_VertexBuffer->Unlock());

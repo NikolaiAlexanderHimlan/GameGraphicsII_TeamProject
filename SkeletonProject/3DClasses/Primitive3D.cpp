@@ -309,9 +309,9 @@ void Primitive3D::buildSphereIndexBuffer(IDirect3DDevice9* gd3dDevice, float rad
 
 	//*Solution 1: http://stackoverflow.com/a/13846592
 	int indexCounter = 0;
-	for (int r = 0; r < numSegments; r++)
+	for (int r = 0; r < numSegments-1; r++)
 	{
-		for (int s = 0; s < numSegments; s++)
+		for (int s = 0; s < numSegments-1; s++)
 		{
 			{//Generate Index Buffer
 				int curRow = r * numSegments;

@@ -27,8 +27,12 @@
 *.out
 *.app
 
+# Visual Studio
 Debug
 *.sdf
 *.suo
 *.opensdf
 Release
+
+# Loose files
+.dropbox.attr

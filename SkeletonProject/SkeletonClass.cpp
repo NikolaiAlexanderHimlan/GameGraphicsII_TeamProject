@@ -21,7 +21,9 @@
 #include "SkeletonClass.h"
 #include "3DClasses\BaseObject3D.h"
 #include "3DClasses\Vertex.h"
-#include "3DClasses\Primitive3D.h"
+#include "3DClasses\Cone3D.h"
+#include "3DClasses\Cylinder3D.h"
+#include "3DClasses\Sphere3D.h"
 //=============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 				   PSTR cmdLine, int showCmd)
@@ -54,25 +56,25 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraHeight    = 5.0f;
 
     // replace or add to the following object creation
-	Primitive3D* addObject;
+	BaseObject3D* addObject;
 
-	addObject = new Primitive3D;
-	addObject->CreatePrimitive_Cube(gd3dDevice);
+	addObject = new BaseObject3D;
+	addObject->Create( gd3dDevice );
 	addObject->setWorldPosition(Vector3f(0.0f, 0.0f, 0.0f));
 	m_Objects.push_back( addObject );
 
-	addObject = new Primitive3D;
-	addObject->CreatePrimitive_Cone(gd3dDevice, 2.0f, 1.0f, 8);
+	addObject = new Cone3D(2.0f, 1.0f, 8);
+	addObject->Create( gd3dDevice );
 	addObject->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
 	m_Objects.push_back(addObject);
 
-	addObject = new Primitive3D;
-	addObject->CreatePrimitive_Cylinder(gd3dDevice, 2.0f, 1.0f, 8);
+	addObject = new Cylinder3D(2.0f, 1.0f, 8);
+	addObject->Create( gd3dDevice );
 	addObject->setWorldPosition(Vector3f(0.0f, -5.0f, -5.0f));
 	m_Objects.push_back(addObject);
 
-	addObject = new Primitive3D;
-	addObject->CreatePrimitive_Sphere( gd3dDevice, 1.0f, 8 );
+	addObject = new Sphere3D(1.0f, 8);
+	addObject->Create( gd3dDevice );
 	addObject->setWorldPosition(Vector3f(5.0f, 5.0f, 5.0f));
 	m_Objects.push_back(addObject);
 

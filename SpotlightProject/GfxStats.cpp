@@ -1,11 +1,16 @@
 //=============================================================================
 // GfxStats.cpp by Frank Luna (C) 2005 All Rights Reserved.
+// Edited by Adi Bar-Lev, 2013
 //=============================================================================
 
 #include "d3dUtil.h"
 #include "d3dApp.h"
 #include "GfxStats.h"
 #include <tchar.h>
+
+//=============================================================================
+DEFINE_SINGLETON(GfxStats);
+//=============================================================================
 
 GfxStats::GfxStats()
 : mFont(0), mFPS(0.0f), mMilliSecPerFrame(0.0f), mNumTris(0), mNumVertices(0)

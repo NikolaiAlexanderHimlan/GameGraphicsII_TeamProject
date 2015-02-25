@@ -14,7 +14,15 @@
 #include <crtdbg.h>
 #include "GfxStats.h"
 #include <list>
+#include <vector>
 #include "Vertex.h"
+
+#include "BaseObject3D.h"
+#include "Vertex.h"
+#include "Cone3D.h"
+#include "Cylinder3D.h"
+#include "Sphere3D.h"
+//=============================================================================
 
 class SpotlightDemo : public D3DApp
 {
@@ -37,10 +45,9 @@ public:
 	void drawGrid();
 	void drawCylinders();
 	void drawSpheres();
+	void drawObjects();
 
 private:
-	GfxStats* mGfxStats;
-
 	DWORD mNumGridVertices;
 	DWORD mNumGridTriangles;
 
@@ -84,6 +91,8 @@ private:
 
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
+
+	std::vector<BaseObject3D*>	m_Objects;
 };
 
 
@@ -113,8 +122,6 @@ SpotlightDemo::SpotlightDemo(HINSTANCE hInstance, std::string winCaption, D3DDEV
 		PostQuitMessage(0);
 	}
 
-	mGfxStats = new GfxStats();
-
 	mCameraRadius    = 50.0f;
 	mCameraRotationY = 1.2 * D3DX_PI;
 	mCameraHeight    = 20.0f;
@@ -142,12 +149,35 @@ SpotlightDemo::SpotlightDemo(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	int numCylTris     = mCylinder->GetNumFaces()    * 14;
 	int numSphereTris  = mSphere->GetNumFaces()      * 14;
 
-	mGfxStats->addVertices(mNumGridVertices);
-	mGfxStats->addVertices(numCylVerts);
-	mGfxStats->addVertices(numSphereVerts);
-	mGfxStats->addTriangles(mNumGridTriangles);
-	mGfxStats->addTriangles(numCylTris);
-	mGfxStats->addTriangles(numSphereTris);
+	GfxStats::GetInstance()->addVertices(mNumGridVertices);
+	GfxStats::GetInstance()->addVertices(numCylVerts);
+	GfxStats::GetInstance()->addVertices(numSphereVerts);
+	GfxStats::GetInstance()->addTriangles(mNumGridTriangles);
+	GfxStats::GetInstance()->addTriangles(numCylTris);
+	GfxStats::GetInstance()->addTriangles(numSphereTris);
+
+	// replace or add to the following object creation
+	BaseObject3D* addObject;
+
+	addObject = new BaseObject3D;
+	addObject->Create( gd3dDevice );
+	addObject->setWorldPosition(Vector3f(0.0f, 0.0f, 0.0f));
+	m_Objects.push_back( addObject );
+
+	addObject = new Cone3D(2.0f, 1.0f, 8);
+	addObject->Create( gd3dDevice );
+	addObject->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
+	m_Objects.push_back(addObject);
+
+	addObject = new Cylinder3D(2.0f, 1.0f, 8);
+	addObject->Create( gd3dDevice );
+	addObject->setWorldPosition(Vector3f(0.0f, -5.0f, -5.0f));
+	m_Objects.push_back(addObject);
+
+	addObject = new Sphere3D(1.0f, 8);
+	addObject->Create( gd3dDevice );
+	addObject->setWorldPosition(Vector3f(5.0f, 5.0f, 5.0f));
+	m_Objects.push_back(addObject);
 
 	onResetDevice();
 
@@ -156,12 +186,16 @@ SpotlightDemo::SpotlightDemo(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 SpotlightDemo::~SpotlightDemo()
 {
-	delete mGfxStats;
+	GfxStats::DeleteInstance();
 	ReleaseCOM(mVB);
 	ReleaseCOM(mIB);
 	ReleaseCOM(mFX);
 	ReleaseCOM(mCylinder);
 	ReleaseCOM(mSphere);
+
+	for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
+		delete m_Objects[obj];
+	m_Objects.clear();
 
 	DestroyAllVertexDeclarations();
 }
@@ -184,13 +218,13 @@ bool SpotlightDemo::checkDeviceCaps()
 
 void SpotlightDemo::onLostDevice()
 {
-	mGfxStats->onLostDevice();
+	GfxStats::GetInstance()->onLostDevice();
 	HR(mFX->OnLostDevice());
 }
 
 void SpotlightDemo::onResetDevice()
 {
-	mGfxStats->onResetDevice();
+	GfxStats::GetInstance()->onResetDevice();
 	HR(mFX->OnResetDevice());
 
 
@@ -201,8 +235,6 @@ void SpotlightDemo::onResetDevice()
 
 void SpotlightDemo::updateScene(float dt)
 {
-	mGfxStats->update(dt);
-
 	// Get snapshot of input devices.
 	gDInput->poll();
 
@@ -267,13 +299,14 @@ void SpotlightDemo::drawScene()
 		drawGrid();
 		drawCylinders();
 		drawSpheres();
+		drawObjects();
 
 		HR(mFX->EndPass());
 	}
 	HR(mFX->End());
 
-	
-	mGfxStats->display();
+	// display the render statistics
+	GfxStats::GetInstance()->display();
 
 	HR(gd3dDevice->EndScene());
 
@@ -470,5 +503,18 @@ void SpotlightDemo::drawSpheres()
 		HR(mFX->SetMatrix(mhWorldInvTrans, &WIT));
 		HR(mFX->CommitChanges());
 		HR(mSphere->DrawSubset(0));
+	}
+}
+
+void SpotlightDemo::drawObjects()
+{
+	// Set render states for the entire scene here:
+//	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
+//	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
+
+	// Render all the objects
+	for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
+	{
+		m_Objects[obj]->Render( gd3dDevice, mView, mProj );
 	}
 }

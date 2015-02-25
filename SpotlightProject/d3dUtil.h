@@ -3,6 +3,8 @@
 //
 // Contains various utility code for DirectX applications, such as, clean up
 // and debugging code.
+//
+// Modified by Adi Bar-Lev, 2013
 //=============================================================================
 
 #ifndef D3DUTIL_H
@@ -31,6 +33,33 @@ extern D3DApp* gd3dApp;
 extern IDirect3DDevice9* gd3dDevice;
 
 //===============================================================
+// Singleton
+//------------------------------------------------------------------------------
+// Put the following declaration as first declaration within your class' h file
+// Notice - no parameters should be passed in the constructor.
+// Since this is a singleton, the constructor should be private /protected
+#define DECLARE_SINGLETON(clsName)	\
+	protected: \
+		static clsName*	 ms_instance; \
+		clsName();  \
+	\
+	public: \
+		static void DeleteInstance()  { \
+			delete ms_instance; \
+			ms_instance = NULL; \
+		} \
+		static clsName* GetInstance() { \
+			if (!ms_instance) \
+				ms_instance = new clsName; \
+			return ms_instance; \
+		} \
+	protected:
+
+// Put the following initilization at the top of your class source file
+#define DEFINE_SINGLETON(clsName)  \
+	clsName*	clsName::ms_instance = NULL;
+
+//==============================================================================
 // Clean up
 
 #define ReleaseCOM(x) { if(x){ x->Release();x = 0; } }

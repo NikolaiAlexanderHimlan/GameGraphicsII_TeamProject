@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="d3dApp.cpp" />
+    <ClCompile Include="d3dUtil.cpp" />
+    <ClCompile Include="DirectInput.cpp" />
+    <ClCompile Include="GfxStats.cpp" />
+    <ClCompile Include="SpotlightDemo.cpp" />
+    <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="Sphere3D.cpp">
+      <Filter>Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Cylinder3D.cpp">
+      <Filter>Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Cone3D.cpp">
+      <Filter>Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject3D.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="d3dApp.h" />
+    <ClInclude Include="d3dUtil.h" />
+    <ClInclude Include="DirectInput.h" />
+    <ClInclude Include="GfxStats.h" />
+    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="Sphere3D.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Cylinder3D.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Cone3D.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject3D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="spotlight.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Primitives">
+      <UniqueIdentifier>{af266636-8407-4387-b194-82773ab9872f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -3,17 +3,21 @@
 //
 // Class used for keeping track of and displaying the frames rendered
 // per second, milliseconds per frame, and vertex and triangle counts.
+
+// Edited by Adi Bar-Lwv, 2013
 //=============================================================================
 
 #ifndef GFX_STATS_H
 #define GFX_STATS_H
 
 #include <d3dx9.h>
+#include "d3dUtil.h"
 
 class GfxStats
 {
+	DECLARE_SINGLETON(GfxStats);
+
 public:
-	GfxStats();
 	~GfxStats();
 
 	void onLostDevice();

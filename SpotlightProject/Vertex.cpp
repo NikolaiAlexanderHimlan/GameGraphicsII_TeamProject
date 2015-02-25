@@ -1,16 +1,19 @@
 //=============================================================================
 // Vertex.cpp by Frank Luna (C) 2005 All Rights Reserved.
+//			  Adopted from Franc Luna's CubeDemo sample project.
+//
+// Please use this file to add classes / inherit and create various vertex classes
 //=============================================================================
-
 #include "Vertex.h"
 #include "d3dUtil.h"
 
+//=============================================================================
 // Initialize static variables.
 IDirect3DVertexDeclaration9* VertexPos::Decl = 0;
 IDirect3DVertexDeclaration9* VertexCol::Decl = 0;
 IDirect3DVertexDeclaration9* VertexPN::Decl  = 0;
 
-
+//=============================================================================
 void InitAllVertexDeclarations()
 {
 	//===============================================================
@@ -46,9 +49,11 @@ void InitAllVertexDeclarations()
 	HR(gd3dDevice->CreateVertexDeclaration(VertexPNElements, &VertexPN::Decl));
 }
 
+//-----------------------------------------------------------------------------
 void DestroyAllVertexDeclarations()
 {
 	ReleaseCOM(VertexPos::Decl);
 	ReleaseCOM(VertexCol::Decl);
 	ReleaseCOM(VertexPN::Decl);
 }
+//=============================================================================

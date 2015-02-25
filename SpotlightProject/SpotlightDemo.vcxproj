@@ -87,18 +87,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseObject3D.cpp" />
+    <ClCompile Include="Cone3D.cpp" />
+    <ClCompile Include="Cylinder3D.cpp" />
     <ClCompile Include="d3dApp.cpp" />
     <ClCompile Include="d3dUtil.cpp" />
     <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="GfxStats.cpp" />
+    <ClCompile Include="Sphere3D.cpp" />
     <ClCompile Include="SpotlightDemo.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseObject3D.h" />
+    <ClInclude Include="Cone3D.h" />
+    <ClInclude Include="Cylinder3D.h" />
     <ClInclude Include="d3dApp.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="DirectInput.h" />
     <ClInclude Include="GfxStats.h" />
+    <ClInclude Include="Sphere3D.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>

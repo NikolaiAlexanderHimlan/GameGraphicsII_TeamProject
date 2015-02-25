@@ -1,0 +1,2 @@
+use the mouse to rotate the camera around the object, preferable (but not required) over rotating the object
+

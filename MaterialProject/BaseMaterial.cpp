@@ -29,7 +29,7 @@ void BaseMaterial::LoadEffect(std::string& filename)
 	ID3DXEffect* effect;
 	ID3DXBuffer* errors = 0;
 
-	HR(D3DXCreateEffectFromFile(gd3dDevice, filename, 0, 0, D3DXSHADER_DEBUG, 0, &effect, &errors));
+	HR(D3DXCreateEffectFromFile(gd3dDevice, filename.c_str(), 0, 0, D3DXSHADER_DEBUG, 0, &effect, &errors));
 
 	if (errors)
 		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);

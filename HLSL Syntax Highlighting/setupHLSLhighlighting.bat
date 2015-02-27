@@ -1,0 +1,3 @@
+NShader.vsix;
+resetVSsyntax.reg
+

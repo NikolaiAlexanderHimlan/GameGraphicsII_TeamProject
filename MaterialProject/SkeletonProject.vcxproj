@@ -113,6 +113,10 @@
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="SkeletonClass.h" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\Gourad.fx" />
+    <FxCompile Include="Shaders\Phong.fx" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

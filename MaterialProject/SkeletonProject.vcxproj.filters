@@ -41,5 +41,16 @@
     <Filter Include="Primitives">
       <UniqueIdentifier>{f6720a67-6625-4395-a32c-9aedab293b4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{5de5a665-01c8-4298-969c-f9d99f9f1ce9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\Phong.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Gourad.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

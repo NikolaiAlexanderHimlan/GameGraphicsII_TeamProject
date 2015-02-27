@@ -42,6 +42,7 @@ public:
     BaseMaterial(void);
     virtual ~BaseMaterial(void);
 
+	void LoadEffect(std::string& filename);
     void ConnectToEffect( ID3DXEffect* effect );
     void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ); 
 };

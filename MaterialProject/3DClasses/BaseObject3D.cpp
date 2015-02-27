@@ -47,6 +47,8 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
 	GfxStats::GetInstance()->addVertices(getVertexCount());
 	GfxStats::GetInstance()->addTriangles(getTriangleCount());
 
+	//TODO: apply material
+
     // Set the buffers and format
     HR(gd3dDevice->SetStreamSource(0, m_VertexBuffer, 0, sizeof(VertexPos)));
 	HR(gd3dDevice->SetIndices(m_IndexBuffer));

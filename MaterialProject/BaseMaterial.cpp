@@ -21,6 +21,23 @@ BaseMaterial::~BaseMaterial(void)
 }
 
 //-----------------------------------------------------------------------------
+void BaseMaterial::LoadEffect(std::string& filename)
+{
+	//if (std::strstr(filename.c_str(), ".fx") == nullptr) filename.append(".fx");//if given filename is not a .fx file, append .fx
+
+	// Create the FX from a .fx file.
+	ID3DXEffect* effect;
+	ID3DXBuffer* errors = 0;
+
+	HR(D3DXCreateEffectFromFile(gd3dDevice, filename, 0, 0, D3DXSHADER_DEBUG, 0, &effect, &errors));
+
+	if (errors)
+		MessageBox(0, (char*)errors->GetBufferPointer(), 0, 0);
+
+	ConnectToEffect(effect);
+}
+
+//-----------------------------------------------------------------------------
 // Need to add here a code that will associate with your shader parameters and 
 // register them.
 void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )

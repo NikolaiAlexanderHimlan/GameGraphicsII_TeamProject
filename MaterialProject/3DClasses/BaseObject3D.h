@@ -14,6 +14,8 @@
 #include <d3dx9.h>
 
 #include "../d3dUtil.h"
+
+#include "../BaseMaterial.h"
 //=============================================================================
 struct IDirect3DVertexBuffer9;
 struct IDirect3DIndexBuffer9;
@@ -29,6 +31,8 @@ protected:
 
 	int mNumVertices;
 	int mNumTriangles;
+
+	BaseMaterial* mObjectMaterial;
 
 protected:
     // Replace the code in the following methods
@@ -46,6 +50,7 @@ public:
 
     // Replace or add to the following code as you progress with the material
     virtual void Create( IDirect3DDevice9* gd3dDevice );
+	inline void setMaterial( BaseMaterial* newMaterial ) { mObjectMaterial = newMaterial;	};
     virtual void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection );
 };
 //=============================================================================

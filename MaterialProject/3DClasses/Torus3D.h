@@ -13,16 +13,25 @@ class Torus3D
 	: public BaseObject3D
 {
 private:
+	float mInnerRadius;
+	float mOuterRadius;
+	int mNumSections;
+	int mNumRings;
 
 protected:
 	//virtual void buildTorusVertexBuffer( IDirect3DDevice9* gd3dDevice );
 	//virtual void buildTorusIndexBuffer( IDirect3DDevice9* gd3dDevice );
 
-	virtual void Build( IDirect3DDevice9* gd3dDevice );
+	virtual void Build( IDirect3DDevice9* gd3dDevice ) {
+		HR(D3DXCreateTorus(gd3dDevice, mInnerRadius, mOuterRadius, mNumSections, mNumRings, &mObjectMesh, 0));
+		//buildTorusVertexBuffer( gd3dDevice );
+		//buildTorusIndexBuffer( gd3dDevice );
+	};
 
 public:
-	Torus3D();
-	~Torus3D(void);
+	Torus3D(float innerRadius, float outerRadius, int numSections, int numRings)
+		: mInnerRadius(innerRadius), mOuterRadius(outerRadius), mNumSections(numSections), mNumRings(numRings) {};
+	~Torus3D(void){};
 };
 //=============================================================================
 #endif // _BASE_OBJECT_3D_H

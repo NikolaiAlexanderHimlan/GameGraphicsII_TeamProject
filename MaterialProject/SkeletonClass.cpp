@@ -25,6 +25,8 @@
 #include "3DClasses\Cone3D.h"
 #include "3DClasses\Cylinder3D.h"
 #include "3DClasses\Sphere3D.h"
+#include "3DClasses\Torus3D.h"
+#include "3DClasses\Teapot3D.h"
 //=============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 				   PSTR cmdLine, int showCmd)
@@ -83,6 +85,18 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	addObject = new Sphere3D(1.0f, 8);
 	addObject->Create( gd3dDevice );
 	addObject->setWorldPosition(Vector3f(5.0f, 5.0f, 5.0f));
+	addObject->setMaterial(addMaterial);
+	m_Objects.push_back(addObject);
+
+	addObject = new Torus3D(0.5f, 1.0f, 8, 8);
+	addObject->Create(gd3dDevice);
+	addObject->setWorldPosition(Vector3f(-5.0f, 5.0f, 5.0f));
+	addObject->setMaterial(addMaterial);
+	m_Objects.push_back(addObject);
+
+	addObject = new Teapot3D();
+	addObject->Create(gd3dDevice);
+	addObject->setWorldPosition(Vector3f(5.0f, 5.0f, -5.0f));
 	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 

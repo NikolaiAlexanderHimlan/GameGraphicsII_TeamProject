@@ -14,7 +14,7 @@ BaseMaterial::BaseMaterial(void)
 }
 
 //-----------------------------------------------------------------------------
-// Relase shader, blah...
+// Release shader, blah...
 BaseMaterial::~BaseMaterial(void)
 {
 	ReleaseCOM(m_Effect);

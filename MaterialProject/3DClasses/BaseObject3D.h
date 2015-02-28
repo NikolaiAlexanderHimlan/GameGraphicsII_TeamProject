@@ -1,10 +1,10 @@
 //=============================================================================
 //                              BaseObject3D
 //
-// Writen by Adi Bar-Lev, 2013
+// Written by Adi Bar-Lev, 2013
 // EGP 300-101, Graphics Programming II  - skeleton project
 //
-// Base class that can handle 3D rendergin via Vertex and Index buffer
+// Base class that can handle 3D rendering via Vertex and Index buffer
 //=============================================================================
 #ifndef _BASE_OBJECT_3D_H
 #define _BASE_OBJECT_3D_H

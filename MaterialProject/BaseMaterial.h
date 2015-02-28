@@ -1,7 +1,7 @@
 //=============================================================================
 //                              BaseMaterial
 //
-// Writen by Adi Bar-Lev, 2013
+// Written by Adi Bar-Lev, 2013
 // EGP 300-101, Graphics Programming II  - skeleton project
 //
 // Base class that contains the most intrinsic parameters to implement per model
@@ -21,7 +21,7 @@ protected:
 
     D3DXVECTOR3         m_DiffuseColor;
     D3DXVECTOR3         m_SpecularColor;
-    float               m_Shininess;            // specualr power
+    float				m_Shininess;            // specular power
 
 
     //---------- Shader Handles ----------

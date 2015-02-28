@@ -46,7 +46,7 @@ void BaseObject3D::setWorldRotation(const Rotation& newRotation)
 void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
     D3DXMATRIX& view, D3DXMATRIX& projection )
 {
-    // Update the statistics singlton class
+	// Update the statistics singleton class
 	GfxStats::GetInstance()->addVertices(getVertexCount());
 	GfxStats::GetInstance()->addTriangles(getTriangleCount());
 

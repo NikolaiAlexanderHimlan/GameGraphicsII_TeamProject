@@ -1,8 +1,6 @@
 //=============================================================================
 //                              Cylinder3D
 //
-// Written by Adi Bar-Lev, 2013
-// EGP 300-101, Graphics Programming II  - skeleton project
 //=============================================================================
 #include "Cylinder3D.h"
 #include "Vertex.h"
@@ -12,30 +10,7 @@
 #include <math.h>
 
 //=============================================================================
-Cylinder3D::Cylinder3D(float height, float radius, int numSegments)
-	: mHeight(height), mRadius(radius), mNumSegments(numSegments)
-{
-    m_VertexBuffer = NULL;
-    m_IndexBuffer = NULL;
-
-    D3DXMatrixIdentity(&m_World);
-}
-
-//-----------------------------------------------------------------------------
-Cylinder3D::~Cylinder3D(void)
-{
-    ReleaseCOM(m_VertexBuffer);
-	ReleaseCOM(m_IndexBuffer);
-}
-
-//-----------------------------------------------------------------------------
-void Cylinder3D::Create(IDirect3DDevice9* gd3dDevice)
-{
-	buildCylinderVertexBuffer( gd3dDevice );
-	buildCylinderIndexBuffer( gd3dDevice );
-}
-
-//-----------------------------------------------------------------------------
+/*
 void Cylinder3D::buildCylinderVertexBuffer(IDirect3DDevice9* gd3dDevice)
 {
 	mNumVertices = (mNumSegments + 1 ) *2; //2 vertices for each section plus a vertex in the center on the top and bottom.
@@ -132,7 +107,7 @@ void Cylinder3D::buildCylinderIndexBuffer(IDirect3DDevice9* gd3dDevice)
 		k[triIndex + 0 + topTriStart] = mNumVertices - 1;//center of bottom
 		k[triIndex + 2 + topTriStart] = vertIndex + topVertexStart;
 		k[triIndex + 1 + topTriStart] = 0 + topVertexStart;//first section index
-	}//*/
+	}//* /
 	//generate sides indices
 	int sideTriStart = topTriStart * 2;//skip the indices from the top/bottom
 	for (int i = 0; i < mNumSegments - 1; i++)
@@ -164,9 +139,10 @@ void Cylinder3D::buildCylinderIndexBuffer(IDirect3DDevice9* gd3dDevice)
 		k[triIndex + 0 + topTriStart] = 0;//opposite index
 		k[triIndex + 1 + topTriStart] = vertIndex + topVertexStart;//current section index
 		k[triIndex + 2 + topTriStart] = 0 + topVertexStart;//first section index
-	}//*/
+	}//* /
 
 
 	HR(m_IndexBuffer->Unlock());
 }
+//*/
 //=============================================================================

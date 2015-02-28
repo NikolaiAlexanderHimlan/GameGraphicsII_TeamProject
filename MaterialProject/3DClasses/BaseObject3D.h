@@ -16,28 +16,25 @@
 #include "../d3dUtil.h"
 
 #include "../BaseMaterial.h"
+#include "../Vector3f.h"
+#include "../Rotation.h"
 //=============================================================================
 struct IDirect3DVertexBuffer9;
 struct IDirect3DIndexBuffer9;
-typedef D3DXVECTOR3 Vector3f;
 //=============================================================================
 class BaseObject3D
 {
-protected:	
+private:
     D3DXMATRIX                  m_World;
 
-	IDirect3DVertexBuffer9*     m_VertexBuffer;
-	IDirect3DIndexBuffer9*      m_IndexBuffer;
-
+protected:	
 	int mNumVertices;
 	int mNumTriangles;
 
+	ID3DXMesh*		mObjectMesh;
 	BaseMaterial* mObjectMaterial;
-
-protected:
-    // Replace the code in the following methods
-    virtual void buildDemoCubeVertexBuffer( IDirect3DDevice9* gd3dDevice );
-    virtual void buildDemoCubeIndexBuffer( IDirect3DDevice9* gd3dDevice );
+	
+	virtual void Build( IDirect3DDevice9* gd3dDevice ) = 0;
 
 public:
     BaseObject3D(void);
@@ -47,11 +44,16 @@ public:
 	inline int getVertexCount() { return mNumVertices;	};
 
 	void setWorldPosition(const Vector3f& newPosition);
+	void setWorldRotation(const Rotation& newRotation);
 
     // Replace or add to the following code as you progress with the material
-    virtual void Create( IDirect3DDevice9* gd3dDevice );
+	inline virtual void Create(IDirect3DDevice9* gd3dDevice) final {
+		Build(gd3dDevice);
+		mNumTriangles = mObjectMesh->GetNumFaces();
+		mNumVertices = mObjectMesh->GetNumVertices();
+	};
 	inline void setMaterial( BaseMaterial* newMaterial ) { mObjectMaterial = newMaterial;	};
-    virtual void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection );
+	virtual void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection ) final;
 };
 //=============================================================================
 #endif // _BASE_OBJECT_3D_H

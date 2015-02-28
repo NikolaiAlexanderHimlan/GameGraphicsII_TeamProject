@@ -27,6 +27,7 @@ protected:
     //---------- Shader Handles ----------
     // Generic shader handles
     D3DXHANDLE          m_WorldMatHandle;    
+	D3DXHANDLE			mWorldMatInvHandle;
     D3DXHANDLE          m_ViewProjectionMatHandel;
 
     D3DXHANDLE          m_LightPosWHandle;       // Position (spot/point) / Direction (directional)
@@ -42,9 +43,10 @@ public:
     BaseMaterial(void);
     virtual ~BaseMaterial(void);
 
-	void LoadEffect(std::string& filename);
+	void LoadEffect(const std::string& filename);
     void ConnectToEffect( ID3DXEffect* effect );
     void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ); 
+	void Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh);
 };
 //=============================================================================
 

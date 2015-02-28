@@ -26,6 +26,10 @@ class BaseObject3D;
 //=============================================================================
 class SkeletonClass : public D3DApp
 {
+private:
+	const std::string SHADER_DIR = ".\\Shaders\\";
+	const std::string GOURAD_FX_FILENAME = SHADER_DIR + "Gourad.fx";
+	const std::string PHONG_FX_FILENAME = SHADER_DIR + "Phong.fx";
 public:
 	SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEVTYPE devType, DWORD requestedVP);
 	~SkeletonClass();

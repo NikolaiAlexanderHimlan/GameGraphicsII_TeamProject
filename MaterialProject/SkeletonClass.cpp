@@ -21,6 +21,7 @@
 #include "SkeletonClass.h"
 #include "3DClasses\BaseObject3D.h"
 #include "3DClasses\Vertex.h"
+#include "3DClasses\Cube3D.h"
 #include "3DClasses\Cone3D.h"
 #include "3DClasses\Cylinder3D.h"
 #include "3DClasses\Sphere3D.h"
@@ -57,8 +58,11 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
     // replace or add to the following object creation
 	BaseObject3D* addObject;
+	BaseMaterial* addMaterial = new BaseMaterial();
+	//addMaterial->LoadEffect(GOURAD_FX_FILENAME);
+	//addMaterial->LoadEffect(PHONG_FX_FILENAME);
 
-	addObject = new BaseObject3D;
+	addObject = new Cube3D(1.0f, 1.0f, 1.0f);
 	addObject->Create( gd3dDevice );
 	addObject->setWorldPosition(Vector3f(0.0f, 0.0f, 0.0f));
 	m_Objects.push_back( addObject );

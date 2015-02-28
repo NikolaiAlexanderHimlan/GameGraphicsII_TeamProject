@@ -7,15 +7,7 @@
 //=============================================================================
 #pragma once
 //=============================================================================
-#include <d3dx9.h>
-
-#include "../d3dUtil.h"
-
 #include "BaseObject3D.h"
-//=============================================================================
-struct IDirect3DVertexBuffer9;
-struct IDirect3DIndexBuffer9;
-typedef D3DXVECTOR3 Vector3f;
 //=============================================================================
 class Cone3D
 	: public BaseObject3D
@@ -24,17 +16,25 @@ private:
 	float mHeight;
 	float mRadius;
 	int mNumSegments;
-protected:
+	int mNumSplits;
 
 protected:
-	virtual void buildConeVertexBuffer( IDirect3DDevice9* gd3dDevice );
-	virtual void buildConeIndexBuffer( IDirect3DDevice9* gd3dDevice );
+	//virtual void buildConeVertexBuffer( IDirect3DDevice9* gd3dDevice );
+	//virtual void buildConeIndexBuffer( IDirect3DDevice9* gd3dDevice );
+
+	inline void Build( IDirect3DDevice9* gd3dDevice ) {
+		//HACK: this is stupid and inefficient, but it's how we are required to make our Cone
+		HR(D3DXCreateCylinder(gd3dDevice, 0.0f, mRadius, mHeight, mNumSegments, mNumSplits, &mObjectMesh, 0));
+		//buildConeVertexBuffer( gd3dDevice );
+		//buildConeIndexBuffer( gd3dDevice );
+	};
+
 public:
-    Cone3D(float height, float radius, int numSegments);
-    ~Cone3D(void);
-
-	void Create(IDirect3DDevice9* gd3dDevice);
+	/// <param name="numSplits"> Number of splits along the height of the cone. </param>
+	Cone3D(float height, float radius, int numSegments, int numSplits = 1)
+		: mHeight(height), mRadius(radius), mNumSegments(numSegments), mNumSplits(numSplits) {};
+	~Cone3D(void){};
 };
 //=============================================================================
-#endif // _BASE_OBJECT_3D_H
+#endif // _CONE_3D_H
 

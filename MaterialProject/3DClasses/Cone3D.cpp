@@ -1,8 +1,6 @@
 //=============================================================================
 //                              Cone3D
 //
-// Written by Adi Bar-Lev, 2013
-// EGP 300-101, Graphics Programming II  - skeleton project
 //=============================================================================
 #include "Cone3D.h"
 #include "Vertex.h"
@@ -12,30 +10,7 @@
 #include <math.h>
 
 //=============================================================================
-Cone3D::Cone3D(float height, float radius, int numSegments)
-	: mHeight(height), mRadius(radius), mNumSegments(numSegments)
-{
-    m_VertexBuffer = NULL;
-    m_IndexBuffer = NULL;
-
-    D3DXMatrixIdentity(&m_World);
-}
-
-//-----------------------------------------------------------------------------
-Cone3D::~Cone3D(void)
-{
-    ReleaseCOM(m_VertexBuffer);
-	ReleaseCOM(m_IndexBuffer);
-}
-
-//-----------------------------------------------------------------------------
-void Cone3D::Create(IDirect3DDevice9* gd3dDevice)
-{
-	buildConeVertexBuffer( gd3dDevice );
-	buildConeIndexBuffer( gd3dDevice );
-}
-
-//-----------------------------------------------------------------------------
+/*
 void Cone3D::buildConeVertexBuffer(IDirect3DDevice9* gd3dDevice)
 {
 	mNumVertices = mNumSegments + 2; //1 vertex for each section plus a vertex in the center on the top and bottom.
@@ -118,4 +93,5 @@ void Cone3D::buildConeIndexBuffer(IDirect3DDevice9* gd3dDevice)
 
 	HR(m_IndexBuffer->Unlock());
 }
+//*/
 //=============================================================================

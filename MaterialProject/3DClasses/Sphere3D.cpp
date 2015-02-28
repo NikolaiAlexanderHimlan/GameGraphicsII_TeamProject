@@ -1,8 +1,6 @@
 //=============================================================================
 //                              Sphere3D
 //
-// Written by Adi Bar-Lev, 2013
-// EGP 300-101, Graphics Programming II  - skeleton project
 //=============================================================================
 #include "Sphere3D.h"
 #include "Vertex.h"
@@ -12,30 +10,7 @@
 #include <math.h>
 
 //=============================================================================
-Sphere3D::Sphere3D(float radius, int numSegments)
-	: mRadius(radius), mNumSegments(numSegments)
-{
-    m_VertexBuffer = NULL;
-    m_IndexBuffer = NULL;
-
-    D3DXMatrixIdentity(&m_World);
-}
-
-//-----------------------------------------------------------------------------
-Sphere3D::~Sphere3D(void)
-{
-    ReleaseCOM(m_VertexBuffer);
-	ReleaseCOM(m_IndexBuffer);
-}
-
-//-----------------------------------------------------------------------------
-void Sphere3D::Create(IDirect3DDevice9* gd3dDevice)
-{
-	buildSphereVertexBuffer( gd3dDevice );
-	buildSphereIndexBuffer( gd3dDevice );
-}
-
-//-----------------------------------------------------------------------------
+/*
 void Sphere3D::buildSphereVertexBuffer(IDirect3DDevice9* gd3dDevice)
 {
 	//mRenderVerts = true;
@@ -118,4 +93,5 @@ void Sphere3D::buildSphereIndexBuffer(IDirect3DDevice9* gd3dDevice)
 
 	HR(m_VertexBuffer->Unlock());
 }
+//*/
 //=============================================================================

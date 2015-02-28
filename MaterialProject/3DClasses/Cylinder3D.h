@@ -7,15 +7,7 @@
 //=============================================================================
 #pragma once
 //=============================================================================
-#include <d3dx9.h>
-
-#include "../d3dUtil.h"
-
 #include "BaseObject3D.h"
-//=============================================================================
-struct IDirect3DVertexBuffer9;
-struct IDirect3DIndexBuffer9;
-typedef D3DXVECTOR3 Vector3f;
 //=============================================================================
 class Cylinder3D
 	: public BaseObject3D
@@ -24,17 +16,24 @@ private:
 	float mHeight;
 	float mRadius;
 	int mNumSegments;
-protected:
+	int mNumSplits;
 
 protected:
-	virtual void buildCylinderVertexBuffer( IDirect3DDevice9* gd3dDevice );
-	virtual void buildCylinderIndexBuffer( IDirect3DDevice9* gd3dDevice );
+	//virtual void buildCylinderVertexBuffer( IDirect3DDevice9* gd3dDevice );
+	//virtual void buildCylinderIndexBuffer( IDirect3DDevice9* gd3dDevice );
+
+	inline void Build(IDirect3DDevice9* gd3dDevice) {
+		HR(D3DXCreateCylinder(gd3dDevice, mRadius, mRadius, mHeight, mNumSegments, mNumSplits, &mObjectMesh, 0));
+		//buildCylinderVertexBuffer( gd3dDevice );
+		//buildCylinderIndexBuffer( gd3dDevice );
+	};
+
 public:
-    Cylinder3D(float height, float radius, int numSegments);
-    ~Cylinder3D(void);
-
-	void Create(IDirect3DDevice9* gd3dDevice);
+	/// <param name="numSplits"> Number of splits along the height of the cone. </param>
+	Cylinder3D(float height, float radius, int numSegments, int numSplits = 1)
+		: mHeight(height), mRadius(radius), mNumSegments(numSegments), mNumSplits(numSplits) {};
+	~Cylinder3D(void){};
 };
 //=============================================================================
-#endif // _BASE_OBJECT_3D_H
+#endif // _CYLINDER_3D_H
 

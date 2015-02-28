@@ -45,8 +45,17 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
     m_Effect = effect;
 
 	m_ViewProjectionMatHandel = m_Effect->GetParameterByName(0, "gWVP");
-	mWorldMatInvHandle = m_Effect->GetParameterByName(0, "gWorldInvTrans");
+	mWorldMatInvHandle = m_Effect->GetParameterByName(0, "gWorldInverseTranspose");
 	m_WorldMatHandle = m_Effect->GetParameterByName(0, "gWorld");
+	m_ViewerPosWHandle = m_Effect->GetParameterByName(0, "gEyePosW");
+	m_LightPosWHandle = m_Effect->GetParameterByName(0, "gLightVecW");
+	m_ShininessHandle = m_Effect->GetParameterByName(0, "gSpecularPower");
+	m_SpecularColHandle = m_Effect->GetParameterByName(0, "gSpecularMtrl");
+	mSpecularLightHandle = m_Effect->GetParameterByName(0, "gSpecularLight");
+	m_DIffuseColHandle = m_Effect->GetParameterByName(0, "gDiffuseMtrl");
+	mDiffuseLightHandle = m_Effect->GetParameterByName(0, "gDiffuseLight");
+	mAmbientColorHandle = m_Effect->GetParameterByName(0, "gAmbientMtrl");
+	mAmbientLightHandle = m_Effect->GetParameterByName(0, "gAmbientLight");
 }
 
 //-----------------------------------------------------------------------------

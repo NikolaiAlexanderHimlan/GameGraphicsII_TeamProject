@@ -35,8 +35,12 @@ protected:
 
     // Material specific shader handles
     D3DXHANDLE          m_DIffuseColHandle;    
-    D3DXHANDLE          m_SpecularColHandle;       
+	D3DXHANDLE			mDiffuseLightHandle;
+    D3DXHANDLE          m_SpecularColHandle;
+	D3DXHANDLE			mSpecularLightHandle;
     D3DXHANDLE          m_ShininessHandle;   
+	D3DXHANDLE			mAmbientColorHandle;
+	D3DXHANDLE			mAmbientLightHandle;
 
 
 public:

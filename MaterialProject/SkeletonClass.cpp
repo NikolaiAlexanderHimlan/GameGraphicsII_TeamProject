@@ -60,26 +60,30 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	BaseObject3D* addObject;
 	BaseMaterial* addMaterial = new BaseMaterial();
 	//addMaterial->LoadEffect(GOURAD_FX_FILENAME);
-	//addMaterial->LoadEffect(PHONG_FX_FILENAME);
+	addMaterial->LoadEffect(PHONG_FX_FILENAME);
 
 	addObject = new Cube3D(1.0f, 1.0f, 1.0f);
 	addObject->Create( gd3dDevice );
 	addObject->setWorldPosition(Vector3f(0.0f, 0.0f, 0.0f));
+	addObject->setMaterial(addMaterial);
 	m_Objects.push_back( addObject );
 
 	addObject = new Cone3D(2.0f, 1.0f, 8);
 	addObject->Create( gd3dDevice );
 	addObject->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
+	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	addObject = new Cylinder3D(2.0f, 1.0f, 8);
 	addObject->Create( gd3dDevice );
 	addObject->setWorldPosition(Vector3f(0.0f, -5.0f, -5.0f));
+	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	addObject = new Sphere3D(1.0f, 8);
 	addObject->Create( gd3dDevice );
 	addObject->setWorldPosition(Vector3f(5.0f, 5.0f, 5.0f));
+	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	onResetDevice();
@@ -160,8 +164,8 @@ void SkeletonClass::drawScene()
 	HR(gd3dDevice->BeginScene());
 
     // Set render states for the entire scene here:
-//	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
-	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
+	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
+//	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 
     // Render all the objects
     for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )

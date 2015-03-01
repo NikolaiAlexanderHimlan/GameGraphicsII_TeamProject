@@ -25,7 +25,15 @@ BaseMaterial::~BaseMaterial(void)
 
 void BaseMaterial::LoadTexture(const std::string& filename)
 {
-	HR(D3DXCreateTextureFromFile(gd3dDevice, ".\\Assets\\Original_Utah_Teapot.bmp", &mImageTexture));
+	IDirect3DTexture9* texture;
+	HR(D3DXCreateTextureFromFile(gd3dDevice, ".\\Assets\\Original_Utah_Teapot.bmp", &texture));
+	setTexture(texture);
+}
+void BaseMaterial::setTexture(IDirect3DTexture9* texture)
+{
+	mImageTexture = texture;
+	mTextureHandle = m_Effect->GetParameterByName(0, "gTexture");
+	HR(m_Effect->SetValue(mTextureHandle, &mImageTexture, sizeof(IDirect3DTexture9*)));
 }
 
 //-----------------------------------------------------------------------------
@@ -67,6 +75,8 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 	mAmbientColorHandle = m_Effect->GetParameterByName(0, "gAmbientMtrl");
 	mAmbientLightHandle = m_Effect->GetParameterByName(0, "gAmbientLight");
 
+	mRenderTextureHandle = m_Effect->GetParameterByName(0, "gRenderTexture");
+
 	/*if (mImageTexture != NULL)
 	{
 		mTextureHandle = m_Effect->GetParameterByName(0, "gTexture");
@@ -86,7 +96,7 @@ void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat,
 	HR(m_Effect->SetValue(m_SpecularColHandle, &mSpecularMtrl, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetFloat(m_ShininessHandle, mSpecularPower));
 
-	
+	HR(m_Effect->SetBool(mRenderTextureHandle, ShouldRenderTexture()));
 
 	//*
 	// Begin passes.

@@ -33,9 +33,8 @@ public:
 	D3DXCOLOR   mSpecularLight;
 	float       mSpecularPower;
 
-	IDirect3DTexture9* mImageTexture;
-
-	
+	bool mRenderTexture = true;
+	IDirect3DTexture9* mImageTexture = nullptr;
 
 protected:
     //---------- Shader Handles ----------
@@ -56,6 +55,7 @@ protected:
 	D3DXHANDLE			mAmbientColorHandle;
 	D3DXHANDLE			mAmbientLightHandle;
 
+	D3DXHANDLE			mRenderTextureHandle;
 	D3DXHANDLE			mTextureHandle;
 
 
@@ -63,10 +63,15 @@ public:
     BaseMaterial(void);
     virtual ~BaseMaterial(void);
 
+	inline bool ShouldRenderTexture(void) const
+	{ return mRenderTexture && (mImageTexture != nullptr);	};
+
 	void LoadTexture(const std::string& filename);
+	void setTexture( IDirect3DTexture9* texture );
 
 	void LoadEffect(const std::string& filename);
     void ConnectToEffect( ID3DXEffect* effect );
+
     void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ) const; 
 	void Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh) const;
 };

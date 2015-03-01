@@ -20,6 +20,7 @@ uniform extern float4 gDiffuseLight;
 uniform extern float4 gAmbientMtrl;
 uniform extern float4 gAmbientLight;
 
+uniform extern bool gRenderTexture;
 uniform extern texture gTexture;
 
 struct InputVS {
@@ -49,6 +50,17 @@ OutputVS PhongVS(float3 posL : POSITION0, float3 normalL : NORMAL0)
 
 float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1) : COLOR
 {
+	/* "can't use flow control on this profile"
+	//http://xboxforums.create.msdn.com/forums/p/81756/494247.aspx
+	[branch] if(gRenderTexture)
+	{
+		//Render texture
+	}
+	else
+	{
+		//render color
+	}
+	//*/
 	// Interpolated normals can become unnormal--so normalize.
 	normalW = normalize(normalW);
 	// Compute the vector from the vertex to the eye position.

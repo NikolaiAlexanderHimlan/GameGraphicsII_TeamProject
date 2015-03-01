@@ -59,59 +59,68 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraRotationY = 1.2 * D3DX_PI;
 	mCameraHeight    = 5.0f;
 
-    // replace or add to the following object creation
-	BaseObject3D* addObject;
-	BaseMaterial* addMaterial = new BaseMaterial();
-	mPhongMaterial = addMaterial;
-	//addMaterial->LoadEffect(GOURAD_FX_FILENAME);
-	addMaterial->LoadEffect(PHONG_FX_FILENAME);
+	//create materials
+	mPhongMaterial = new BaseMaterial();
+	mPhongMaterial->LoadEffect(PHONG_FX_FILENAME);
+	mGouradMaterial = new BaseMaterial();
+	mGouradMaterial->LoadEffect(GOURAD_FX_FILENAME);
 
-	addMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
-	addMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
-	addMaterial->mDiffuseLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	addMaterial->mAmbientMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
-	addMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
-	addMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
-	addMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	addMaterial->mSpecularPower = 8.0f;
+	//set Phong lighting data
+	mPhongMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
+	mPhongMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	mPhongMaterial->mDiffuseLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	mPhongMaterial->mAmbientMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	mPhongMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
+	mPhongMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
+	mPhongMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	mPhongMaterial->mSpecularPower = 8.0f;
+	//set Gourad lighting data
+	mGouradMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
+	mGouradMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	mGouradMaterial->mDiffuseLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	mGouradMaterial->mAmbientMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	mGouradMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
+	mGouradMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
+	mGouradMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	mGouradMaterial->mSpecularPower = 8.0f;
+	
+	// create objects
+	BaseObject3D* addObject;
 
 	addObject = new Cube3D(1.0f, 1.0f, 1.0f);
 	addObject->Create( gd3dDevice );
 	//addObject->setWorldPosition(Vector3f(0.0f, 0.0f, 0.0f));
-	addObject->setMaterial(addMaterial);
 	m_Objects.push_back( addObject );
 
 	addObject = new Cone3D(2.0f, 1.0f, 8);
 	addObject->Create( gd3dDevice );
 	//addObject->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
 	addObject->setWorldRotationDegrees(Rotation(90.0f, 0.0f, 0.0f));
-	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	addObject = new Cylinder3D(2.0f, 1.0f, 8);
 	addObject->Create( gd3dDevice );
 	//addObject->setWorldPosition(Vector3f(0.0f, -5.0f, -5.0f));
 	addObject->setWorldRotationDegrees(Rotation(90.0f, 0.0f, 0.0f));
-	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	addObject = new Sphere3D(1.0f, 8);
 	addObject->Create( gd3dDevice );
 	//addObject->setWorldPosition(Vector3f(5.0f, 5.0f, 5.0f));
-	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	addObject = new Torus3D(0.5f, 1.0f, 8, 8);
 	addObject->Create(gd3dDevice);
 	//addObject->setWorldPosition(Vector3f(-5.0f, 5.0f, 5.0f));
-	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	addObject = new Teapot3D();
 	addObject->Create(gd3dDevice);
 	//addObject->setWorldPosition(Vector3f(5.0f, 5.0f, -5.0f));
-	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
+
+	setPhongMaterial();
+	//setGouradMaterial();
 
 	onResetDevice();
 
@@ -128,6 +137,9 @@ SkeletonClass::~SkeletonClass()
 
 	delete mPhongMaterial;
 	mPhongMaterial = nullptr;
+
+	delete mGouradMaterial;
+	mGouradMaterial = nullptr;
 
 	DestroyAllVertexDeclarations();
 }
@@ -186,6 +198,12 @@ void SkeletonClass::updateScene(float dt)
 		mRenderTextures = !mRenderTextures; //Toggle Textures
 	if (gDInput->keyPress(DIK_W))
 		mIsWireframe = !mIsWireframe; // Toggle Wireframe
+
+	//Switch object materials
+	if (gDInput->keyPress(DIK_G))
+		setGouradMaterial();
+	if (gDInput->keyPress(DIK_P))
+		setPhongMaterial();
 
 	//Set target based on number key
 	if (gDInput->keyPress(DIK_1))	SetTarget(0);
@@ -269,4 +287,17 @@ void SkeletonClass::buildProjMtx()
 	float w = (float)md3dPP.BackBufferWidth;
 	float h = (float)md3dPP.BackBufferHeight;
 	D3DXMatrixPerspectiveFovLH(&mProj, D3DX_PI * 0.25f, w/h, 1.0f, 5000.0f);
+}
+
+void SkeletonClass::setPhongMaterial()
+{
+	for (size_t i = 0; i < m_Objects.size(); i++)
+		if (mPhongMaterial != m_Objects[i]->getMaterial())
+			m_Objects[i]->setMaterial(mPhongMaterial);
+}
+void SkeletonClass::setGouradMaterial()
+{
+	for (size_t i = 0; i < m_Objects.size(); i++)
+		if (mGouradMaterial != m_Objects[i]->getMaterial())
+			m_Objects[i]->setMaterial(mGouradMaterial);
 }

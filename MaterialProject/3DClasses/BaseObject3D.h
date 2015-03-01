@@ -45,6 +45,8 @@ public:
 	inline int getVertexCount() const { return mNumVertices;	};
 
 	inline const Transform& getLocalTransform() const { return mLocalTransform;	};
+
+	inline const BaseMaterial* getMaterial() const { return mObjectMaterial;	};
 	
 	//Reference Getters
 	inline Transform& refLocalTransform() { return mLocalTransform;	};

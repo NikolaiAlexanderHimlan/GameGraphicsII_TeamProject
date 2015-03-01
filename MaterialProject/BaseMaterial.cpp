@@ -5,6 +5,9 @@
 // lighting / shaders effects.
 //=============================================================================
 #include "BaseMaterial.h"
+#include <D3D9.h>
+#include <d3dx9tex.h>
+#include <d3dx9.h>
 #include <D3dx9math.h>
 #include "3DClasses/BaseObject3D.h"
 //=============================================================================
@@ -20,6 +23,11 @@ BaseMaterial::~BaseMaterial(void)
 	ReleaseCOM(m_Effect);
 }
 
+void BaseMaterial::LoadTexture(const std::string& filename)
+{
+	HR(D3DXCreateTextureFromFile(gd3dDevice, ".\\Assets\\Original_Utah_Teapot.bmp", &mImageTexture));
+}
+
 //-----------------------------------------------------------------------------
 void BaseMaterial::LoadEffect(const std::string& filename)
 {
@@ -28,6 +36,8 @@ void BaseMaterial::LoadEffect(const std::string& filename)
 	// Create the FX from a .fx file.
 	ID3DXEffect* effect;
 	ID3DXBuffer* errors = 0;
+
+	//HR(D3DXCreateTextureFromFile(gd3dDevice, ".\\Assets\\Original_Utah_Teapot.bmp", &mImageTexture));
 
 	HR(D3DXCreateEffectFromFile(gd3dDevice, filename.c_str(), 0, 0, D3DXSHADER_DEBUG, 0, &effect, &errors));
 
@@ -56,6 +66,12 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 	mDiffuseLightHandle = m_Effect->GetParameterByName(0, "gDiffuseLight");
 	mAmbientColorHandle = m_Effect->GetParameterByName(0, "gAmbientMtrl");
 	mAmbientLightHandle = m_Effect->GetParameterByName(0, "gAmbientLight");
+
+	/*if (mImageTexture != NULL)
+	{
+		mTextureHandle = m_Effect->GetParameterByName(0, "gTexture");
+	}*/
+	
 }
 
 //-----------------------------------------------------------------------------
@@ -69,6 +85,8 @@ void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat,
 	HR(m_Effect->SetValue(mSpecularLightHandle, &mSpecularLight, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetValue(m_SpecularColHandle, &mSpecularMtrl, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetFloat(m_ShininessHandle, mSpecularPower));
+
+	
 
 	//*
 	// Begin passes.
@@ -86,6 +104,12 @@ void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat,
 		HR(m_Effect->SetMatrix(m_ViewProjectionMatHandel, &(worldMat*viewMat*projMat)));
 		HR(m_Effect->SetMatrix(m_WorldMatHandle, &worldMat));
 		HR(m_Effect->SetMatrix(mWorldMatInvHandle, &WIT));
+
+		/*if (mImageTexture != NULL)
+		{
+			HR(m_Effect->SetTexture(mTextureHandle, mImageTexture));
+		}*/
+
 		HR(m_Effect->CommitChanges());
 		//*/
 

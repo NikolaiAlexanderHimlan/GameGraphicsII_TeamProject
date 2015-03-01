@@ -33,6 +33,10 @@ public:
 	D3DXCOLOR   mSpecularLight;
 	float       mSpecularPower;
 
+	IDirect3DTexture9* mImageTexture;
+
+	
+
 protected:
     //---------- Shader Handles ----------
     // Generic shader handles
@@ -52,10 +56,14 @@ protected:
 	D3DXHANDLE			mAmbientColorHandle;
 	D3DXHANDLE			mAmbientLightHandle;
 
+	D3DXHANDLE			mTextureHandle;
+
 
 public:
     BaseMaterial(void);
     virtual ~BaseMaterial(void);
+
+	void LoadTexture(const std::string& filename);
 
 	void LoadEffect(const std::string& filename);
     void ConnectToEffect( ID3DXEffect* effect );

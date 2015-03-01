@@ -99,7 +99,10 @@
     <ClCompile Include="d3dApp.cpp" />
     <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="GfxStats.cpp" />
+    <ClCompile Include="NAH_lib\RotationMath.cpp" />
+    <ClCompile Include="Rotation.cpp" />
     <ClCompile Include="SkeletonClass.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h" />
@@ -116,8 +119,10 @@
     <ClInclude Include="DirectInput.h" />
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="NAH_lib\RotationMath.h" />
     <ClInclude Include="Rotation.h" />
     <ClInclude Include="SkeletonClass.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector3f.h" />
   </ItemGroup>
   <ItemGroup>

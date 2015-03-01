@@ -17,8 +17,6 @@ BaseObject3D::BaseObject3D(void)
 	//m_IndexBuffer = NULL;
 	mObjectMesh = nullptr;
 	mObjectMaterial = nullptr;
-
-    D3DXMatrixIdentity(&m_World);
 }
 
 //-----------------------------------------------------------------------------
@@ -27,19 +25,29 @@ BaseObject3D::~BaseObject3D(void)
 	//ReleaseCOM(m_VertexBuffer);
 	//ReleaseCOM(m_IndexBuffer);
 	ReleaseCOM(mObjectMesh);
+	//HACK: mObjectMaterial should not be deleted here, as it can be a shared pointer, save in SkeletonClass and delete there
 	delete mObjectMaterial;
 }
 
 //-----------------------------------------------------------------------------
 void BaseObject3D::setWorldPosition(const Vector3f& newPosition)
 {
-	m_World = *D3DXMatrixTranslation(&m_World, newPosition.x, newPosition.y, newPosition.z);
+	//TODO: Handle relative world
+	mLocalTransform.position = newPosition;
 }
 
 //-----------------------------------------------------------------------------
-void BaseObject3D::setWorldRotation(const Rotation& newRotation)
+void BaseObject3D::setWorldRotationDegrees(const Rotation& newDegrees)
 {
-	m_World = *D3DXMatrixRotationYawPitchRoll(&m_World, newRotation.y, newRotation.x, newRotation.z);
+	//TODO: Handle relative world
+	mLocalTransform.rotation = asRadians(newDegrees);
+}
+
+//-----------------------------------------------------------------------------
+void BaseObject3D::setWorldRotationRadians(const Rotation& newRadians)
+{
+	//TODO: Handle relative world
+	mLocalTransform.rotation = newRadians;
 }
 
 //-----------------------------------------------------------------------------
@@ -49,6 +57,10 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
 	// Update the statistics singleton class
 	GfxStats::GetInstance()->addVertices(getVertexCount());
 	GfxStats::GetInstance()->addTriangles(getTriangleCount());
+
+	//Calculate the world transform matrix
+	D3DXMATRIX transformationMat;
+	mLocalTransform.calcRenderMatrix(&transformationMat);
 
 	/*Vertex + Index buffer Render
     // Set the buffers and format
@@ -70,6 +82,6 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
 	if (mObjectMaterial == nullptr)
 		mObjectMesh->DrawSubset(0);
 	else //Render Material
-		mObjectMaterial->Render(m_World, view, projection, mObjectMesh);
+		mObjectMaterial->Render(transformationMat, view, projection, mObjectMesh);
 }
 //=============================================================================

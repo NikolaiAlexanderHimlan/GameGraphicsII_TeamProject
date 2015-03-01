@@ -18,6 +18,7 @@
 #include "../BaseMaterial.h"
 #include "../Vector3f.h"
 #include "../Rotation.h"
+#include "../Transform.h"
 //=============================================================================
 struct IDirect3DVertexBuffer9;
 struct IDirect3DIndexBuffer9;
@@ -25,7 +26,7 @@ struct IDirect3DIndexBuffer9;
 class BaseObject3D
 {
 private:
-    D3DXMATRIX                  m_World;
+	Transform		mLocalTransform;
 
 protected:	
 	int mNumVertices;
@@ -40,11 +41,14 @@ public:
     BaseObject3D(void);
     ~BaseObject3D(void);
 
-	inline int getTriangleCount() { return mNumTriangles;	};
-	inline int getVertexCount() { return mNumVertices;	};
+	inline int getTriangleCount() const { return mNumTriangles;	};
+	inline int getVertexCount() const { return mNumVertices;	};
+	
+	Transform& refLocalTransform() { return mLocalTransform;	};
 
 	void setWorldPosition(const Vector3f& newPosition);
-	void setWorldRotation(const Rotation& newRotation);
+	void setWorldRotationDegrees(const Rotation& newDegrees);
+	void setWorldRotationRadians(const Rotation& newRadians);
 
     // Replace or add to the following code as you progress with the material
 	inline virtual void Create(IDirect3DDevice9* gd3dDevice) final {

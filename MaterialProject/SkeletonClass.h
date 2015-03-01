@@ -66,8 +66,8 @@ private:
 
 	BaseMaterial*	mPhongMaterial;
 	BaseMaterial*	mGouradMaterial;
-	void setPhongMaterial();;
-	void setGouradMaterial();;
+	void setPhongMaterial();
+	void setGouradMaterial();
 
 	inline void SetTarget(unsigned int targetNum)
 	{

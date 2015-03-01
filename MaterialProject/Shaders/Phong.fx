@@ -1,5 +1,5 @@
 /*
-Author:
+Author: Andrew Esposito
 Class: EGP-300 <Section 52>
 Assignment: Shader Materials
 Certification of Authenticity:
@@ -20,12 +20,10 @@ uniform extern float4 gDiffuseLight;
 uniform extern float4 gAmbientMtrl;
 uniform extern float4 gAmbientLight;
 
-struct InputVS
-{
+struct InputVS {
 };
 
-struct OutputVS
-{
+struct OutputVS {
 	float4 posH : POSITION0;
 	float3 normalW : TEXCOORD0;
 	float3 posW : TEXCOORD1;

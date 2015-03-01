@@ -1,5 +1,5 @@
 /*
-Author:
+Author: Nikolai Alexander-Himlan
 Class: EGP-300 <Section 52>
 Assignment: Shader Materials
 Certification of Authenticity:

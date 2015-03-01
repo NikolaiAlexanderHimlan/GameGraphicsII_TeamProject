@@ -16,8 +16,6 @@
 #include "../d3dUtil.h"
 
 #include "../BaseMaterial.h"
-#include "../Vector3f.h"
-#include "../Rotation.h"
 #include "../Transform.h"
 //=============================================================================
 struct IDirect3DVertexBuffer9;
@@ -28,12 +26,12 @@ class BaseObject3D
 private:
 	Transform		mLocalTransform;
 
-protected:	
+protected:
 	int mNumVertices;
 	int mNumTriangles;
 
 	ID3DXMesh*		mObjectMesh;
-	BaseMaterial* mObjectMaterial;
+	BaseMaterial*	mObjectMaterial;
 	
 	virtual void Build( IDirect3DDevice9* gd3dDevice ) = 0;
 

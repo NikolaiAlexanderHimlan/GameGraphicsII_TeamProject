@@ -90,7 +90,6 @@ void Sphere3D::buildSphereIndexBuffer(IDirect3DDevice9* gd3dDevice)
 		}
 	}
 
-
 	HR(m_VertexBuffer->Unlock());
 }
 //*/

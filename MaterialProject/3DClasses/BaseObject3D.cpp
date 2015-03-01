@@ -51,8 +51,7 @@ void BaseObject3D::setWorldRotationRadians(const Rotation& newRadians)
 }
 
 //-----------------------------------------------------------------------------
-void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
-    D3DXMATRIX& view, D3DXMATRIX& projection )
+void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection )
 {
 	// Update the statistics singleton class
 	GfxStats::GetInstance()->addVertices(getVertexCount());
@@ -72,7 +71,7 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,
 	HR(gd3dDevice->SetTransform(D3DTS_WORLD, &m_World));
 	HR(gd3dDevice->SetTransform(D3DTS_VIEW, &view));
 	HR(gd3dDevice->SetTransform(D3DTS_PROJECTION, &projection));	
-    
+
     // Send to render
 	HR(gd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, getVertexCount(), 0, getTriangleCount()));
 

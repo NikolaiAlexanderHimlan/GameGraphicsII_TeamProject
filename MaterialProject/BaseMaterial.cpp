@@ -33,7 +33,7 @@ void BaseMaterial::setTexture(IDirect3DTexture9* texture)
 {
 	mImageTexture = texture;
 	mTextureHandle = m_Effect->GetParameterByName(0, "gTexture");
-	HR(m_Effect->SetValue(mTextureHandle, &mImageTexture, sizeof(IDirect3DTexture9*)));
+	HR(m_Effect->SetTexture(mTextureHandle, mImageTexture));
 }
 
 //-----------------------------------------------------------------------------
@@ -44,8 +44,6 @@ void BaseMaterial::LoadEffect(const std::string& filename)
 	// Create the FX from a .fx file.
 	ID3DXEffect* effect;
 	ID3DXBuffer* errors = 0;
-
-	//HR(D3DXCreateTextureFromFile(gd3dDevice, ".\\Assets\\Original_Utah_Teapot.bmp", &mImageTexture));
 
 	HR(D3DXCreateEffectFromFile(gd3dDevice, filename.c_str(), 0, 0, D3DXSHADER_DEBUG, 0, &effect, &errors));
 
@@ -75,13 +73,7 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 	mAmbientColorHandle = m_Effect->GetParameterByName(0, "gAmbientMtrl");
 	mAmbientLightHandle = m_Effect->GetParameterByName(0, "gAmbientLight");
 
-	mRenderTextureHandle = m_Effect->GetParameterByName(0, "gRenderTexture");
-
-	/*if (mImageTexture != NULL)
-	{
-		mTextureHandle = m_Effect->GetParameterByName(0, "gTexture");
-	}*/
-	
+	mRenderTextureHandle = m_Effect->GetParameterByName(0, "gRenderTexture");	
 }
 
 //-----------------------------------------------------------------------------
@@ -114,11 +106,6 @@ void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat,
 		HR(m_Effect->SetMatrix(m_ViewProjectionMatHandel, &(worldMat*viewMat*projMat)));
 		HR(m_Effect->SetMatrix(m_WorldMatHandle, &worldMat));
 		HR(m_Effect->SetMatrix(mWorldMatInvHandle, &WIT));
-
-		/*if (mImageTexture != NULL)
-		{
-			HR(m_Effect->SetTexture(mTextureHandle, mImageTexture));
-		}*/
 
 		HR(m_Effect->CommitChanges());
 		//*/

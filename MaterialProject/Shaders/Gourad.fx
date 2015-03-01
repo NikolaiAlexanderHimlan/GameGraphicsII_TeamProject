@@ -20,6 +20,8 @@ uniform extern float4 gDiffuseLight;
 uniform extern float4 gAmbientMtrl;
 uniform extern float4 gAmbientLight;
 
+uniform extern texture gTexture;
+
 struct InputVS {
 };
 

@@ -19,11 +19,21 @@ protected:
     D3DXMATRIX          m_WorldMat;
     D3DXMATRIX          m_ViewProjectionMat;
 
+public:
     D3DXVECTOR3         m_DiffuseColor;
     D3DXVECTOR3         m_SpecularColor;
     float				m_Shininess;            // specular power
 
+	D3DXVECTOR3 mLightVecW;
+	D3DXCOLOR   mAmbientMtrl;
+	D3DXCOLOR   mAmbientLight;
+	D3DXCOLOR   mDiffuseMtrl;
+	D3DXCOLOR   mDiffuseLight;
+	D3DXCOLOR   mSpecularMtrl;
+	D3DXCOLOR   mSpecularLight;
+	float       mSpecularPower;
 
+protected:
     //---------- Shader Handles ----------
     // Generic shader handles
     D3DXHANDLE          m_WorldMatHandle;    

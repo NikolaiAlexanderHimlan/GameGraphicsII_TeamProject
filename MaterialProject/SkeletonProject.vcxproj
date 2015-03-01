@@ -115,6 +115,7 @@
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="DirectInput.h" />
     <ClInclude Include="GfxStats.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Rotation.h" />
     <ClInclude Include="SkeletonClass.h" />
     <ClInclude Include="Vector3f.h" />

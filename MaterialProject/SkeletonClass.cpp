@@ -27,6 +27,7 @@
 #include "3DClasses\Sphere3D.h"
 #include "3DClasses\Torus3D.h"
 #include "3DClasses\Teapot3D.h"
+#include "Color.h"
 //=============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 				   PSTR cmdLine, int showCmd)
@@ -63,6 +64,15 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	BaseMaterial* addMaterial = new BaseMaterial();
 	//addMaterial->LoadEffect(GOURAD_FX_FILENAME);
 	addMaterial->LoadEffect(PHONG_FX_FILENAME);
+
+	addMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
+	addMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	addMaterial->mDiffuseLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	addMaterial->mAmbientMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	addMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
+	addMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
+	addMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	addMaterial->mSpecularPower = 8.0f;
 
 	addObject = new Cube3D(1.0f, 1.0f, 1.0f);
 	addObject->Create( gd3dDevice );

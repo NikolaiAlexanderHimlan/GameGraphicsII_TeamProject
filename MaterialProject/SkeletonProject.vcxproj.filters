@@ -50,6 +50,7 @@
     </ClInclude>
     <ClInclude Include="Rotation.h" />
     <ClInclude Include="Vector3f.h" />
+    <ClInclude Include="Color.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Primitives">

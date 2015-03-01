@@ -35,6 +35,7 @@ public:
 
 	bool mRenderTexture = true;
 	IDirect3DTexture9* mImageTexture = nullptr;
+	IDirect3DTexture9* mBlankTexture = nullptr;
 
 protected:
     //---------- Shader Handles ----------
@@ -63,15 +64,18 @@ public:
     BaseMaterial(void);
     virtual ~BaseMaterial(void);
 
+	//Texture
 	inline bool ShouldRenderTexture(void) const
 	{ return mRenderTexture && (mImageTexture != nullptr);	};
-
 	void LoadTexture(const std::string& filename);
 	void setTexture( IDirect3DTexture9* texture );
+	void ToggleTextureRender();
 
+	//Effect
 	void LoadEffect(const std::string& filename);
     void ConnectToEffect( ID3DXEffect* effect );
 
+	//Render
     void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ) const; 
 	void Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh) const;
 };

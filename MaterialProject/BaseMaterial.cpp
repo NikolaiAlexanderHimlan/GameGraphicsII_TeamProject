@@ -23,6 +23,7 @@ BaseMaterial::~BaseMaterial(void)
 	ReleaseCOM(m_Effect);
 }
 
+//-----------------------------------------------------------------------------
 void BaseMaterial::LoadTexture(const std::string& filename)
 {
 	IDirect3DTexture9* texture;
@@ -32,8 +33,21 @@ void BaseMaterial::LoadTexture(const std::string& filename)
 void BaseMaterial::setTexture(IDirect3DTexture9* texture)
 {
 	mImageTexture = texture;
-	mTextureHandle = m_Effect->GetParameterByName(0, "gTexture");
 	HR(m_Effect->SetTexture(mTextureHandle, mImageTexture));
+}
+void BaseMaterial::ToggleTextureRender()
+{
+	if (mImageTexture == nullptr) return;//nothing changes if there is no valid texture
+
+	mRenderTexture = !mRenderTexture;//switch texture rendering
+
+	//resend the correct texture
+	if (mRenderTexture) {
+		HR(m_Effect->SetTexture(mTextureHandle, mImageTexture));
+	}
+	else {
+		HR(m_Effect->SetTexture(mTextureHandle, mBlankTexture));
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -73,7 +87,11 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 	mAmbientColorHandle = m_Effect->GetParameterByName(0, "gAmbientMtrl");
 	mAmbientLightHandle = m_Effect->GetParameterByName(0, "gAmbientLight");
 
-	mRenderTextureHandle = m_Effect->GetParameterByName(0, "gRenderTexture");	
+	mRenderTextureHandle = m_Effect->GetParameterByName(0, "gRenderTexture");
+	mTextureHandle = m_Effect->GetParameterByName(0, "gTexture");
+
+	//send null texture to start with
+	HR(m_Effect->SetTexture(mTextureHandle, mBlankTexture));
 }
 
 //-----------------------------------------------------------------------------

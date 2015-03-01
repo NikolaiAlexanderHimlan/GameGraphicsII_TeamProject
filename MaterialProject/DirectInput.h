@@ -19,6 +19,7 @@ public:
 
 	void poll();
 	bool keyDown(char key);
+	bool keyPress(char key);
 	bool mouseButtonDown(int button);
 	float mouseDX();
 	float mouseDY();
@@ -32,11 +33,14 @@ private:
 private:
 	IDirectInput8*       mDInput;
 
+	static const unsigned int KEY_COUNT = 256;
 	IDirectInputDevice8* mKeyboard;
-	char                 mKeyboardState[256]; 
+	char                 mKeyboardState[KEY_COUNT];
+	char					mKeyboardPrev[KEY_COUNT];
 
 	IDirectInputDevice8* mMouse;
 	DIMOUSESTATE2        mMouseState;
+	DIMOUSESTATE2			mMousePrev;
 };
 extern DirectInput* gDInput;
 

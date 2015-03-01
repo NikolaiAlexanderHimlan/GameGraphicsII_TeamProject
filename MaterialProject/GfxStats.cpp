@@ -8,6 +8,8 @@
 #include "GfxStats.h"
 #include <tchar.h>
 
+#include "Vector3f.h"
+
 //=============================================================================
 DEFINE_SINGLETON(GfxStats);
 //=============================================================================
@@ -115,8 +117,10 @@ void GfxStats::display()
 
 	sprintf(buffer, "Frames Per Second = %.2f\n"
 		"Milliseconds Per Frame = %.4f\n"
+		"Camera Position = %s\n"
 		"Triangle Count = %d\n"
-		"Vertex Count = %d", mFPS, mMilliSecPerFrame, mNumTris, mNumVertices);
+		"Vertex Count = %d"
+		, mFPS, mMilliSecPerFrame, toString(mCameraPos).c_str(), mNumTris, mNumVertices);
 
 	RECT R = {5, 5, 0, 0};
 	HR(mFont->DrawText(0, buffer, -1, &R, DT_NOCLIP, D3DCOLOR_XRGB(0,0,0)));

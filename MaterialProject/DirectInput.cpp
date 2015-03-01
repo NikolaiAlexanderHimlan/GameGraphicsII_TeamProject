@@ -39,22 +39,27 @@ DirectInput::~DirectInput()
 void DirectInput::poll()
 {
 	// Poll keyboard.
+	for (unsigned int i = 0; i < KEY_COUNT; i++)
+		mKeyboardPrev[i] = mKeyboardState[i];//save previous state
 	HRESULT hr = mKeyboard->GetDeviceState(sizeof(mKeyboardState), (void**)&mKeyboardState); 
 	if( FAILED(hr) )
 	{
 		// Keyboard lost, zero out keyboard data structure.
 		ZeroMemory(mKeyboardState, sizeof(mKeyboardState));
+		ZeroMemory(mKeyboardPrev, sizeof(mKeyboardPrev));
 
 		 // Try to acquire for next time we poll.
 		hr = mKeyboard->Acquire();
 	}
 
 	// Poll mouse.
+	mMousePrev = mMouseState;//save previous state
 	hr = mMouse->GetDeviceState(sizeof(DIMOUSESTATE2), (void**)&mMouseState); 
 	if( FAILED(hr) )
 	{
 		// Mouse lost, zero out mouse data structure.
 		ZeroMemory(&mMouseState, sizeof(mMouseState));
+		ZeroMemory(&mMousePrev, sizeof(mMousePrev));
 
 		// Try to acquire for next time we poll.
 		hr = mMouse->Acquire(); 
@@ -64,6 +69,11 @@ void DirectInput::poll()
 bool DirectInput::keyDown(char key)
 {
 	return (mKeyboardState[key] & 0x80) != 0;
+}
+bool DirectInput::keyPress(char key)
+{
+	return ((mKeyboardState[key] & 0x80) != 0)
+		&& !((mKeyboardPrev[key] & 0x80) != 0);
 }
 
 bool DirectInput::mouseButtonDown(int button)

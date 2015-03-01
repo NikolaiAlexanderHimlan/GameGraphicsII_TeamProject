@@ -59,7 +59,7 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 }
 
 //-----------------------------------------------------------------------------
-void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh)
+void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh) const
 {
 	HR(m_Effect->SetValue(m_LightPosWHandle, &mLightVecW, sizeof(D3DXVECTOR3)));
 	HR(m_Effect->SetValue(m_DIffuseColHandle, &mDiffuseMtrl, sizeof(D3DXCOLOR)));

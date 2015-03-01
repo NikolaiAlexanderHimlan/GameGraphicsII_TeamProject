@@ -59,8 +59,8 @@ public:
 
 	void LoadEffect(const std::string& filename);
     void ConnectToEffect( ID3DXEffect* effect );
-    void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ); 
-	void Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh);
+    void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ) const; 
+	void Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh) const;
 };
 //=============================================================================
 

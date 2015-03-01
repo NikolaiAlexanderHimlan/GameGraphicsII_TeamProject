@@ -13,6 +13,8 @@
 #include <d3dx9.h>
 #include "d3dUtil.h"
 
+#include "Vector3f.h"
+
 class GfxStats
 {
     DECLARE_SINGLETON(GfxStats);
@@ -31,6 +33,8 @@ public:
 	void setTriCount(DWORD n);
 	void setVertexCount(DWORD n);
 
+	void setCameraPosition(const Vector3f& pos) { mCameraPos = pos;	};
+
 	void update(float dt);
 	void display();
 
@@ -43,6 +47,7 @@ private:
 	ID3DXFont* mFont;
 	float mFPS;
 	float mMilliSecPerFrame;
+	Vector3f mCameraPos;
 	DWORD mNumTris;
 	DWORD mNumVertices;
 };

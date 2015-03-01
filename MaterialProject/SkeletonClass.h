@@ -23,6 +23,7 @@
 #include <vector>
 //=============================================================================
 class BaseObject3D;
+class BaseMaterial;
 //=============================================================================
 class SkeletonClass : public D3DApp
 {
@@ -45,14 +46,38 @@ public:
 	void buildProjMtx();
 
 private:
+	bool mIsWireframe = false;
+	bool mRenderTextures = true;
+	bool mSpecularEnabled = true;
+	bool mDiffuseEnabled = true;
+	unsigned int mCurrentTarget = 0;
+
 	float mCameraRotationY;
 	float mCameraRadius;
 	float mCameraHeight;
+	bool mCameraInvertX = false;
+	bool mCameraInvertY = false;
+	bool mCameraInvertZ = false; //Zoom/Radius
 
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
 
     std::vector<BaseObject3D*>      m_Objects;
+
+	BaseMaterial*	mPhongMaterial;
+	BaseMaterial*	mGouradMaterial;
+
+	inline void SetTarget(unsigned int targetNum)
+	{
+		if (targetNum < m_Objects.size())
+			mCurrentTarget = targetNum;
+	};
+	inline void NextTarget(void)
+	{
+		mCurrentTarget++;
+		if (mCurrentTarget >= m_Objects.size())
+			mCurrentTarget = 0;//back to start
+	}
 };
 //=============================================================================
 #endif // _SKELETON_CLASS_H_

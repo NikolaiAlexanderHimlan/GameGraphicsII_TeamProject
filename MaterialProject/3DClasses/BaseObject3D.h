@@ -33,21 +33,34 @@ protected:
 	ID3DXMesh*		mObjectMesh;
 	BaseMaterial*	mObjectMaterial;
 	
+	//Actions
 	virtual void Build( IDirect3DDevice9* gd3dDevice ) = 0;
 
 public:
     BaseObject3D(void);
     ~BaseObject3D(void);
 
+	//Getters
 	inline int getTriangleCount() const { return mNumTriangles;	};
 	inline int getVertexCount() const { return mNumVertices;	};
-	
-	Transform& refLocalTransform() { return mLocalTransform;	};
 
+	inline const Transform& getLocalTransform() const { return mLocalTransform;	};
+	
+	//Reference Getters
+	inline Transform& refLocalTransform() { return mLocalTransform;	};
+
+	//Setters
+	inline void setWorldTransform(const Transform& newTransform) {
+		setWorldPosition(newTransform.position);
+		setWorldRotationDegrees(newTransform.rotation);
+		setWorldScale(newTransform.scale);
+	}
 	void setWorldPosition(const Vector3f& newPosition);
 	void setWorldRotationDegrees(const Rotation& newDegrees);
 	void setWorldRotationRadians(const Rotation& newRadians);
+	void setWorldScale(const Vector3f& newScale);
 
+	//Actions
     // Replace or add to the following code as you progress with the material
 	inline virtual void Create(IDirect3DDevice9* gd3dDevice) final {
 		Build(gd3dDevice);
@@ -55,7 +68,15 @@ public:
 		mNumVertices = mObjectMesh->GetNumVertices();
 	};
 	inline void setMaterial( BaseMaterial* newMaterial ) { mObjectMaterial = newMaterial;	};
-	virtual void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection ) final;
+	inline void deleteMaterial(void)
+	{
+		if (mObjectMaterial != nullptr)
+		{
+			delete mObjectMaterial;
+			mObjectMaterial = nullptr;
+		}
+	};
+	virtual void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection ) const final;
 };
 //=============================================================================
 #endif // _BASE_OBJECT_3D_H

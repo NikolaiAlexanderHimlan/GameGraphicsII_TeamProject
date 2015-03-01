@@ -25,8 +25,6 @@ BaseObject3D::~BaseObject3D(void)
 	//ReleaseCOM(m_VertexBuffer);
 	//ReleaseCOM(m_IndexBuffer);
 	ReleaseCOM(mObjectMesh);
-	//HACK: mObjectMaterial should not be deleted here, as it can be a shared pointer, save in SkeletonClass and delete there
-	delete mObjectMaterial;
 }
 
 //-----------------------------------------------------------------------------
@@ -40,7 +38,7 @@ void BaseObject3D::setWorldPosition(const Vector3f& newPosition)
 void BaseObject3D::setWorldRotationDegrees(const Rotation& newDegrees)
 {
 	//TODO: Handle relative world
-	mLocalTransform.rotation = asRadians(newDegrees);
+	mLocalTransform.rotation = newDegrees.asRadians();
 }
 
 //-----------------------------------------------------------------------------
@@ -51,7 +49,7 @@ void BaseObject3D::setWorldRotationRadians(const Rotation& newRadians)
 }
 
 //-----------------------------------------------------------------------------
-void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection )
+void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection ) const
 {
 	// Update the statistics singleton class
 	GfxStats::GetInstance()->addVertices(getVertexCount());

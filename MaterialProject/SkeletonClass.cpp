@@ -62,6 +62,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
     // replace or add to the following object creation
 	BaseObject3D* addObject;
 	BaseMaterial* addMaterial = new BaseMaterial();
+	mPhongMaterial = addMaterial;
 	//addMaterial->LoadEffect(GOURAD_FX_FILENAME);
 	addMaterial->LoadEffect(PHONG_FX_FILENAME);
 
@@ -76,39 +77,39 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	addObject = new Cube3D(1.0f, 1.0f, 1.0f);
 	addObject->Create( gd3dDevice );
-	addObject->setWorldPosition(Vector3f(0.0f, 0.0f, 0.0f));
+	//addObject->setWorldPosition(Vector3f(0.0f, 0.0f, 0.0f));
 	addObject->setMaterial(addMaterial);
 	m_Objects.push_back( addObject );
 
 	addObject = new Cone3D(2.0f, 1.0f, 8);
 	addObject->Create( gd3dDevice );
-	addObject->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
+	//addObject->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
 	addObject->setWorldRotationDegrees(Rotation(90.0f, 0.0f, 0.0f));
 	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	addObject = new Cylinder3D(2.0f, 1.0f, 8);
 	addObject->Create( gd3dDevice );
-	addObject->setWorldPosition(Vector3f(0.0f, -5.0f, -5.0f));
+	//addObject->setWorldPosition(Vector3f(0.0f, -5.0f, -5.0f));
 	addObject->setWorldRotationDegrees(Rotation(90.0f, 0.0f, 0.0f));
 	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	addObject = new Sphere3D(1.0f, 8);
 	addObject->Create( gd3dDevice );
-	addObject->setWorldPosition(Vector3f(5.0f, 5.0f, 5.0f));
+	//addObject->setWorldPosition(Vector3f(5.0f, 5.0f, 5.0f));
 	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	addObject = new Torus3D(0.5f, 1.0f, 8, 8);
 	addObject->Create(gd3dDevice);
-	addObject->setWorldPosition(Vector3f(-5.0f, 5.0f, 5.0f));
+	//addObject->setWorldPosition(Vector3f(-5.0f, 5.0f, 5.0f));
 	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
 	addObject = new Teapot3D();
 	addObject->Create(gd3dDevice);
-	addObject->setWorldPosition(Vector3f(5.0f, 5.0f, -5.0f));
+	//addObject->setWorldPosition(Vector3f(5.0f, 5.0f, -5.0f));
 	addObject->setMaterial(addMaterial);
 	m_Objects.push_back(addObject);
 
@@ -124,6 +125,9 @@ SkeletonClass::~SkeletonClass()
     for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
         delete m_Objects[obj];
     m_Objects.clear();
+
+	delete mPhongMaterial;
+	mPhongMaterial = nullptr;
 
 	DestroyAllVertexDeclarations();
 }
@@ -158,14 +162,47 @@ void SkeletonClass::updateScene(float dt)
 	gDInput->poll();
 
 	// Check input.
-	if( gDInput->keyDown(DIK_W) )	 
-		mCameraHeight   += 25.0f * dt;
-	if( gDInput->keyDown(DIK_S) )	 
-		mCameraHeight   -= 25.0f * dt;
+	// Check inverts
+	if (gDInput->keyPress(DIK_C))
+		mCameraInvertY = !mCameraInvertY;
+	if (gDInput->keyPress(DIK_X))
+		mCameraInvertX = !mCameraInvertX;
+	if (gDInput->keyPress(DIK_Z))
+		mCameraInvertZ = !mCameraInvertZ;
+
+	if( gDInput->keyDown(DIK_Y) )
+		mCameraRadius	+= 25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
+	if (gDInput->keyDown(DIK_H))
+		mCameraRadius	-= 25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
+
+	//Toggle render properties
+	if (gDInput->keyPress(DIK_D))
+		mDiffuseEnabled = !mDiffuseEnabled; //Toggle Diffuse
+	if (gDInput->keyPress(DIK_O))
+		NextTarget(); //Switch between objects
+	if (gDInput->keyPress(DIK_S))
+		mSpecularEnabled = !mSpecularEnabled; //Toggle Specular
+	if (gDInput->keyPress(DIK_T))
+		mRenderTextures = !mRenderTextures; //Toggle Textures
+	if (gDInput->keyPress(DIK_W))
+		mIsWireframe = !mIsWireframe; // Toggle Wireframe
+
+	//Set target based on number key
+	if (gDInput->keyPress(DIK_1))	SetTarget(0);
+	if (gDInput->keyPress(DIK_2))	SetTarget(1);
+	if (gDInput->keyPress(DIK_3))	SetTarget(2);
+	if (gDInput->keyPress(DIK_4))	SetTarget(3);
+	if (gDInput->keyPress(DIK_5))	SetTarget(4);
+	if (gDInput->keyPress(DIK_6))	SetTarget(5);
+	if (gDInput->keyPress(DIK_7))	SetTarget(6);
+	if (gDInput->keyPress(DIK_8))	SetTarget(7);
+	if (gDInput->keyPress(DIK_9))	SetTarget(8);
+	if (gDInput->keyPress(DIK_0))	SetTarget(9);
 
 	// Divide by 50 to make mouse less sensitive. 
-	mCameraRotationY += gDInput->mouseDX() / 100.0f;
-	mCameraRadius    += gDInput->mouseDY() / 25.0f;
+	mCameraRotationY	+= gDInput->mouseDX() / 100.0f * ((mCameraInvertX) ? -1.0f : 1.0f);
+	mCameraHeight		+= gDInput->mouseDY() / 25.0f * ((mCameraInvertY) ? 1.0f : -1.0f);
+	mCameraRadius		+= gDInput->mouseDZ() / 25.0f * ((mCameraInvertZ) ? 1.0f : -1.0f);
 
 	// If we rotate over 360 degrees, just roll back to 0
 	if( fabsf(mCameraRotationY) >= 2.0f * D3DX_PI ) 
@@ -190,14 +227,21 @@ void SkeletonClass::drawScene()
 	HR(gd3dDevice->BeginScene());
 
     // Set render states for the entire scene here:
-	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
-//	HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
+	if (mIsWireframe) {
+		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
+	} else {
+		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
+	}
 
+	/*
     // Render all the objects
     for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
     {
         m_Objects[obj]->Render( gd3dDevice, mView, mProj );
     }
+	//*/
+	// Render the current target
+	m_Objects[mCurrentTarget]->Render( gd3dDevice, mView, mProj );
 
     // display the render statistics
     GfxStats::GetInstance()->display();
@@ -213,9 +257,11 @@ void SkeletonClass::buildViewMtx()
 	float x = mCameraRadius * cosf(mCameraRotationY);
 	float z = mCameraRadius * sinf(mCameraRotationY);
 	D3DXVECTOR3 pos(x, mCameraHeight, z);
-	D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 target(m_Objects[mCurrentTarget]->getLocalTransform().position);
 	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
 	D3DXMatrixLookAtLH(&mView, &pos, &target, &up);
+
+	GfxStats::GetInstance()->setCameraPosition(pos);
 }
 
 void SkeletonClass::buildProjMtx()

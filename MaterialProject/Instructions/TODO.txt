@@ -1,6 +1,6 @@
-*Gourad shader
-*Color(BaseMaterial)
 *Reflectivness (BaseMaterial)
+*Toggle Specular
+*Toggle Diffuse
 *Texture
 	(Vertex)
 	-Texture coordinates

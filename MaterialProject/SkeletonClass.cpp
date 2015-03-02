@@ -55,6 +55,8 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 		PostQuitMessage(0);
 	}
 
+	InitAllVertexDeclarations();
+
 	mCameraRadius    = 10.0f;
 	mCameraRotationY = 1.2 * D3DX_PI;
 	mCameraHeight    = 5.0f;
@@ -62,12 +64,15 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	//create materials
 	mPhongMaterial = new BaseMaterial();
 	mPhongMaterial->LoadEffect(PHONG_FX_FILENAME);
+	mPhongMaterial->LoadTexture(TEXTURE_FILENAME);
 	mGouradMaterial = new BaseMaterial();
 	mGouradMaterial->LoadEffect(GOURAD_FX_FILENAME);
+	mGouradMaterial->LoadTexture(TEXTURE_FILENAME);
 
 	//set Phong lighting data
 	mPhongMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
 	mPhongMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	//mPhongMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 	mPhongMaterial->mDiffuseLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	mPhongMaterial->mAmbientMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
 	mPhongMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
@@ -123,8 +128,6 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	//setGouradMaterial();
 
 	onResetDevice();
-
-	InitAllVertexDeclarations();
 }
 
 SkeletonClass::~SkeletonClass()
@@ -195,7 +198,7 @@ void SkeletonClass::updateScene(float dt)
 	if (gDInput->keyPress(DIK_S))
 		mSpecularEnabled = !mSpecularEnabled; //Toggle Specular
 	if (gDInput->keyPress(DIK_T))
-		mRenderTextures = !mRenderTextures; //Toggle Textures
+		ToggleTextureRendering(); //Toggle Textures
 	if (gDInput->keyPress(DIK_W))
 		mIsWireframe = !mIsWireframe; // Toggle Wireframe
 
@@ -300,4 +303,10 @@ void SkeletonClass::setGouradMaterial()
 	for (size_t i = 0; i < m_Objects.size(); i++)
 		if (mGouradMaterial != m_Objects[i]->getMaterial())
 			m_Objects[i]->setMaterial(mGouradMaterial);
+}
+
+void SkeletonClass::ToggleTextureRendering()
+{
+	mPhongMaterial->ToggleTextureRender();
+	mGouradMaterial->ToggleTextureRender();
 }

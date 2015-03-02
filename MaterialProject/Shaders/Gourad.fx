@@ -23,6 +23,17 @@ uniform extern float4 gAmbientLight;
 uniform extern bool gRenderTexture;
 uniform extern texture gTexture;
 
+sampler TextureSampler = sampler_state
+{
+	Texture = <gTexture>;
+	MinFilter = Anisotropic;
+	MagFilter = LINEAR;
+	MipFilter = LINEAR;
+	MaxAnisotropy = 8;
+	AddressU  = WRAP;
+    AddressV  = WRAP;
+};
+
 struct InputVS {
 };
 
@@ -30,10 +41,12 @@ struct OutputVS {
 	float4 posH : POSITION0;
 	float3 normalW : TEXCOORD0;
 	float3 posW : TEXCOORD1;
-	float4 c : COLOR0;
+	float4 diffuse	: COLOR0;
+	float4 spec		: COLOR1;
+    float2 tex0    : TEXCOORD2;
 };
 
-OutputVS GouradVS(float3 posL : POSITION0, float3 normalL : NORMAL0)
+OutputVS GouradVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0: TEXCOORD2)
 {
 	OutputVS outVS = (OutputVS)0;
 	// Transform normal to world space.
@@ -59,16 +72,23 @@ OutputVS GouradVS(float3 posL : POSITION0, float3 normalL : NORMAL0)
 	float3 spec = t*(gSpecularMtrl*gSpecularLight).rgb;
 	float3 diffuse = s*(gDiffuseMtrl*gDiffuseLight).rgb;
 	float3 ambient = (gAmbientMtrl*gAmbientLight).xyz;
+
 	// Sum all the terms together and copy over the diffuse alpha.
-	outVS.c = float4(ambient + diffuse + spec, gDiffuseMtrl.a);
+	outVS.diffuse = float4(ambient + diffuse, gDiffuseMtrl.a);
+	outVS.spec = float4(spec, 0.0f);
+
+	// Pass texture coordinates on to Pixel shader
+	outVS.tex0 = tex0;
 
 	// Done--return the output.
 	return outVS;
 };
 
-float4 GouradPS(float4 c : COLOR0) : COLOR
+float4 GouradPS(float4 diffuse : COLOR0, float4 spec : COLOR1, float2 tex0 : TEXCOORD0) : COLOR
 {
-	return c;
+	float3 texColor = tex2D(TextureSampler, tex0).rgb;
+	float3 texVal = diffuse.rgb * texColor;
+    return float4(texVal + spec.rgb, diffuse.a);
 }
 
 technique GouradTech

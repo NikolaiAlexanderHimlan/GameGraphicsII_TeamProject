@@ -22,7 +22,8 @@ protected:
 		HR(D3DXCreateTeapot(gd3dDevice, &mObjectMesh, 0));
 		//buildTeapotVertexBuffer( gd3dDevice );
 		//buildTeapotIndexBuffer( gd3dDevice );
-	}
+	};
+	inline void BuildTexCoord() { __super::BuildTexCoord();	}; //HACK: placeholder, implement TexCoord
 
 public:
 	Teapot3D() {};

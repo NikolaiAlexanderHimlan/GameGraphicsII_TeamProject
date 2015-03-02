@@ -35,6 +35,7 @@ protected:
 	
 	//Actions
 	virtual void Build( IDirect3DDevice9* gd3dDevice ) = 0;
+	virtual void BuildTexCoord() = 0;
 
 public:
     BaseObject3D(void);
@@ -66,6 +67,7 @@ public:
     // Replace or add to the following code as you progress with the material
 	inline virtual void Create(IDirect3DDevice9* gd3dDevice) final {
 		Build(gd3dDevice);
+		BuildTexCoord();
 		mNumTriangles = mObjectMesh->GetNumFaces();
 		mNumVertices = mObjectMesh->GetNumVertices();
 	};

@@ -25,6 +25,7 @@ protected:
 		//buildSphereVertexBuffer( gd3dDevice );
 		//buildSphereIndexBuffer( gd3dDevice );
 	};
+	void BuildTexCoord();
 
 public:
 	Sphere3D(float radius, int numSegments)

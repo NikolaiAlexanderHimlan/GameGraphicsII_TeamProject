@@ -26,8 +26,12 @@ uniform extern texture gTexture;
 sampler TextureSampler = sampler_state
 {
 	Texture = <gTexture>;
-	MinFilter = POINT;
-	MAGFilter = POINT;
+	MinFilter = Anisotropic;
+	MagFilter = LINEAR;
+	MipFilter = LINEAR;
+	MaxAnisotropy = 8;
+	AddressU  = WRAP;
+    AddressV  = WRAP;
 };
 
 struct InputVS {
@@ -50,6 +54,7 @@ OutputVS PhongVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0 
 	outVS.normalW = normalize(outVS.normalW);
 	// Transform vertex position to world space.
 	outVS.posW = mul(float4(posL, 1.0f), gWorld).xyz;
+
 	// Transform to homogeneous clip space.
 	outVS.posH = mul(float4(posL, 1.0f), gWVP);
 
@@ -63,7 +68,7 @@ OutputVS PhongVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0 
 	return outVS;
 }
 
-float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 : TEXCOORD2, float4 c : COLOR0) : COLOR
+float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 : TEXCOORD2) : COLOR
 {
 	// Interpolated normals can become unnormal--so normalize.
 	normalW = normalize(normalW);
@@ -77,10 +82,17 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 	// Determine the diffuse light intensity that strikes the vertex.
 	float s = max(dot(gLightVecW, normalW), 0.0f);
 	// Compute the ambient, diffuse, and specular terms separately.
-	float3 spec = t*(gSpecularMtrl*gSpecularLight).rgb;
-	float3 diffuse = s*(gDiffuseMtrl*gDiffuseLight).rgb;
+	float3 specVal = float4(t*(gSpecularMtrl*gSpecularLight).rgb, 0.0f);
+	float3 diffuseVal = float4(s*(gDiffuseMtrl*gDiffuseLight).rgb, 0.0f);
 	float3 ambient = (gAmbientMtrl*gAmbientLight).xyz;
 
+	float4 diffuse;
+	float4 spec;
+	diffuse.rgb = ambient + diffuseVal;
+	diffuse.a = gDiffuseMtrl.a;
+	spec = float4(specVal.rgb, 0.0f);
+
+	/*
 	//**********USED FOR TEXTURE DISPLAY
 	// Get texel from texture map that gets mapped to this pixel.
 	float3 texColor = tex2D(TextureSampler, tex0).rgb;
@@ -89,9 +101,13 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 	// Add in the specular term separately.
 	return float4(ambient + diffuse + spec, c.a);
 	//**********
+	//*/
+
+	float3 texColor = tex2D(TextureSampler, tex0).rgb;
+	float3 texVal = diffuse.rgb * texColor;
 
 	// Sum all the terms together and copy over the diffuse alpha.
-	return float4(ambient + diffuse + spec, gDiffuseMtrl.a);
+	return float4(spec.rgb + texVal, gDiffuseMtrl.a);
 }
 
 technique PhongTech

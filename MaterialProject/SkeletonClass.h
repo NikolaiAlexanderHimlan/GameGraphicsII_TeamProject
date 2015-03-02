@@ -28,6 +28,8 @@ class BaseMaterial;
 class SkeletonClass : public D3DApp
 {
 private:
+	const std::string ASSET_DIR = ".\\Assets\\";
+	const std::string TEXTURE_FILENAME = ASSET_DIR + "Original_Utah_Teapot.bmp";
 	const std::string SHADER_DIR = ".\\Shaders\\";
 	const std::string GOURAD_FX_FILENAME = SHADER_DIR + "Gourad.fx";
 	const std::string PHONG_FX_FILENAME = SHADER_DIR + "Phong.fx";
@@ -47,10 +49,9 @@ public:
 
 private:
 	bool mIsWireframe = false;
-	bool mRenderTextures = true;
 	bool mSpecularEnabled = true;
 	bool mDiffuseEnabled = true;
-	unsigned int mCurrentTarget = 0;
+	unsigned int mCurrentTarget = 3;
 
 	float mCameraRotationY;
 	float mCameraRadius;
@@ -68,6 +69,8 @@ private:
 	BaseMaterial*	mGouradMaterial;
 	void setPhongMaterial();
 	void setGouradMaterial();
+
+	void ToggleTextureRendering();
 
 	inline void SetTarget(unsigned int targetNum)
 	{

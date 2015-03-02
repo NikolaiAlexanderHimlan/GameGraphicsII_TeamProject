@@ -49,6 +49,58 @@ void BaseObject3D::setWorldRotationRadians(const Rotation& newRadians)
 }
 
 //-----------------------------------------------------------------------------
+void BaseObject3D::BuildTexCoord()
+{
+	//HACK: Default tex coords
+
+	// D3DXCreate* functions generate vertices with position 
+	// and normal data.  But for texturing, we also need
+	// tex-coords.  So clone the mesh to change the vertex
+	// format to a format with tex-coords.
+
+	D3DVERTEXELEMENT9 elements[64];
+	UINT numElements = 0;
+	VertexPNT::Decl->GetDeclaration(elements, &numElements);
+
+	ID3DXMesh* temp = 0;
+	HR(mObjectMesh->CloneMesh(D3DXMESH_SYSTEMMEM,
+		elements, gd3dDevice, &temp));
+
+	ReleaseCOM(mObjectMesh);
+
+	// Now generate texture coordinates for each vertex.
+	VertexPNT* vertices = 0;
+	HR(temp->LockVertexBuffer(0, (void**)&vertices));
+
+	for (UINT i = 0; i < temp->GetNumVertices(); ++i)
+	{
+		// Convert to spherical coordinates.
+		D3DXVECTOR3 p = vertices[i].pos;
+
+		float theta = atan2f(p.z, p.x);
+		float phi = acosf(p.y / sqrtf(p.x*p.x + p.y*p.y + p.z*p.z));
+
+		// Phi and theta give the texture coordinates, but are not in 
+		// the range [0, 1], so scale them into that range.
+
+		float u = theta / (2.0f*D3DX_PI);
+		float v = phi / D3DX_PI;
+
+		// Save texture coordinates.
+
+		vertices[i].tex.x = u;
+		vertices[i].tex.y = v;
+	}
+	HR(temp->UnlockVertexBuffer());
+
+	// Clone back to a hardware mesh.
+	HR(temp->CloneMesh(D3DXMESH_MANAGED | D3DXMESH_WRITEONLY,
+		elements, gd3dDevice, &mObjectMesh));
+
+	ReleaseCOM(temp);
+}
+
+//-----------------------------------------------------------------------------
 void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection ) const
 {
 	// Update the statistics singleton class

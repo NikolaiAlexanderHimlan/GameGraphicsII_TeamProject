@@ -1,9 +1,5 @@
 *Reflectivness (BaseMaterial)
 *Toggle Specular
 *Toggle Diffuse
-*Texture
-	(Vertex)
-	-Texture coordinates
-	-Normal
 *Readme Doc
 *Release build

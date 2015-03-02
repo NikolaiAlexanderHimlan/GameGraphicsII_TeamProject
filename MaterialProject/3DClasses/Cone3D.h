@@ -18,6 +18,8 @@ private:
 	int mNumSegments;
 	int mNumSplits;
 
+	AXIS mAxis = Z_AXIS;
+
 protected:
 	//virtual void buildConeVertexBuffer( IDirect3DDevice9* gd3dDevice );
 	//virtual void buildConeIndexBuffer( IDirect3DDevice9* gd3dDevice );
@@ -28,6 +30,7 @@ protected:
 		//buildConeVertexBuffer( gd3dDevice );
 		//buildConeIndexBuffer( gd3dDevice );
 	};
+	void BuildTexCoord();
 
 public:
 	/// <param name="numSplits"> Number of splits along the height of the cone. </param>

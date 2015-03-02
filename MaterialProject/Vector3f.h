@@ -9,6 +9,14 @@ I certify that this assignment is entirely my own work.
 */
 #include <d3dx9math.h>
 #include <string>
+
+enum AXIS
+{
+	X_AXIS,
+	Y_AXIS,
+	Z_AXIS
+};
+
 typedef D3DXVECTOR3 Vector3f;
 
 const std::string toString(const Vector3f&);

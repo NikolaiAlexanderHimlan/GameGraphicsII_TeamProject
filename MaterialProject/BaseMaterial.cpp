@@ -27,7 +27,7 @@ BaseMaterial::~BaseMaterial(void)
 void BaseMaterial::LoadTexture(const std::string& filename)
 {
 	IDirect3DTexture9* texture;
-	HR(D3DXCreateTextureFromFile(gd3dDevice, ".\\Assets\\Original_Utah_Teapot.bmp", &texture));
+	HR(D3DXCreateTextureFromFile(gd3dDevice, filename.c_str(), &texture));
 	setTexture(texture);
 }
 void BaseMaterial::setTexture(IDirect3DTexture9* texture)

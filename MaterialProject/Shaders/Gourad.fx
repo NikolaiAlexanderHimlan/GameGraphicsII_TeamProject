@@ -20,6 +20,8 @@ uniform extern float4 gDiffuseLight;
 uniform extern float4 gAmbientMtrl;
 uniform extern float4 gAmbientLight;
 
+uniform extern bool gRenderDiffuse;
+uniform extern bool gRenderSpecular;
 uniform extern bool gRenderTexture;
 uniform extern texture gTexture;
 
@@ -87,8 +89,32 @@ OutputVS GouradVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0
 float4 GouradPS(float4 diffuse : COLOR0, float4 spec : COLOR1, float2 tex0 : TEXCOORD0) : COLOR
 {
 	float3 texColor = tex2D(TextureSampler, tex0).rgb;
-	float3 texVal = diffuse.rgb * texColor;
+	[flatten] if (gRenderTexture)
+	{
+		texColor = texColor;
+	}
+	else
+	{
+		texColor = float3(1.0f,1.0f,1.0f); //1.0f will not affect the diffuse
+	}
+	float3 texVal;
+	[flatten] if (gRenderDiffuse)
+	{
+		texVal = diffuse.rgb * texColor;
+	}
+	else
+	{
+		texVal = texColor;
+	}
+	// Sum all the terms together and copy over the diffuse alpha.
+	[flatten] if (gRenderSpecular)
+	{
     return float4(texVal + spec.rgb, diffuse.a);
+	}
+	else
+	{
+		return float4(texVal, gDiffuseMtrl.a);
+	}
 }
 
 technique GouradTech

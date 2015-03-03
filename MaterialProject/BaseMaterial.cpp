@@ -82,8 +82,10 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 	m_ShininessHandle = m_Effect->GetParameterByName(0, "gSpecularPower");
 	m_SpecularColHandle = m_Effect->GetParameterByName(0, "gSpecularMtrl");
 	mSpecularLightHandle = m_Effect->GetParameterByName(0, "gSpecularLight");
+	mRenderSpecularHandle = m_Effect->GetParameterByName(0, "gRenderSpecular");
 	m_DIffuseColHandle = m_Effect->GetParameterByName(0, "gDiffuseMtrl");
 	mDiffuseLightHandle = m_Effect->GetParameterByName(0, "gDiffuseLight");
+	mRenderDiffuseHandle = m_Effect->GetParameterByName(0, "gRenderDiffuse");
 	mAmbientColorHandle = m_Effect->GetParameterByName(0, "gAmbientMtrl");
 	mAmbientLightHandle = m_Effect->GetParameterByName(0, "gAmbientLight");
 
@@ -100,8 +102,10 @@ void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat,
 	HR(m_Effect->SetValue(m_LightPosWHandle, &mLightVecW, sizeof(D3DXVECTOR3)));
 	HR(m_Effect->SetValue(m_DIffuseColHandle, &mDiffuseMtrl, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetValue(mDiffuseLightHandle, &mDiffuseLight, sizeof(D3DXCOLOR)));
+	HR(m_Effect->SetBool(mRenderDiffuseHandle, mRenderDiffuse));
 	HR(m_Effect->SetValue(mAmbientColorHandle, &mAmbientMtrl, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetValue(mAmbientLightHandle, &mAmbientLight, sizeof(D3DXCOLOR)));
+	HR(m_Effect->SetBool(mRenderSpecularHandle, mRenderSpecular));
 	HR(m_Effect->SetValue(mSpecularLightHandle, &mSpecularLight, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetValue(m_SpecularColHandle, &mSpecularMtrl, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetFloat(m_ShininessHandle, mSpecularPower));

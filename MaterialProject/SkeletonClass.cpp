@@ -192,11 +192,19 @@ void SkeletonClass::updateScene(float dt)
 
 	//Toggle render properties
 	if (gDInput->keyPress(DIK_D))
-		mDiffuseEnabled = !mDiffuseEnabled; //Toggle Diffuse
+	{
+		//Toggle Diffuse
+		mPhongMaterial->ToggleDiffuse();
+		mGouradMaterial->ToggleDiffuse();
+	}
 	if (gDInput->keyPress(DIK_O))
 		NextTarget(); //Switch between objects
 	if (gDInput->keyPress(DIK_S))
-		mSpecularEnabled = !mSpecularEnabled; //Toggle Specular
+	{
+		//Toggle Specular
+		mPhongMaterial->ToggleSpecular();
+		mGouradMaterial->ToggleSpecular();
+	}
 	if (gDInput->keyPress(DIK_T))
 		ToggleTextureRendering(); //Toggle Textures
 	if (gDInput->keyPress(DIK_W))

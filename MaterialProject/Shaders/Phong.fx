@@ -20,6 +20,8 @@ uniform extern float4 gDiffuseLight;
 uniform extern float4 gAmbientMtrl;
 uniform extern float4 gAmbientLight;
 
+uniform extern bool gRenderDiffuse;
+uniform extern bool gRenderSpecular;
 uniform extern bool gRenderTexture;
 uniform extern texture gTexture;
 
@@ -104,10 +106,33 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 	//*/
 
 	float3 texColor = tex2D(TextureSampler, tex0).rgb;
-	float3 texVal = diffuse.rgb * texColor;
+	[flatten] if (gRenderTexture)
+	{
+		texColor = texColor;
+	}
+	else
+	{
+		texColor = float3(1.0f,1.0f,1.0f); //1.0f will not affect the diffuse
+	}
+	float3 texVal;
+	[flatten] if (gRenderDiffuse)
+	{
+		texVal = diffuse.rgb * texColor;
+	}
+	else
+	{
+		texVal = texColor;
+	}
 
 	// Sum all the terms together and copy over the diffuse alpha.
+	[flatten] if (gRenderSpecular)
+	{
 	return float4(spec.rgb + texVal, gDiffuseMtrl.a);
+	}
+	else
+	{
+		return float4(texVal, gDiffuseMtrl.a);
+	}
 }
 
 technique PhongTech

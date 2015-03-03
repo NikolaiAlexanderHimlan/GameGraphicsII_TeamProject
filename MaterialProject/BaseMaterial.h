@@ -12,6 +12,9 @@
 //=============================================================================
 class BaseMaterial
 {
+private: 
+	const D3DXCOLOR	EMPTY_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
+
 protected:
     ID3DXEffect*        m_Effect;               // the shader associate effect file
 
@@ -27,8 +30,10 @@ public:
 	D3DXVECTOR3 mLightVecW;
 	D3DXCOLOR   mAmbientMtrl;
 	D3DXCOLOR   mAmbientLight;
+	bool		mRenderDiffuse = true;
 	D3DXCOLOR   mDiffuseMtrl;
 	D3DXCOLOR   mDiffuseLight;
+	bool		mRenderSpecular = true;
 	D3DXCOLOR   mSpecularMtrl;
 	D3DXCOLOR   mSpecularLight;
 	float       mSpecularPower;
@@ -50,9 +55,11 @@ protected:
     // Material specific shader handles
     D3DXHANDLE          m_DIffuseColHandle;    
 	D3DXHANDLE			mDiffuseLightHandle;
+	D3DXHANDLE			mRenderDiffuseHandle;
     D3DXHANDLE          m_SpecularColHandle;
 	D3DXHANDLE			mSpecularLightHandle;
     D3DXHANDLE          m_ShininessHandle;   
+	D3DXHANDLE			mRenderSpecularHandle;
 	D3DXHANDLE			mAmbientColorHandle;
 	D3DXHANDLE			mAmbientLightHandle;
 
@@ -70,6 +77,8 @@ public:
 	void LoadTexture(const std::string& filename);
 	void setTexture( IDirect3DTexture9* texture );
 	void ToggleTextureRender();
+	inline void ToggleDiffuse() { mRenderDiffuse = !mRenderDiffuse;	};
+	inline void ToggleSpecular() { mRenderSpecular = !mRenderSpecular;	};
 
 	//Effect
 	void LoadEffect(const std::string& filename);

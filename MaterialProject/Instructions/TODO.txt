@@ -1,5 +1,3 @@
 *Reflectivness (BaseMaterial)
-*Toggle Specular
-*Toggle Diffuse
 *Readme Doc
 *Release build

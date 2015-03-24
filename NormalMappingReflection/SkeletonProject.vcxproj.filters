@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="3DClasses\BaseObject3D.cpp" />
+    <ClCompile Include="3DClasses\Vertex.cpp" />
+    <ClCompile Include="d3dApp.cpp" />
+    <ClCompile Include="DirectInput.cpp" />
+    <ClCompile Include="GfxStats.cpp" />
+    <ClCompile Include="SkeletonClass.cpp" />
+    <ClCompile Include="3DClasses\Cone3D.cpp">
+      <Filter>Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="3DClasses\Cylinder3D.cpp">
+      <Filter>Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="3DClasses\Sphere3D.cpp">
+      <Filter>Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMaterial.cpp" />
+    <ClCompile Include="3DClasses\Cube3D.cpp">
+      <Filter>Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Datatypes</Filter>
+    </ClCompile>
+    <ClCompile Include="NAH_lib\RotationMath.cpp">
+      <Filter>NAH_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Rotation.cpp" />
+    <ClCompile Include="Vector3f.cpp">
+      <Filter>Datatypes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="3DClasses\BaseObject3D.h" />
+    <ClInclude Include="3DClasses\Vertex.h" />
+    <ClInclude Include="d3dApp.h" />
+    <ClInclude Include="d3dUtil.h" />
+    <ClInclude Include="DirectInput.h" />
+    <ClInclude Include="GfxStats.h" />
+    <ClInclude Include="SkeletonClass.h" />
+    <ClInclude Include="3DClasses\Cone3D.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="3DClasses\Cylinder3D.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="3DClasses\Sphere3D.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMaterial.h" />
+    <ClInclude Include="3DClasses\Cube3D.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="3DClasses\Torus3D.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="3DClasses\Teapot3D.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Rotation.h">
+      <Filter>Datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3f.h">
+      <Filter>Datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="NAH_lib\RotationMath.h">
+      <Filter>NAH_lib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Primitives">
+      <UniqueIdentifier>{f6720a67-6625-4395-a32c-9aedab293b4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{5de5a665-01c8-4298-969c-f9d99f9f1ce9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Datatypes">
+      <UniqueIdentifier>{d185462b-e855-4342-a212-dae09657590a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NAH_lib">
+      <UniqueIdentifier>{8bf50f79-8a97-4811-9ac4-da505c367c18}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Gourad.fx">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Phong.fx">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

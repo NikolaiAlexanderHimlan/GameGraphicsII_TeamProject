@@ -303,6 +303,7 @@ LRESULT D3DApp::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 			enableFullScreenMode(false);
 		else if( wParam == 'F' )
 		{
+			//NOTE: fullscreen currently crashes the program, low priority to fix
 			//enableFullScreenMode(true);
 		}
 		return 0;

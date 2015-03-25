@@ -61,6 +61,22 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraRotationY = 1.2 * D3DX_PI;
 	mCameraHeight    = 5.0f;
 
+	//Create skybox
+	mSkyboxMaterial = new BaseMaterial();
+	mSkyboxMaterial->LoadEffect(PHONG_FX_FILENAME);
+	mSkyboxMaterial->LoadTexture(SKYBOX_TEXTURE_FILENAME);
+	mSkyboxMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
+	mSkyboxMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	//mSkyboxMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+	mSkyboxMaterial->mDiffuseLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	mSkyboxMaterial->mAmbientMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	mSkyboxMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
+	mSkyboxMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
+	mSkyboxMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	mSkyboxMaterial->mSpecularPower = 8.0f;
+	mSkybox = new Cube3D(1.0f, 1.0f, 1.0f);
+	mSkybox->Create(gd3dDevice);
+
 	//create materials
 	mPhongMaterial = new BaseMaterial();
 	mPhongMaterial->LoadEffect(PHONG_FX_FILENAME);
@@ -143,6 +159,12 @@ SkeletonClass::~SkeletonClass()
 
 	delete mGouradMaterial;
 	mGouradMaterial = nullptr;
+
+	delete mSkybox;
+	mSkybox = nullptr;
+
+	delete mSkyboxMaterial;
+	mSkyboxMaterial = nullptr;
 
 	DestroyAllVertexDeclarations();
 }
@@ -261,6 +283,10 @@ void SkeletonClass::drawScene()
 	} else {
 		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
 	}
+
+	//mSkybox->setWorldPosition(getCameraLocation());
+	mSkybox->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
+	mSkybox->Render(gd3dDevice, mView, mProj);
 
 	/*
     // Render all the objects

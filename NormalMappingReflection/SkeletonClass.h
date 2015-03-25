@@ -28,11 +28,18 @@ class BaseMaterial;
 class SkeletonClass : public D3DApp
 {
 private:
+	//Directories
 	const std::string ASSET_DIR = ".\\Assets\\";
-	const std::string TEXTURE_FILENAME = ASSET_DIR + "Original_Utah_Teapot.bmp";
 	const std::string SHADER_DIR = ".\\Shaders\\";
+
+	//Textures
+	const std::string TEXTURE_FILENAME = ASSET_DIR + "Original_Utah_Teapot.bmp";
+	const std::string SKYBOX_TEXTURE_FILENAME = ASSET_DIR + "stars2.png";
+
+	//Shaders
 	const std::string GOURAD_FX_FILENAME = SHADER_DIR + "Gourad.fx";
 	const std::string PHONG_FX_FILENAME = SHADER_DIR + "Phong.fx";
+
 public:
 	SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEVTYPE devType, DWORD requestedVP);
 	~SkeletonClass();
@@ -59,9 +66,16 @@ private:
 	bool mCameraInvertX = false;
 	bool mCameraInvertY = false;
 	bool mCameraInvertZ = false; //Zoom/Radius
+	Vector3f getCameraLocation() const
+	{
+		return Vector3f();//HACK: return 0 vector for now
+	};
 
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
+
+	BaseObject3D* mSkybox;
+	BaseMaterial* mSkyboxMaterial;
 
     std::vector<BaseObject3D*>      m_Objects;
 

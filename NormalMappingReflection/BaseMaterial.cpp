@@ -88,6 +88,7 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 	mRenderDiffuseHandle = m_Effect->GetParameterByName(0, "gRenderDiffuse");
 	mAmbientColorHandle = m_Effect->GetParameterByName(0, "gAmbientMtrl");
 	mAmbientLightHandle = m_Effect->GetParameterByName(0, "gAmbientLight");
+	mRenderAmbientHandle = m_Effect->GetParameterByName(0, "gRenderAmbient");
 
 	mRenderTextureHandle = m_Effect->GetParameterByName(0, "gRenderTexture");
 	mTextureHandle = m_Effect->GetParameterByName(0, "gTexture");
@@ -103,6 +104,7 @@ void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat,
 	HR(m_Effect->SetValue(m_DIffuseColHandle, &mDiffuseMtrl, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetValue(mDiffuseLightHandle, &mDiffuseLight, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetBool(mRenderDiffuseHandle, mRenderDiffuse));
+	HR(m_Effect->SetBool(mRenderAmbientHandle, mRenderAmbient));
 	HR(m_Effect->SetValue(mAmbientColorHandle, &mAmbientMtrl, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetValue(mAmbientLightHandle, &mAmbientLight, sizeof(D3DXCOLOR)));
 	HR(m_Effect->SetBool(mRenderSpecularHandle, mRenderSpecular));

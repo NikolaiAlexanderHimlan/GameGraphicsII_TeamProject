@@ -24,6 +24,7 @@
 //=============================================================================
 class BaseObject3D;
 class BaseMaterial;
+class Cubemap;
 //=============================================================================
 class SkeletonClass : public D3DApp
 {
@@ -34,11 +35,12 @@ private:
 
 	//Textures
 	const std::string TEXTURE_FILENAME = ASSET_DIR + "Original_Utah_Teapot.bmp";
-	const std::string SKYBOX_TEXTURE_FILENAME = ASSET_DIR + "stars2.png";
+	const std::string SKYBOX_TEXTURE_FILENAME = ASSET_DIR + "cubeMap.dds";
 
 	//Shaders
 	const std::string GOURAD_FX_FILENAME = SHADER_DIR + "Gourad.fx";
 	const std::string PHONG_FX_FILENAME = SHADER_DIR + "Phong.fx";
+	const std::string CUBEMAP_FX_FILENAME = SHADER_DIR + "Cubemap.fx";
 
 public:
 	SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEVTYPE devType, DWORD requestedVP);
@@ -74,8 +76,7 @@ private:
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
 
-	BaseObject3D* mSkybox;
-	BaseMaterial* mSkyboxMaterial;
+	Cubemap* mSkybox;
 
     std::vector<BaseObject3D*>      m_Objects;
 

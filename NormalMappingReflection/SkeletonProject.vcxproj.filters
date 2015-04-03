@@ -30,6 +30,7 @@
     <ClCompile Include="Vector3f.cpp">
       <Filter>Datatypes</Filter>
     </ClCompile>
+    <ClCompile Include="Cubemap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h" />
@@ -73,6 +74,7 @@
     <ClInclude Include="NAH_lib\RotationMath.h">
       <Filter>NAH_lib</Filter>
     </ClInclude>
+    <ClInclude Include="Cubemap.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Primitives">
@@ -93,6 +95,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\Phong.fx">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Cubemap.fx">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

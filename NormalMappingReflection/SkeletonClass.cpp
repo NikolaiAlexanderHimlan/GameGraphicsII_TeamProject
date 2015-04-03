@@ -28,6 +28,7 @@
 #include "3DClasses\Torus3D.h"
 #include "3DClasses\Teapot3D.h"
 #include "Color.h"
+#include "Cubemap.h"
 //=============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 				   PSTR cmdLine, int showCmd)
@@ -62,20 +63,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraHeight    = 5.0f;
 
 	//Create skybox
-	mSkyboxMaterial = new BaseMaterial();
-	mSkyboxMaterial->LoadEffect(PHONG_FX_FILENAME);
-	mSkyboxMaterial->LoadTexture(SKYBOX_TEXTURE_FILENAME);
-	mSkyboxMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
-	mSkyboxMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
-	//mSkyboxMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
-	mSkyboxMaterial->mDiffuseLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	mSkyboxMaterial->mAmbientMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
-	mSkyboxMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
-	mSkyboxMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
-	mSkyboxMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	mSkyboxMaterial->mSpecularPower = 8.0f;
-	mSkybox = new Cube3D(1.0f, 1.0f, 1.0f);
-	mSkybox->Create(gd3dDevice);
+	mSkybox = new Cubemap(30.0f, SKYBOX_TEXTURE_FILENAME, CUBEMAP_FX_FILENAME);
 
 	//create materials
 	mPhongMaterial = new BaseMaterial();
@@ -162,9 +150,6 @@ SkeletonClass::~SkeletonClass()
 
 	delete mSkybox;
 	mSkybox = nullptr;
-
-	delete mSkyboxMaterial;
-	mSkyboxMaterial = nullptr;
 
 	DestroyAllVertexDeclarations();
 }
@@ -284,8 +269,7 @@ void SkeletonClass::drawScene()
 		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
 	}
 
-	//mSkybox->setWorldPosition(getCameraLocation());
-	mSkybox->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
+	mSkybox->position = getCameraLocation();
 	mSkybox->Render(gd3dDevice, mView, mProj);
 
 	/*

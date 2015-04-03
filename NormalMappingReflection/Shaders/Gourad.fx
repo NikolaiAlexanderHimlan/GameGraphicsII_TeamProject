@@ -22,6 +22,8 @@ uniform extern float4 gAmbientLight;
 
 uniform extern bool gRenderDiffuse;
 uniform extern bool gRenderSpecular;
+// TODO: implement gRenderAmbinet toggle
+uniform extern bool gRenderAmbient;
 uniform extern bool gRenderTexture;
 uniform extern texture gTexture;
 

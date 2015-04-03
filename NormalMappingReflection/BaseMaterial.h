@@ -28,6 +28,7 @@ public:
     float				m_Shininess;            // specular power
 
 	D3DXVECTOR3 mLightVecW;
+	bool		mRenderAmbient = true;
 	D3DXCOLOR   mAmbientMtrl;
 	D3DXCOLOR   mAmbientLight;
 	bool		mRenderDiffuse = true;
@@ -60,6 +61,7 @@ protected:
 	D3DXHANDLE			mSpecularLightHandle;
     D3DXHANDLE          m_ShininessHandle;   
 	D3DXHANDLE			mRenderSpecularHandle;
+	D3DXHANDLE			mRenderAmbientHandle;
 	D3DXHANDLE			mAmbientColorHandle;
 	D3DXHANDLE			mAmbientLightHandle;
 
@@ -77,8 +79,12 @@ public:
 	void LoadTexture(const std::string& filename);
 	void setTexture( IDirect3DTexture9* texture );
 	void ToggleTextureRender();
-	inline void ToggleDiffuse() { mRenderDiffuse = !mRenderDiffuse;	};
-	inline void ToggleSpecular() { mRenderSpecular = !mRenderSpecular;	};
+	inline void ToggleDiffuse() { ToggleDiffuse(!mRenderDiffuse);	};
+	inline void ToggleDiffuse(bool enabled) { mRenderDiffuse = enabled; };
+	inline void ToggleSpecular() { ToggleSpecular(!mRenderSpecular);	};
+	inline void ToggleSpecular(bool enabled) { mRenderSpecular = enabled; };
+	inline void ToggleAmbient() { ToggleAmbient(!mRenderAmbient);	};
+	inline void ToggleAmbient(bool enabled) { mRenderAmbient = enabled; };
 
 	//Effect
 	void LoadEffect(const std::string& filename);

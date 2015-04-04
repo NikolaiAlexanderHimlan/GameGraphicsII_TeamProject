@@ -63,7 +63,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mCameraHeight    = 5.0f;
 
 	//Create skybox
-	mSkybox = new Cubemap(30.0f, SKYBOX_TEXTURE_FILENAME, CUBEMAP_FX_FILENAME);
+	mSkybox = new Cubemap(10000.0f, SKYBOX_TEXTURE_FILENAME, CUBEMAP_FX_FILENAME);
 
 	//create materials
 	mPhongMaterial = new BaseMaterial();

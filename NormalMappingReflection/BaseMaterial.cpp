@@ -21,6 +21,7 @@ BaseMaterial::BaseMaterial(void)
 BaseMaterial::~BaseMaterial(void)
 {
 	ReleaseCOM(m_Effect);
+	clearTexture();
 }
 
 //-----------------------------------------------------------------------------
@@ -101,16 +102,28 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh) const
 {
 	HR(m_Effect->SetValue(m_LightPosWHandle, &mLightVecW, sizeof(D3DXVECTOR3)));
-	HR(m_Effect->SetValue(m_DIffuseColHandle, &mDiffuseMtrl, sizeof(D3DXCOLOR)));
-	HR(m_Effect->SetValue(mDiffuseLightHandle, &mDiffuseLight, sizeof(D3DXCOLOR)));
+
 	HR(m_Effect->SetBool(mRenderDiffuseHandle, mRenderDiffuse));
+	if (mRenderDiffuse)//don't update values if not rendering
+	{
+		HR(m_Effect->SetValue(m_DIffuseColHandle, &mDiffuseMtrl, sizeof(D3DXCOLOR)));
+		HR(m_Effect->SetValue(mDiffuseLightHandle, &mDiffuseLight, sizeof(D3DXCOLOR)));
+	}
+
 	HR(m_Effect->SetBool(mRenderAmbientHandle, mRenderAmbient));
-	HR(m_Effect->SetValue(mAmbientColorHandle, &mAmbientMtrl, sizeof(D3DXCOLOR)));
-	HR(m_Effect->SetValue(mAmbientLightHandle, &mAmbientLight, sizeof(D3DXCOLOR)));
+	if (mRenderAmbient)//don't update values if not rendering
+	{
+		HR(m_Effect->SetValue(mAmbientColorHandle, &mAmbientMtrl, sizeof(D3DXCOLOR)));
+		HR(m_Effect->SetValue(mAmbientLightHandle, &mAmbientLight, sizeof(D3DXCOLOR)));
+	}
+
 	HR(m_Effect->SetBool(mRenderSpecularHandle, mRenderSpecular));
-	HR(m_Effect->SetValue(mSpecularLightHandle, &mSpecularLight, sizeof(D3DXCOLOR)));
-	HR(m_Effect->SetValue(m_SpecularColHandle, &mSpecularMtrl, sizeof(D3DXCOLOR)));
-	HR(m_Effect->SetFloat(m_ShininessHandle, mSpecularPower));
+	if (mRenderSpecular)//don't update values if not rendering
+	{
+		HR(m_Effect->SetValue(mSpecularLightHandle, &mSpecularLight, sizeof(D3DXCOLOR)));
+		HR(m_Effect->SetValue(m_SpecularColHandle, &mSpecularMtrl, sizeof(D3DXCOLOR)));
+		HR(m_Effect->SetFloat(m_ShininessHandle, mSpecularPower));
+	}
 
 	HR(m_Effect->SetBool(mRenderTextureHandle, ShouldRenderTexture()));
 

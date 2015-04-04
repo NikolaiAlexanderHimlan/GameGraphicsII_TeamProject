@@ -22,7 +22,6 @@ uniform extern float4 gAmbientLight;
 
 uniform extern bool gRenderDiffuse;
 uniform extern bool gRenderSpecular;
-// TODO: implement gRenderAmbinet toggle
 uniform extern bool gRenderAmbient;
 uniform extern bool gRenderTexture;
 uniform extern texture gTexture;
@@ -92,7 +91,14 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 
 	float4 diffuse;
 	float4 spec;
-	diffuse.rgb = ambient + diffuseVal;
+	[flatten] if (gRenderDiffuse)
+	{
+		diffuse.rgb = ambient + diffuseVal;
+	}
+	else
+	{
+		diffuse.rgb = diffuseVal;
+	}
 	diffuse.a = gDiffuseMtrl.a;
 	spec = float4(specVal.rgb, 0.0f);
 
@@ -129,7 +135,7 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 	// Sum all the terms together and copy over the diffuse alpha.
 	[flatten] if (gRenderSpecular)
 	{
-	return float4(spec.rgb + texVal, gDiffuseMtrl.a);
+		return float4(spec.rgb + texVal, gDiffuseMtrl.a);
 	}
 	else
 	{

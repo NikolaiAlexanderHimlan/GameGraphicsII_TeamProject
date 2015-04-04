@@ -40,10 +40,11 @@ public:
 	float       mSpecularPower;
 
 	bool mRenderTexture = true;
-	IDirect3DTexture9* mImageTexture = nullptr;
-	IDirect3DTexture9* mBlankTexture = nullptr;
 
 protected:
+	IDirect3DTexture9* mImageTexture = nullptr;
+	IDirect3DTexture9* mBlankTexture = nullptr;//blank texture used when texture is disabled
+
     //---------- Shader Handles ----------
     // Generic shader handles
     D3DXHANDLE          m_WorldMatHandle;    
@@ -78,7 +79,14 @@ public:
 	{ return mRenderTexture && (mImageTexture != nullptr);	};
 	void LoadTexture(const std::string& filename);
 	void setTexture( IDirect3DTexture9* texture );
-	void ToggleTextureRender();
+	virtual void ToggleTextureRender();
+	void clearTexture()
+	{
+		if (mImageTexture != nullptr)
+			ReleaseCOM(mImageTexture);
+	};
+
+	//Render Toggles
 	inline void ToggleDiffuse() { ToggleDiffuse(!mRenderDiffuse);	};
 	inline void ToggleDiffuse(bool enabled) { mRenderDiffuse = enabled; };
 	inline void ToggleSpecular() { ToggleSpecular(!mRenderSpecular);	};

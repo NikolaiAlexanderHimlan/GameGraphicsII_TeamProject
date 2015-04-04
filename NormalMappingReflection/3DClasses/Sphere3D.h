@@ -30,7 +30,7 @@ protected:
 public:
 	Sphere3D(float radius, int numSegments)
 		: mRadius(radius), mNumSegments(numSegments) {};
-	~Sphere3D(void){};
+	virtual ~Sphere3D(void){};
 };
 //=============================================================================
 #endif // _SPHERE_3D_H

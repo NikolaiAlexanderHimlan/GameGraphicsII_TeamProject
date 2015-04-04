@@ -31,6 +31,7 @@
       <Filter>Datatypes</Filter>
     </ClCompile>
     <ClCompile Include="Cubemap.cpp" />
+    <ClCompile Include="CubeMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h" />
@@ -75,6 +76,7 @@
       <Filter>NAH_lib</Filter>
     </ClInclude>
     <ClInclude Include="Cubemap.h" />
+    <ClInclude Include="CubeMaterial.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Primitives">

@@ -36,7 +36,7 @@ public:
 	/// <param name="numSplits"> Number of splits along the height of the cone. </param>
 	Cone3D(float height, float radius, int numSegments, int numSplits = 1)
 		: mHeight(height), mRadius(radius), mNumSegments(numSegments), mNumSplits(numSplits) {};
-	~Cone3D(void){};
+	virtual ~Cone3D(void){};
 };
 //=============================================================================
 #endif // _CONE_3D_H

@@ -64,6 +64,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	//Create skybox
 	mSkybox = new Cubemap(10000.0f, SKYBOX_TEXTURE_FILENAME, CUBEMAP_FX_FILENAME);
+	mSkybox->Create(gd3dDevice);
 
 	//create materials
 	mPhongMaterial = new BaseMaterial();

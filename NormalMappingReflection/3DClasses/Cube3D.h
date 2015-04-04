@@ -31,7 +31,7 @@ protected:
 public:
 	Cube3D(float width, float height, float depth)
 		: mWidth(width), mHeight(height), mDepth(depth) {};
-	~Cube3D(void){};
+	virtual ~Cube3D(void){};
 };
 //=============================================================================
 #endif // _CUBE_3D_H

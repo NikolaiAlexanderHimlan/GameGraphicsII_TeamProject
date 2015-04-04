@@ -22,7 +22,6 @@ uniform extern float4 gAmbientLight;
 
 uniform extern bool gRenderDiffuse;
 uniform extern bool gRenderSpecular;
-// TODO: implement gRenderAmbinet toggle
 uniform extern bool gRenderAmbient;
 uniform extern bool gRenderTexture;
 uniform extern texture gTexture;
@@ -78,7 +77,14 @@ OutputVS GouradVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0
 	float3 ambient = (gAmbientMtrl*gAmbientLight).xyz;
 
 	// Sum all the terms together and copy over the diffuse alpha.
-	outVS.diffuse = float4(ambient + diffuse, gDiffuseMtrl.a);
+	[flatten] if (gRenderAmbient)
+	{
+		outVS.diffuse = float4(ambient + diffuse, gDiffuseMtrl.a);
+	}
+	else
+	{
+		outVS.diffuse = float4(diffuse, gDiffuseMtrl.a);
+	}
 	outVS.spec = float4(spec, 0.0f);
 
 	// Pass texture coordinates on to Pixel shader

@@ -35,7 +35,7 @@ public:
 	/// <param name="numSplits"> Number of splits along the height of the cone. </param>
 	Cylinder3D(float height, float radius, int numSegments, int numSplits = 1)
 		: mHeight(height), mRadius(radius), mNumSegments(numSegments), mNumSplits(numSplits) {};
-	~Cylinder3D(void){};
+	virtual ~Cylinder3D(void){};
 };
 //=============================================================================
 #endif // _CYLINDER_3D_H

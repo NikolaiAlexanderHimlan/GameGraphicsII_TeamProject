@@ -98,6 +98,7 @@
     <ClCompile Include="3DClasses\Vertex.cpp" />
     <ClCompile Include="BaseMaterial.cpp" />
     <ClCompile Include="Cubemap.cpp" />
+    <ClCompile Include="CubeMaterial.cpp" />
     <ClCompile Include="d3dApp.cpp" />
     <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="GfxStats.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="3DClasses\Vertex.h" />
     <ClInclude Include="BaseMaterial.h" />
     <ClInclude Include="Cubemap.h" />
+    <ClInclude Include="CubeMaterial.h" />
     <ClInclude Include="d3dApp.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="DirectInput.h" />

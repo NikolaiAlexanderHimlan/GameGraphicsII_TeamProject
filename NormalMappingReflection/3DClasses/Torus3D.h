@@ -32,7 +32,7 @@ protected:
 public:
 	Torus3D(float innerRadius, float outerRadius, int numSections, int numRings)
 		: mInnerRadius(innerRadius), mOuterRadius(outerRadius), mNumSections(numSections), mNumRings(numRings) {};
-	~Torus3D(void){};
+	virtual ~Torus3D(void){};
 };
 //=============================================================================
 #endif // _BASE_OBJECT_3D_H

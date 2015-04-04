@@ -27,7 +27,7 @@ protected:
 
 public:
 	Teapot3D() {};
-	~Teapot3D(void){};
+	virtual ~Teapot3D(void){};
 };
 //=============================================================================
 #endif // _BASE_OBJECT_3D_H

@@ -2,12 +2,23 @@
 // sky.fx by Frank Luna (C) 2004 All Rights Reserved.
 //=============================================================================
 
+uniform extern float4x4 gWorld;
+uniform extern float4x4 gWorldInverseTranspose;
 uniform extern float4x4 gWVP;
-uniform extern texture  gEnvMap;
+
+uniform extern float3 gEyePosW;
+uniform extern float3 gLightVecW;
+
+uniform extern bool gRenderDiffuse;
+uniform extern bool gRenderSpecular;
+uniform extern bool gRenderAmbient;
+uniform extern bool gRenderTexture;
+
+uniform extern texture gTexture;
 
 sampler EnvMapS = sampler_state
 {
-	Texture   = <gEnvMap>;
+	Texture   = <gTexture>;
 	MinFilter = LINEAR; 
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;

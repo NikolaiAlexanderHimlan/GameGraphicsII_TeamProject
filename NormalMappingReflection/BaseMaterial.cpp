@@ -73,23 +73,29 @@ void BaseMaterial::LoadEffect(const std::string& filename)
 // register them.
 void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 {
+	clearEffect();
+
     m_Effect = effect;
 
 	m_ViewProjectionMatHandel = m_Effect->GetParameterByName(0, "gWVP");
 	mWorldMatInvHandle = m_Effect->GetParameterByName(0, "gWorldInverseTranspose");
 	m_WorldMatHandle = m_Effect->GetParameterByName(0, "gWorld");
+	
 	m_ViewerPosWHandle = m_Effect->GetParameterByName(0, "gEyePosW");
 	m_LightPosWHandle = m_Effect->GetParameterByName(0, "gLightVecW");
+	
+	mRenderSpecularHandle = m_Effect->GetParameterByName(0, "gRenderSpecular");
 	m_ShininessHandle = m_Effect->GetParameterByName(0, "gSpecularPower");
 	m_SpecularColHandle = m_Effect->GetParameterByName(0, "gSpecularMtrl");
 	mSpecularLightHandle = m_Effect->GetParameterByName(0, "gSpecularLight");
-	mRenderSpecularHandle = m_Effect->GetParameterByName(0, "gRenderSpecular");
+	
+	mRenderDiffuseHandle = m_Effect->GetParameterByName(0, "gRenderDiffuse");
 	m_DIffuseColHandle = m_Effect->GetParameterByName(0, "gDiffuseMtrl");
 	mDiffuseLightHandle = m_Effect->GetParameterByName(0, "gDiffuseLight");
-	mRenderDiffuseHandle = m_Effect->GetParameterByName(0, "gRenderDiffuse");
+	
+	mRenderAmbientHandle = m_Effect->GetParameterByName(0, "gRenderAmbient");
 	mAmbientColorHandle = m_Effect->GetParameterByName(0, "gAmbientMtrl");
 	mAmbientLightHandle = m_Effect->GetParameterByName(0, "gAmbientLight");
-	mRenderAmbientHandle = m_Effect->GetParameterByName(0, "gRenderAmbient");
 
 	mRenderTextureHandle = m_Effect->GetParameterByName(0, "gRenderTexture");
 	mTextureHandle = m_Effect->GetParameterByName(0, "gTexture");
@@ -99,7 +105,7 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 }
 
 //-----------------------------------------------------------------------------
-void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh) const
+void BaseMaterial::RefreshEffectValues() const
 {
 	HR(m_Effect->SetValue(m_LightPosWHandle, &mLightVecW, sizeof(D3DXVECTOR3)));
 
@@ -126,6 +132,11 @@ void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat,
 	}
 
 	HR(m_Effect->SetBool(mRenderTextureHandle, ShouldRenderTexture()));
+}
+//-----------------------------------------------------------------------------
+void BaseMaterial::Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh) const
+{
+	RefreshEffectValues();
 
 	//*
 	// Begin passes.

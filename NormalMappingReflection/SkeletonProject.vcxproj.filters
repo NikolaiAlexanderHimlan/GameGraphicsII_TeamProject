@@ -16,7 +16,6 @@
     <ClCompile Include="3DClasses\Sphere3D.cpp">
       <Filter>Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="BaseMaterial.cpp" />
     <ClCompile Include="3DClasses\Cube3D.cpp">
       <Filter>Primitives</Filter>
     </ClCompile>
@@ -31,7 +30,16 @@
       <Filter>Datatypes</Filter>
     </ClCompile>
     <ClCompile Include="Cubemap.cpp" />
-    <ClCompile Include="CubeMaterial.cpp" />
+    <ClCompile Include="BaseMaterial.cpp">
+      <Filter>Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeMaterial.cpp">
+      <Filter>Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectiveMaterial.cpp">
+      <Filter>Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h" />
@@ -50,7 +58,6 @@
     <ClInclude Include="3DClasses\Sphere3D.h">
       <Filter>Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="BaseMaterial.h" />
     <ClInclude Include="3DClasses\Cube3D.h">
       <Filter>Primitives</Filter>
     </ClInclude>
@@ -76,7 +83,18 @@
       <Filter>NAH_lib</Filter>
     </ClInclude>
     <ClInclude Include="Cubemap.h" />
-    <ClInclude Include="CubeMaterial.h" />
+    <ClInclude Include="BaseMaterial.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMaterial.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalMaterial.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectiveMaterial.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Primitives">
@@ -91,6 +109,9 @@
     <Filter Include="NAH_lib">
       <UniqueIdentifier>{8bf50f79-8a97-4811-9ac4-da505c367c18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Materials">
+      <UniqueIdentifier>{d85448a7-6533-4d39-bb66-93f4bf95e8e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Gourad.fx">
@@ -100,6 +121,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\Cubemap.fx">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Phong_ReflNormal.fx">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

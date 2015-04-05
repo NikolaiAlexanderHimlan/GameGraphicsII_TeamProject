@@ -12,9 +12,6 @@
 //=============================================================================
 class BaseMaterial
 {
-private: 
-	const D3DXCOLOR	EMPTY_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
-
 protected:
     ID3DXEffect*        m_Effect;               // the shader associate effect file
 
@@ -69,17 +66,25 @@ protected:
 	D3DXHANDLE			mRenderTextureHandle;
 	D3DXHANDLE			mTextureHandle;
 
+	virtual void RefreshEffectValues() const;
 
 public:
     BaseMaterial(void);
     virtual ~BaseMaterial(void);
+
+	//Effect
+	void LoadEffect(const std::string& filename);
+	virtual void ConnectToEffect( ID3DXEffect* effect );
+	void clearEffect() {
+		if (m_Effect != nullptr)
+			ReleaseCOM(m_Effect);
+	};
 
 	//Texture
 	inline bool ShouldRenderTexture(void) const
 	{ return mRenderTexture && (mImageTexture != nullptr);	};
 	void LoadTexture(const std::string& filename);
 	void setTexture( IDirect3DTexture9* texture );
-	virtual void ToggleTextureRender();
 	void clearTexture()
 	{
 		if (mImageTexture != nullptr)
@@ -93,10 +98,7 @@ public:
 	inline void ToggleSpecular(bool enabled) { mRenderSpecular = enabled; };
 	inline void ToggleAmbient() { ToggleAmbient(!mRenderAmbient);	};
 	inline void ToggleAmbient(bool enabled) { mRenderAmbient = enabled; };
-
-	//Effect
-	void LoadEffect(const std::string& filename);
-    void ConnectToEffect( ID3DXEffect* effect );
+	virtual void ToggleTextureRender();
 
 	//Render
     void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ) const; 

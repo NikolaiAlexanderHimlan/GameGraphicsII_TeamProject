@@ -103,6 +103,8 @@
     <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="GfxStats.cpp" />
     <ClCompile Include="NAH_lib\RotationMath.cpp" />
+    <ClCompile Include="NormalMaterial.cpp" />
+    <ClCompile Include="ReflectiveMaterial.cpp" />
     <ClCompile Include="Rotation.cpp" />
     <ClCompile Include="SkeletonClass.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -126,6 +128,8 @@
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="NAH_lib\RotationMath.h" />
+    <ClInclude Include="NormalMaterial.h" />
+    <ClInclude Include="ReflectiveMaterial.h" />
     <ClInclude Include="Rotation.h" />
     <ClInclude Include="SkeletonClass.h" />
     <ClInclude Include="Transform.h" />
@@ -141,6 +145,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Cubemap.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Phong_ReflNormal.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

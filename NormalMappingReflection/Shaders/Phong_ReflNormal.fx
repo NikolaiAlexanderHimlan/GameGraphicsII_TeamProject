@@ -161,4 +161,3 @@ technique PhongTech
         pixelShader  = compile ps_2_0 PhongPS();
     }
 }
-

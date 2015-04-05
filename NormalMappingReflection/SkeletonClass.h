@@ -25,6 +25,7 @@
 class BaseObject3D;
 class BaseMaterial;
 class Cubemap;
+class ReflectiveMaterial;
 //=============================================================================
 class SkeletonClass : public D3DApp
 {
@@ -40,7 +41,13 @@ private:
 	//Shaders
 	const std::string GOURAD_FX_FILENAME = SHADER_DIR + "Gourad.fx";
 	const std::string PHONG_FX_FILENAME = SHADER_DIR + "Phong.fx";
+	const std::string ADVANCED_FX_FILENAME = SHADER_DIR + "Phong_ReflNormal.fx";
 	const std::string CUBEMAP_FX_FILENAME = SHADER_DIR + "Cubemap.fx";
+
+	//Shader adjust amounts
+	const float REFL_BLEND_AMOUNT = 0.1f;
+	const float NORMAL_STR_AMOUNT = 0.1f;
+	const float SPECULAR_COEF_AMOUNT = 1.0f;
 
 public:
 	SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEVTYPE devType, DWORD requestedVP);
@@ -50,6 +57,23 @@ public:
 	void onLostDevice();
 	void onResetDevice();
 	void updateScene(float dt);
+
+	//Rendering
+	bool mIsWireframe = false;
+
+	//Set the material for all objects
+	void setPhongMaterial();
+	void setGouradMaterial();
+	void setAdvancedMaterial();
+
+	//Rendering Toggle functions (to toggle rendering for all materials)
+	void ToggleDiffuseRendering(); //Toggle Diffuse rendering
+	void ToggleSpecularRendering(); //Toggle Specular rendering
+	void ToggleAmbientRendering();
+	void ToggleTextureRendering();
+	void ToggleNormalMapRendering();
+	void ToggleReflectivity();
+
 	void drawScene();
 
 	// Helper methods
@@ -57,11 +81,7 @@ public:
 	void buildProjMtx();
 
 private:
-	bool mIsWireframe = false;
-	bool mSpecularEnabled = true;
-	bool mDiffuseEnabled = true;
-	unsigned int mCurrentTarget = 3;
-
+#pragma region Camera Data
 	float mCameraRotationY;
 	float mCameraRadius;
 	float mCameraHeight;
@@ -75,17 +95,19 @@ private:
 
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
+#pragma endregion Camera Data
 
+	//World/Environment Data
 	Cubemap* mSkybox;
 
-    std::vector<BaseObject3D*>      m_Objects;
-
+	//Material Data
 	BaseMaterial*	mPhongMaterial;
 	BaseMaterial*	mGouradMaterial;
-	void setPhongMaterial();
-	void setGouradMaterial();
+	ReflectiveMaterial* mAdvancedMaterial;
 
-	void ToggleTextureRendering();
+	//Objects
+	std::vector<BaseObject3D*> m_Objects;
+	unsigned int mCurrentTarget = 3;
 
 	inline void SetTarget(unsigned int targetNum)
 	{
@@ -98,6 +120,16 @@ private:
 		if (mCurrentTarget >= m_Objects.size())
 			mCurrentTarget = 0;//back to start
 	}
+
+protected:
+	void UpdateInputs(float dt);
+	void UpdateCamera(float dt);
+
+	//Adjust Material properties
+	void AddReflectionBlend(float blendAmount);
+	void AddNormalMapStrength(float normalAmount);
+	void AddSpecularCoefficient(float specularAmount);
+	void SetSpecularCoefficient(float specularAmount);
 };
 //=============================================================================
 #endif // _SKELETON_CLASS_H_

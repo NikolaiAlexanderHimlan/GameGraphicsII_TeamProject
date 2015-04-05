@@ -32,6 +32,7 @@
     </ClCompile>
     <ClCompile Include="Cubemap.cpp" />
     <ClCompile Include="CubeMaterial.cpp" />
+    <ClCompile Include="ReflectiveMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h" />
@@ -77,6 +78,8 @@
     </ClInclude>
     <ClInclude Include="Cubemap.h" />
     <ClInclude Include="CubeMaterial.h" />
+    <ClInclude Include="NormalMaterial.h" />
+    <ClInclude Include="ReflectiveMaterial.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Primitives">
@@ -100,6 +103,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\Cubemap.fx">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Phong_ReflNormal.fx">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

@@ -29,6 +29,7 @@
 #include "3DClasses\Teapot3D.h"
 #include "Color.h"
 #include "Cubemap.h"
+#include "ReflectiveMaterial.h"
 //=============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 				   PSTR cmdLine, int showCmd)
@@ -67,12 +68,19 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mSkybox->Create(gd3dDevice);
 
 	//create materials
+		//Phong material
 	mPhongMaterial = new BaseMaterial();
 	mPhongMaterial->LoadEffect(PHONG_FX_FILENAME);
 	mPhongMaterial->LoadTexture(TEXTURE_FILENAME);
+		//Gourad material
 	mGouradMaterial = new BaseMaterial();
 	mGouradMaterial->LoadEffect(GOURAD_FX_FILENAME);
 	mGouradMaterial->LoadTexture(TEXTURE_FILENAME);
+		//Advanced material
+	mAdvancedMaterial = new ReflectiveMaterial();
+	mAdvancedMaterial->LoadEffect(ADVANCED_FX_FILENAME);
+	mAdvancedMaterial->LoadTexture(TEXTURE_FILENAME);
+	//mAdvancedMaterial->LoadNormalMap(NORMALMAP_FILENAME);
 
 	//set Phong lighting data
 	mPhongMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
@@ -83,7 +91,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mPhongMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
 	mPhongMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
 	mPhongMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	mPhongMaterial->mSpecularPower = 8.0f;
+
 	//set Gourad lighting data
 	mGouradMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
 	mGouradMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
@@ -92,8 +100,18 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mGouradMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
 	mGouradMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
 	mGouradMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	mGouradMaterial->mSpecularPower = 8.0f;
+
+	//set Advanced material lighting data
+	mAdvancedMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
+	mAdvancedMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	mAdvancedMaterial->mDiffuseLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	mAdvancedMaterial->mAmbientMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	mAdvancedMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
+	mAdvancedMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
+	mAdvancedMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	
+	SetSpecularCoefficient(8.0f);
+
 	// create objects
 	BaseObject3D* addObject;
 
@@ -129,8 +147,9 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	//addObject->setWorldPosition(Vector3f(5.0f, 5.0f, -5.0f));
 	m_Objects.push_back(addObject);
 
-	setPhongMaterial();
+	//setPhongMaterial();
 	//setGouradMaterial();
+	setAdvancedMaterial();
 
 	onResetDevice();
 }
@@ -181,10 +200,82 @@ void SkeletonClass::updateScene(float dt)
 	GfxStats::GetInstance()->setTriCount(0);
 	GfxStats::GetInstance()->update(dt);
 
+	UpdateInputs(dt);
+}
+void SkeletonClass::UpdateInputs(float dt)
+{
 	// Get snapshot of input devices.
 	gDInput->poll();
 
-	// Check input.
+	UpdateCamera(dt);
+
+	//Toggle render properties
+	if (gDInput->keyPress(DIK_D))
+		ToggleDiffuseRendering();
+	if (gDInput->keyPress(DIK_Q))//Q is close to A/S, which controls the Specular coefficient
+		ToggleSpecularRendering();
+	if (gDInput->keyPress(DIK_E))//E for Environment lighting, also grouped together with other toggle keys
+		ToggleAmbientRendering();
+	if (gDInput->keyPress(DIK_R))
+		ToggleReflectivity();
+
+	if (gDInput->keyPress(DIK_T))
+		ToggleTextureRendering(); //Toggle Textures
+	if (gDInput->keyPress(DIK_N))
+		ToggleNormalMapRendering();
+	if (gDInput->keyPress(DIK_W))
+		mIsWireframe = !mIsWireframe; // Toggle Wireframe
+
+	//Adjust material properties
+		//Reflection-Specular blending
+	if (gDInput->keyPress(DIK_EQUALS))//=/+ key is labeled EQUALS
+		AddReflectionBlend(REFL_BLEND_AMOUNT);
+	if (gDInput->keyPress(DIK_MINUS))
+		AddReflectionBlend(-REFL_BLEND_AMOUNT);
+
+	//Normal map strength
+	if (gDInput->keyPress(DIK_A))
+		AddNormalMapStrength(-NORMAL_STR_AMOUNT);
+	if (gDInput->keyPress(DIK_S))
+		AddNormalMapStrength(NORMAL_STR_AMOUNT);
+
+	//Specular coefficient
+	if (gDInput->keyPress(DIK_LBRACKET))
+		AddSpecularCoefficient(-SPECULAR_COEF_AMOUNT);
+	if (gDInput->keyPress(DIK_RBRACKET))
+		AddSpecularCoefficient(SPECULAR_COEF_AMOUNT);
+	if (gDInput->keyPress(DIK_1))	SetSpecularCoefficient(2);
+	if (gDInput->keyPress(DIK_2))	SetSpecularCoefficient(4);
+	if (gDInput->keyPress(DIK_3))	SetSpecularCoefficient(8);
+	if (gDInput->keyPress(DIK_4))	SetSpecularCoefficient(16);
+	if (gDInput->keyPress(DIK_5))	SetSpecularCoefficient(32);
+	if (gDInput->keyPress(DIK_6))	SetSpecularCoefficient(64);
+	if (gDInput->keyPress(DIK_7))	SetSpecularCoefficient(128);
+
+	//Switch object materials
+	if (gDInput->keyPress(DIK_G))
+		setGouradMaterial();
+	if (gDInput->keyPress(DIK_P))
+		setPhongMaterial();
+	if (gDInput->keyPress(DIK_I))// I because it's next to P and I have no other ideas?
+		setAdvancedMaterial();
+
+	//Set target
+	if (gDInput->keyPress(DIK_O))
+		NextTarget(); //Switch between objects
+	if (gDInput->keyPress(DIK_F1))	SetTarget(0);
+	if (gDInput->keyPress(DIK_F2))	SetTarget(1);
+	if (gDInput->keyPress(DIK_F3))	SetTarget(2);
+	if (gDInput->keyPress(DIK_F4))	SetTarget(3);
+	if (gDInput->keyPress(DIK_F5))	SetTarget(4);
+	if (gDInput->keyPress(DIK_F6))	SetTarget(5);
+	if (gDInput->keyPress(DIK_F7))	SetTarget(6);
+	if (gDInput->keyPress(DIK_F8))	SetTarget(7);
+	if (gDInput->keyPress(DIK_F9))	SetTarget(8);
+	if (gDInput->keyPress(DIK_F10))	SetTarget(9);
+}
+void SkeletonClass::UpdateCamera(float dt)
+{
 	// Check inverts
 	if (gDInput->keyPress(DIK_C))
 		mCameraInvertY = !mCameraInvertY;
@@ -193,48 +284,10 @@ void SkeletonClass::updateScene(float dt)
 	if (gDInput->keyPress(DIK_Z))
 		mCameraInvertZ = !mCameraInvertZ;
 
-	if( gDInput->keyDown(DIK_Y) )
-		mCameraRadius	+= 25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
+	if (gDInput->keyDown(DIK_Y))
+		mCameraRadius += 25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
 	if (gDInput->keyDown(DIK_H))
-		mCameraRadius	-= 25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
-
-	//Toggle render properties
-	if (gDInput->keyPress(DIK_D))
-	{
-		//Toggle Diffuse
-		mPhongMaterial->ToggleDiffuse();
-		mGouradMaterial->ToggleDiffuse();
-	}
-	if (gDInput->keyPress(DIK_O))
-		NextTarget(); //Switch between objects
-	if (gDInput->keyPress(DIK_S))
-	{
-		//Toggle Specular
-		mPhongMaterial->ToggleSpecular();
-		mGouradMaterial->ToggleSpecular();
-	}
-	if (gDInput->keyPress(DIK_T))
-		ToggleTextureRendering(); //Toggle Textures
-	if (gDInput->keyPress(DIK_W))
-		mIsWireframe = !mIsWireframe; // Toggle Wireframe
-
-	//Switch object materials
-	if (gDInput->keyPress(DIK_G))
-		setGouradMaterial();
-	if (gDInput->keyPress(DIK_P))
-		setPhongMaterial();
-
-	//Set target based on number key
-	if (gDInput->keyPress(DIK_1))	SetTarget(0);
-	if (gDInput->keyPress(DIK_2))	SetTarget(1);
-	if (gDInput->keyPress(DIK_3))	SetTarget(2);
-	if (gDInput->keyPress(DIK_4))	SetTarget(3);
-	if (gDInput->keyPress(DIK_5))	SetTarget(4);
-	if (gDInput->keyPress(DIK_6))	SetTarget(5);
-	if (gDInput->keyPress(DIK_7))	SetTarget(6);
-	if (gDInput->keyPress(DIK_8))	SetTarget(7);
-	if (gDInput->keyPress(DIK_9))	SetTarget(8);
-	if (gDInput->keyPress(DIK_0))	SetTarget(9);
+		mCameraRadius -= 25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
 
 	// Divide by 50 to make mouse less sensitive. 
 	mCameraRotationY	+= gDInput->mouseDX() / 100.0f * ((mCameraInvertX) ? -1.0f : 1.0f);
@@ -311,6 +364,7 @@ void SkeletonClass::buildProjMtx()
 	D3DXMatrixPerspectiveFovLH(&mProj, D3DX_PI * 0.25f, w/h, 1.0f, 5000.0f);
 }
 
+//Material
 void SkeletonClass::setPhongMaterial()
 {
 	for (size_t i = 0; i < m_Objects.size(); i++)
@@ -323,9 +377,65 @@ void SkeletonClass::setGouradMaterial()
 		if (mGouradMaterial != m_Objects[i]->getMaterial())
 			m_Objects[i]->setMaterial(mGouradMaterial);
 }
+void SkeletonClass::setAdvancedMaterial()
+{
+	for (size_t i = 0; i < m_Objects.size(); i++)
+	if (mAdvancedMaterial != m_Objects[i]->getMaterial())
+		m_Objects[i]->setMaterial(mAdvancedMaterial);
+}
 
+//Material Render properties
+void SkeletonClass::ToggleDiffuseRendering()
+{
+	mPhongMaterial->ToggleDiffuse();
+	mGouradMaterial->ToggleDiffuse();
+}
+void SkeletonClass::ToggleSpecularRendering()
+{
+	mPhongMaterial->ToggleSpecular();
+	mGouradMaterial->ToggleSpecular();
+}
+void SkeletonClass::ToggleAmbientRendering()
+{
+	throw std::logic_error("The method or operation is not implemented.");
+	mPhongMaterial;
+	mGouradMaterial;
+}
+void SkeletonClass::ToggleNormalMapRendering()
+{
+	throw std::logic_error("The method or operation is not implemented.");
+	mPhongMaterial;
+	mGouradMaterial;
+}
+void SkeletonClass::ToggleReflectivity()
+{
+	throw std::logic_error("The method or operation is not implemented.");
+	mPhongMaterial;
+	mGouradMaterial;
+}
 void SkeletonClass::ToggleTextureRendering()
 {
 	mPhongMaterial->ToggleTextureRender();
 	mGouradMaterial->ToggleTextureRender();
+}
+
+void SkeletonClass::AddReflectionBlend(float blendAmount)
+{
+	throw std::logic_error("The method or operation is not implemented.");
+}
+void SkeletonClass::AddNormalMapStrength(float normalAmount)
+{
+	throw std::logic_error("The method or operation is not implemented.");
+}
+void SkeletonClass::AddSpecularCoefficient(float specularAmount)
+{
+	mPhongMaterial->mSpecularPower += specularAmount;
+	mGouradMaterial->mSpecularPower += specularAmount;
+	mAdvancedMaterial->mSpecularPower += specularAmount;
+}
+void SkeletonClass::SetSpecularCoefficient(float specularAmount)
+{
+	mPhongMaterial->mSpecularPower = specularAmount;
+	mGouradMaterial->mSpecularPower = specularAmount;
+	mAdvancedMaterial->mSpecularPower = specularAmount;
 }

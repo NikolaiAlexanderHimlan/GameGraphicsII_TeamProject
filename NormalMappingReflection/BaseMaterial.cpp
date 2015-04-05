@@ -73,6 +73,8 @@ void BaseMaterial::LoadEffect(const std::string& filename)
 // register them.
 void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 {
+	clearEffect();
+
     m_Effect = effect;
 
 	m_ViewProjectionMatHandel = m_Effect->GetParameterByName(0, "gWVP");

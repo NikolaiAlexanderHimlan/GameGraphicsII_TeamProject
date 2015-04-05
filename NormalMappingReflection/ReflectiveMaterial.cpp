@@ -22,7 +22,7 @@ void ReflectiveMaterial::ConnectToEffect(ID3DXEffect* effect)
 	mhReflectionBlendingHandle = m_Effect->GetParameterByName(0, "gReflectBlending");;
 	mhEnvironmentMapHandle = m_Effect->GetParameterByName(0, "gEnvMap");;
 }
-void ReflectiveMaterial::EnableEnvironmentReflection(IDirect3DTexture9* environmentTexure)
+void ReflectiveMaterial::EnableEnvironmentReflection(IDirect3DCubeTexture9* environmentTexure)
 {
 	HR(m_Effect->SetTexture(mhEnvironmentMapHandle, environmentTexure));
 	mEnvironmentInitialized = true;

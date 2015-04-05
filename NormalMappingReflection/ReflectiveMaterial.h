@@ -29,7 +29,7 @@ public:
 	virtual ~ReflectiveMaterial();
 
 	virtual void ConnectToEffect(ID3DXEffect* effect);
-	void EnableEnvironmentReflection(IDirect3DTexture9* environmentTexure);
+	void EnableEnvironmentReflection(IDirect3DCubeTexture9* environmentTexure);
 
 	void ToggleReflection() { ToggleReflection(!mRenderReflections);	};
 	void ToggleReflection(bool enabled) { mRenderReflections = enabled && mEnvironmentInitialized;	};

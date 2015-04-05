@@ -52,13 +52,13 @@ protected:
     D3DXHANDLE          m_ViewerPosWHandle;
 
     // Material specific shader handles
+	D3DXHANDLE			mRenderDiffuseHandle;
     D3DXHANDLE          m_DIffuseColHandle;    
 	D3DXHANDLE			mDiffuseLightHandle;
-	D3DXHANDLE			mRenderDiffuseHandle;
+	D3DXHANDLE			mRenderSpecularHandle;
     D3DXHANDLE          m_SpecularColHandle;
 	D3DXHANDLE			mSpecularLightHandle;
     D3DXHANDLE          m_ShininessHandle;   
-	D3DXHANDLE			mRenderSpecularHandle;
 	D3DXHANDLE			mRenderAmbientHandle;
 	D3DXHANDLE			mAmbientColorHandle;
 	D3DXHANDLE			mAmbientLightHandle;
@@ -85,8 +85,7 @@ public:
 	{ return mRenderTexture && (mImageTexture != nullptr);	};
 	void LoadTexture(const std::string& filename);
 	void setTexture( IDirect3DTexture9* texture );
-	void clearTexture()
-	{
+	void clearTexture() {
 		if (mImageTexture != nullptr)
 			ReleaseCOM(mImageTexture);
 	};

@@ -69,8 +69,7 @@ void BaseMaterial::LoadEffect(const std::string& filename)
 }
 
 //-----------------------------------------------------------------------------
-// Need to add here a code that will associate with your shader parameters and 
-// register them.
+// Need to add here a code that will associate with your shader parameters and register them.
 void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 {
 	clearEffect();
@@ -107,6 +106,7 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 //-----------------------------------------------------------------------------
 void BaseMaterial::RefreshEffectValues() const
 {
+	//TODO: HR(m_Effect->SetValue(m_ViewerPosWHandle, /*Camera Position*/, sizeof(D3DXVECTOR3)));
 	HR(m_Effect->SetValue(m_LightPosWHandle, &mLightVecW, sizeof(D3DXVECTOR3)));
 
 	HR(m_Effect->SetBool(mRenderDiffuseHandle, mRenderDiffuse));

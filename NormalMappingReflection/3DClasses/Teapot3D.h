@@ -23,7 +23,7 @@ protected:
 		//buildTeapotVertexBuffer( gd3dDevice );
 		//buildTeapotIndexBuffer( gd3dDevice );
 	};
-	inline void BuildTexCoord() { __super::BuildTexCoord();	}; //HACK: placeholder, implement TexCoord
+	void BuildTexCoord() { __super::BuildTexCoord(); }; //HACK: placeholder, implement TexCoord
 
 public:
 	Teapot3D() {};

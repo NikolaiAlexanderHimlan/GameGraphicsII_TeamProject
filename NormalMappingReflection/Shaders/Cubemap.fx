@@ -20,8 +20,10 @@ sampler EnvMapS = sampler_state
 {
 	Texture   = <gTexture>;
 	MinFilter = LINEAR; 
+	//MinFilter = Anisotropic;
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;
+	//MaxAnisotropy = 8;
 	AddressU  = WRAP;
 	AddressV  = WRAP;
 };

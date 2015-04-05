@@ -133,6 +133,7 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 		diffuseVal += reflVal;
 	}
 
+	float3 diffuse;//final color of the surface
 	float3 texColor;//color of the texture at this coord
 	float3 pixColor;//final pixel color
 	float alphaVal;//final pixel alpha
@@ -152,22 +153,28 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 	//combine ambient into diffuse
 	[flatten] if (gRenderAmbient)
 	{
-		diffuseVal = diffuseVal + ambientVal;
+		diffuse = diffuseVal + ambientVal;
 		alphaVal *= gDiffuseMtrl.a;
 	}
 	else
 	{
-		diffuseVal = diffuseVal;
+		diffuse = diffuseVal;
 	}
 	
 	//Combine diffuse with pixel color
 	[flatten] if (gRenderDiffuse)
 	{
-		pixColor = texColor * diffuseVal;
+		pixColor = texColor * diffuse;
 	}
 	else
 	{
 		pixColor = texColor;
+	}
+
+	//if diffuse and ambient are both disabled,, reflections will need to be reapplied
+	[flatten] if (gRenderReflection)
+	{
+		pixColor *= reflVal * 2;//multiplied by 2 as the reflection is multiplied by 2 values which make up the pixel color, and both need to be compensated for.
 	}
 
 	//combine specular into the pixel color

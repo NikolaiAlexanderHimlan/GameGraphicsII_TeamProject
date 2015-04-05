@@ -113,8 +113,6 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mAdvancedMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
 	mAdvancedMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	mAdvancedMaterial->mReflectionBlending = 0.5f;
-	
-	SetSpecularCoefficient(8.0f);
 
 	// create objects
 	BaseObject3D* addObject;
@@ -151,9 +149,17 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	//addObject->setWorldPosition(Vector3f(5.0f, 5.0f, -5.0f));
 	m_Objects.push_back(addObject);
 
+	//Initial target
+	SetTarget(mCurrentTarget);
+
 	//setPhongMaterial();
 	//setGouradMaterial();
 	setAdvancedMaterial();
+
+	//Call setters at the end to avoid null material errors
+	SetSpecularCoefficient(8.0f);
+
+	InitializeGfxStatValues();
 
 	onResetDevice();
 }
@@ -368,7 +374,24 @@ void SkeletonClass::buildProjMtx()
 	D3DXMatrixPerspectiveFovLH(&mProj, D3DX_PI * 0.25f, w/h, 1.0f, 5000.0f);
 }
 
+void SkeletonClass::InitializeGfxStatValues()
+{
+	//Initialize GfxStats values
+	GfxStats::GetInstance()->mCurTarget = mCurrentTarget;
+	GfxStats::GetInstance()->mSpecularEnable = getCurrentMaterial()->mRenderSpecular;
+	GfxStats::GetInstance()->mAbientEnable = getCurrentMaterial()->mRenderAmbient;
+	GfxStats::GetInstance()->mReflectionEnable = mAdvancedMaterial->mRenderReflections;
+	GfxStats::GetInstance()->mTextureEnable = getCurrentMaterial()->mRenderTexture;
+	GfxStats::GetInstance()->mNormalMapEnable = mAdvancedMaterial->mRenderNormalMap;
+	GfxStats::GetInstance()->mReflectBlend = mAdvancedMaterial->mReflectionBlending;
+	GfxStats::GetInstance()->mNormalStr = mAdvancedMaterial->mNormalMapStrength;
+	GfxStats::GetInstance()->mSpecularStr = getCurrentMaterial()->mSpecularPower;
+	GfxStats::GetInstance()->mSpecularStr = getCurrentMaterial()->mSpecularPower;
+}
+
 //Material
+BaseMaterial* SkeletonClass::getCurrentMaterial() const
+{ return m_Objects[mCurrentTarget]->getMaterial();	}
 void SkeletonClass::setPhongMaterial()
 {
 	for (size_t i = 0; i < m_Objects.size(); i++)
@@ -394,32 +417,38 @@ void SkeletonClass::ToggleDiffuseRendering()
 	mPhongMaterial->ToggleDiffuse();
 	mGouradMaterial->ToggleDiffuse();
 	mAdvancedMaterial->ToggleDiffuse();
+	GfxStats::GetInstance()->mDiffuseEnable = getCurrentMaterial()->mRenderDiffuse;
 }
 void SkeletonClass::ToggleSpecularRendering()
 {
 	mPhongMaterial->ToggleSpecular();
 	mGouradMaterial->ToggleSpecular();
 	mAdvancedMaterial->ToggleSpecular();
+	GfxStats::GetInstance()->mSpecularEnable = getCurrentMaterial()->mRenderSpecular;
 }
 void SkeletonClass::ToggleAmbientRendering()
 {
 	mPhongMaterial->ToggleAmbient();
 	mGouradMaterial->ToggleAmbient();
 	mAdvancedMaterial->ToggleAmbient();
+	GfxStats::GetInstance()->mAbientEnable = getCurrentMaterial()->mRenderAmbient;
 }
 void SkeletonClass::ToggleReflectivity()
 {
 	mAdvancedMaterial->ToggleReflection();
+	GfxStats::GetInstance()->mReflectionEnable = mAdvancedMaterial->mRenderReflections;
 }
 void SkeletonClass::ToggleTextureRendering()
 {
 	mPhongMaterial->ToggleTextureRender();
 	mGouradMaterial->ToggleTextureRender();
 	mAdvancedMaterial->ToggleTextureRender();
+	GfxStats::GetInstance()->mTextureEnable = getCurrentMaterial()->mRenderTexture;
 }
 void SkeletonClass::ToggleNormalMapRendering()
 {
 	mAdvancedMaterial->ToggleNormalMapRender();
+	GfxStats::GetInstance()->mNormalMapEnable = mAdvancedMaterial->mRenderNormalMap;
 }
 
 void SkeletonClass::AddReflectionBlend(float blendAmount)
@@ -429,6 +458,7 @@ void SkeletonClass::AddReflectionBlend(float blendAmount)
 		mAdvancedMaterial->mReflectionBlending = 0.0f;
 	else if (mAdvancedMaterial->mReflectionBlending > 1.0f)
 		mAdvancedMaterial->mReflectionBlending = 1.0f;
+	GfxStats::GetInstance()->mReflectBlend = mAdvancedMaterial->mReflectionBlending;
 }
 void SkeletonClass::AddNormalMapStrength(float normalAmount)
 {
@@ -437,16 +467,19 @@ void SkeletonClass::AddNormalMapStrength(float normalAmount)
 		mAdvancedMaterial->mNormalMapStrength = 0.0f;
 	else if (mAdvancedMaterial->mNormalMapStrength > 1.0f)
 		mAdvancedMaterial->mNormalMapStrength = 1.0f;
+	GfxStats::GetInstance()->mNormalStr = mAdvancedMaterial->mNormalMapStrength;
 }
 void SkeletonClass::AddSpecularCoefficient(float specularAmount)
 {
 	mPhongMaterial->mSpecularPower += specularAmount;
 	mGouradMaterial->mSpecularPower += specularAmount;
 	mAdvancedMaterial->mSpecularPower += specularAmount;
+	GfxStats::GetInstance()->mSpecularStr = getCurrentMaterial()->mSpecularPower;
 }
 void SkeletonClass::SetSpecularCoefficient(float specularAmount)
 {
 	mPhongMaterial->mSpecularPower = specularAmount;
 	mGouradMaterial->mSpecularPower = specularAmount;
 	mAdvancedMaterial->mSpecularPower = specularAmount;
+	GfxStats::GetInstance()->mSpecularStr = getCurrentMaterial()->mSpecularPower;
 }

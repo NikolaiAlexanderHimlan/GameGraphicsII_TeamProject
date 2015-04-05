@@ -47,7 +47,7 @@ public:
 
 	inline const Transform& getLocalTransform() const { return mLocalTransform;	};
 
-	inline const BaseMaterial* getMaterial() const { return mObjectMaterial;	};
+	inline BaseMaterial* getMaterial() const { return mObjectMaterial;	};
 	
 	//Reference Getters
 	inline Transform& refLocalTransform() { return mLocalTransform;	};

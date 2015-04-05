@@ -120,6 +120,7 @@
     <ClInclude Include="3DClasses\Torus3D.h" />
     <ClInclude Include="3DClasses\Vertex.h" />
     <ClInclude Include="BaseMaterial.h" />
+    <ClInclude Include="CodingDefines.h" />
     <ClInclude Include="Cubemap.h" />
     <ClInclude Include="CubeMaterial.h" />
     <ClInclude Include="d3dApp.h" />

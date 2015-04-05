@@ -9,6 +9,7 @@
 #include <tchar.h>
 
 #include "Vector3f.h"
+#include "CodingDefines.h"
 
 //=============================================================================
 DEFINE_SINGLETON(GfxStats);
@@ -113,14 +114,45 @@ void GfxStats::update(float dt)
 void GfxStats::display()
 {
 	// Make static so memory is not allocated every frame.
-	static char buffer[256];
+	static const int NUM_LINES = 17;
+	static const int CHAR_PER_LINE = 64;
+	static char buffer[CHAR_PER_LINE * NUM_LINES];
 
-	sprintf(buffer, "Frames Per Second = %.2f\n"
+	sprintf(buffer, 
+		"Frames Per Second = %.2f\n"
 		"Milliseconds Per Frame = %.4f\n"
 		"Camera Position = %s\n"
 		"Triangle Count = %d\n"
-		"Vertex Count = %d"
-		, mFPS, mMilliSecPerFrame, toString(mCameraPos).c_str(), mNumTris, mNumVertices);
+		"Vertex Count = %d\n"
+
+		"\nControls: \n"
+		"Ambient %s (E - Toggle)\n"
+		"Diffuse %s (D - Toggle)\n"
+		"Specular %s (Q - Toggle) Specular Rendering\n"
+		"Reflection %s (R - Toggle)\n"
+		"Textures %s (T - Toggle)\n"
+		"Normal Map %s (N - Toggle)\n"
+
+		"Reflection Blending %.1f (-/= - Adjust by 0.1)\n"
+		"Normal Map Strength %.1f (A/S - Adjust by 0.1)\n"
+		"Specular Coefficient %.1f (1-7 - Select preset)\n"
+
+		"Current target object %i (O - Cycle between objects)\n"
+		
+		, mFPS, mMilliSecPerFrame
+		, toString(mCameraPos).c_str()
+		, mNumTris, mNumVertices
+		, EnableToStr(mAbientEnable)
+		, EnableToStr(mDiffuseEnable)
+		, EnableToStr(mSpecularEnable)
+		, EnableToStr(mReflectionEnable)
+		, EnableToStr(mTextureEnable)
+		, EnableToStr(mNormalMapEnable)
+		, mReflectBlend
+		, mNormalStr
+		, mSpecularStr
+		, mCurTarget
+		);
 
 	RECT R = {5, 5, 0, 0};
 	HR(mFont->DrawText(0, buffer, -1, &R, DT_NOCLIP, D3DCOLOR_XRGB(0,0,0)));

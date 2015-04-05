@@ -66,6 +66,49 @@ void BaseObject3D::BuildTexCoord()
 	HR(mObjectMesh->CloneMesh(D3DXMESH_SYSTEMMEM,
 		elements, gd3dDevice, &temp));
 
+
+	//********************
+	//CODE IS IN PROGRESS OF BEING MADE TO WORK
+	ID3DXMesh* tempMesh = mObjectMesh;
+
+	// Get the vertex declaration for the NMapVertex.
+	D3DVERTEXELEMENT9 elems[MAX_FVF_DECL_SIZE];
+	UINT numElems = 0;
+	HR(VertexNMap::Decl->GetDeclaration(elems, &numElems));
+
+	// Clone the mesh to the NMapVertex format.
+	ID3DXMesh* clonedTempMesh = 0;
+	HR(tempMesh->CloneMesh(D3DXMESH_MANAGED, elems, gd3dDevice, &clonedTempMesh));
+
+
+
+
+
+	// Now use D3DXComputeTangentFrameEx to build the TNB-basis for each vertex
+	// in the mesh.  
+
+	HR(D3DXComputeTangentFrameEx(
+		clonedTempMesh, // Input mesh
+		D3DDECLUSAGE_TEXCOORD, 0, // Vertex element of input tex-coords.  
+		D3DDECLUSAGE_BINORMAL, 0, // Vertex element to output binormal.
+		D3DDECLUSAGE_TANGENT, 0,  // Vertex element to output tangent.
+		D3DDECLUSAGE_NORMAL, 0,   // Vertex element to output normal.
+		0, // Options
+		0, // Adjacency
+		0.01f, 0.25f, 0.01f, // Thresholds for handling errors
+		&mObjectMesh, // Output mesh
+		0));         // Vertex Remapping
+
+	// Done with temps.
+	ReleaseCOM(tempMesh);
+	ReleaseCOM(clonedTempMesh);
+
+
+
+	//********************
+
+
+
 	ReleaseCOM(mObjectMesh);
 
 	// Now generate texture coordinates for each vertex.

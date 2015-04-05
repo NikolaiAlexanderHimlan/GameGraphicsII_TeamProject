@@ -11,11 +11,20 @@ class NormalMaterial :
 	public BaseMaterial
 {
 public:
+	//-------- Material Parameters -------
+	bool mRenderNormalMap = true;
+
+protected:
+	//---------- Shader Handles ----------
+
+public:
 	NormalMaterial()
 	{
 	};
 	virtual ~NormalMaterial()
 	{
 	};
+
+	void ToggleNormalMapRender();
 };
 

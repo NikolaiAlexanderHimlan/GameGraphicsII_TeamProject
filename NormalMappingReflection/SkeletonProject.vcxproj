@@ -103,6 +103,7 @@
     <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="GfxStats.cpp" />
     <ClCompile Include="NAH_lib\RotationMath.cpp" />
+    <ClCompile Include="NormalMaterial.cpp" />
     <ClCompile Include="ReflectiveMaterial.cpp" />
     <ClCompile Include="Rotation.cpp" />
     <ClCompile Include="SkeletonClass.cpp" />

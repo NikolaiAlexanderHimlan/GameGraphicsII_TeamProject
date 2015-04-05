@@ -389,34 +389,33 @@ void SkeletonClass::ToggleDiffuseRendering()
 {
 	mPhongMaterial->ToggleDiffuse();
 	mGouradMaterial->ToggleDiffuse();
+	mAdvancedMaterial->ToggleDiffuse();
 }
 void SkeletonClass::ToggleSpecularRendering()
 {
 	mPhongMaterial->ToggleSpecular();
 	mGouradMaterial->ToggleSpecular();
+	mAdvancedMaterial->ToggleSpecular();
 }
 void SkeletonClass::ToggleAmbientRendering()
 {
-	throw std::logic_error("The method or operation is not implemented.");
-	mPhongMaterial;
-	mGouradMaterial;
-}
-void SkeletonClass::ToggleNormalMapRendering()
-{
-	throw std::logic_error("The method or operation is not implemented.");
-	mPhongMaterial;
-	mGouradMaterial;
+	mPhongMaterial->ToggleAmbient();
+	mGouradMaterial->ToggleAmbient();
+	mAdvancedMaterial->ToggleAmbient();
 }
 void SkeletonClass::ToggleReflectivity()
 {
-	throw std::logic_error("The method or operation is not implemented.");
-	mPhongMaterial;
-	mGouradMaterial;
+	mAdvancedMaterial->ToggleReflections();
 }
 void SkeletonClass::ToggleTextureRendering()
 {
 	mPhongMaterial->ToggleTextureRender();
 	mGouradMaterial->ToggleTextureRender();
+	mAdvancedMaterial->ToggleTextureRender();
+}
+void SkeletonClass::ToggleNormalMapRendering()
+{
+	mAdvancedMaterial->ToggleNormalMapRender();
 }
 
 void SkeletonClass::AddReflectionBlend(float blendAmount)

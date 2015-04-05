@@ -11,7 +11,17 @@ class ReflectiveMaterial :
 	public NormalMaterial
 {
 public:
+	bool		mRenderReflections = true;
+
+protected:
+	//---------- Shader Handles ----------
+
+public:
+
 	ReflectiveMaterial();
 	virtual ~ReflectiveMaterial();
+
+	void ToggleReflections() { ToggleReflections(!mRenderReflections); };
+	void ToggleReflections(bool enabled) { mRenderReflections = enabled;	};
 };
 

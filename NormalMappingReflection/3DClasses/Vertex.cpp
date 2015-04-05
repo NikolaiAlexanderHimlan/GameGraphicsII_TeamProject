@@ -12,6 +12,7 @@ IDirect3DVertexDeclaration9* VertexCol::Decl = 0;
 IDirect3DVertexDeclaration9* VertexPN::Decl  = 0;
 IDirect3DVertexDeclaration9* VertexPNT::Decl = 0;
 IDirect3DVertexDeclaration9* VertexPT::Decl  = 0;
+IDirect3DVertexDeclaration9* VertexNMap::Decl = 0;
 //=============================================================================
 void InitAllVertexDeclarations()
 {
@@ -69,6 +70,20 @@ void InitAllVertexDeclarations()
 		D3DDECL_END()
 	};
 	HR(gd3dDevice->CreateVertexDeclaration(VertexPTElements, &VertexPT::Decl));
+
+	//===============================================================
+	// NMapVertex
+
+	D3DVERTEXELEMENT9 VertexNMapElements[] =
+	{
+		{ 0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 },
+		{ 0, 12, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TANGENT, 0 },
+		{ 0, 24, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_BINORMAL, 0 },
+		{ 0, 36, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL, 0 },
+		{ 0, 48, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
+		D3DDECL_END()
+	};
+	HR(gd3dDevice->CreateVertexDeclaration(VertexNMapElements, &VertexNMap::Decl));
 }
 //-----------------------------------------------------------------------------
 void DestroyAllVertexDeclarations()
@@ -78,5 +93,6 @@ void DestroyAllVertexDeclarations()
 	ReleaseCOM(VertexPN::Decl);
 	ReleaseCOM(VertexPNT::Decl);
 	ReleaseCOM(VertexPT::Decl);
+	ReleaseCOM(VertexNMap::Decl);
 }
 //=============================================================================

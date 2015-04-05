@@ -12,6 +12,7 @@
 void InitAllVertexDeclarations();
 void DestroyAllVertexDeclarations();
 //=============================================================================
+//Position
 struct VertexPos
 {
 	VertexPos()
@@ -24,6 +25,7 @@ struct VertexPos
 };
 
 //===============================================================
+//Color
 struct VertexCol
 {
 	VertexCol():pos(0.0f, 0.0f, 0.0f),col(0x00000000){}
@@ -36,6 +38,7 @@ struct VertexCol
 };
 
 //===============================================================
+//Position-Normal
 struct VertexPN
 {
 	VertexPN()
@@ -52,6 +55,7 @@ struct VertexPN
 };
 
 //===============================================================
+//Position-Normal-TextureCoord
 struct VertexPNT
 {
 	VertexPNT()
@@ -82,6 +86,7 @@ struct VertexPNT
 };
 
 //===============================================================
+//Position-TextureCoord
 struct VertexPT
 {
 	VertexPT()
@@ -95,6 +100,46 @@ struct VertexPT
 	D3DXVECTOR3 pos;
 	D3DXVECTOR2 tex;
 
+	static IDirect3DVertexDeclaration9* Decl;
+};
+//=============================================================================
+//Position-Tangent-Binormal-Normal-TextureCoord
+struct VertexNMap
+{
+	VertexNMap()
+		: pos(0.0f, 0.0f, 0.0f),
+		tangent(0.0f, 0.0f, 0.0f),
+		binormal(0.0f, 0.0f, 0.0f),
+		norm(0.0f, 0.0f, 0.0f),
+		tex(0.0f, 0.0f) {}
+	VertexNMap(float x, float y, float z,
+		float tan_x, float tan_y, float tan_z,
+		float bx, float by, float bz,
+		float nx, float ny, float nz,
+		float u, float v
+		) : pos(x, y, z),
+			tangent(tan_x, tan_y, tan_z),
+			binormal(bx, by, bz),
+			norm(nx, ny, nz),
+			tex(u, v)
+	{}
+	VertexNMap(const D3DXVECTOR3& v,
+		const D3DXVECTOR3& t,
+		const D3DXVECTOR3& b,
+		const D3DXVECTOR3& n,
+		const D3DXVECTOR2& uv
+		) : pos(v),
+			tangent(t),
+			binormal(b),
+			norm(n),
+			tex(uv)
+	{}
+		
+	D3DXVECTOR3 pos;
+	D3DXVECTOR3 tangent;
+	D3DXVECTOR3 binormal;
+	D3DXVECTOR3 norm;
+	D3DXVECTOR2 tex;
 	static IDirect3DVertexDeclaration9* Decl;
 };
 //=============================================================================

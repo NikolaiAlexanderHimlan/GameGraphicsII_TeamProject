@@ -18,7 +18,7 @@ protected:
 
 public:
 	CubeMaterial(void);
-	virtual ~CubeMaterial();;
+	virtual ~CubeMaterial();
 
 	//Texture
 	void LoadCubeTexture(const std::string& filename);

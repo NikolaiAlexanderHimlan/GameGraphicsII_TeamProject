@@ -4,7 +4,6 @@ Class: EGP-300 <Section 52>
 Assignment: AdvancedTexturing
 Certification of Authenticity:
 I certify that this assignment is entirely my own work.
-Based on the Sky object by Frank Luna
 */
 #include "CubeMaterial.h"
 

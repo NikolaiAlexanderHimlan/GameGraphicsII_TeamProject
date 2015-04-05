@@ -12,7 +12,8 @@ class NormalMaterial :
 {
 public:
 	//-------- Material Parameters -------
-	bool mRenderNormalMap = true;
+	bool		mRenderNormalMap = true;
+	float		mNormalMapStrength;
 
 protected:
 	//---------- Shader Handles ----------

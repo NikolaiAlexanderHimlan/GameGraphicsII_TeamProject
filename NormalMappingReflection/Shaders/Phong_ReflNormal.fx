@@ -80,8 +80,7 @@ OutputVS PhongVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0 
 	OutputVS outVS = (OutputVS)0;
 	
 	// Transform normal to world space.
-	outVS.normalW = mul(float4(normalL, 0.0f),
-	gWorldInverseTranspose).xyz;
+	outVS.normalW = mul(float4(normalL, 0.0f), gWorldInverseTranspose).xyz;
 	outVS.normalW = normalize(outVS.normalW);
 	
 	// Transform vertex position to world space.

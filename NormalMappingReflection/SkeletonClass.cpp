@@ -81,8 +81,8 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mAdvancedMaterial->LoadEffect(ADVANCED_FX_FILENAME);
 	mAdvancedMaterial->LoadTexture(TEXTURE_FILENAME);
 	//mAdvancedMaterial->LoadNormalMap(NORMALMAP_FILENAME);
-	IDirect3DTexture9* envTexture;
-	HR(D3DXCreateTextureFromFile(gd3dDevice, SKYBOX_TEXTURE_FILENAME.c_str(), &envTexture));
+	IDirect3DCubeTexture9* envTexture;
+	HR(D3DXCreateCubeTextureFromFile(gd3dDevice, SKYBOX_TEXTURE_FILENAME.c_str(), &envTexture));
 	mAdvancedMaterial->EnableEnvironmentReflection(envTexture);
 
 	//set Phong lighting data

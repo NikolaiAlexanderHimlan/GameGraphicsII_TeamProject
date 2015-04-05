@@ -70,9 +70,9 @@ public:
 	void ToggleDiffuseRendering(); //Toggle Diffuse rendering
 	void ToggleSpecularRendering(); //Toggle Specular rendering
 	void ToggleAmbientRendering();
+	void ToggleReflectivity();
 	void ToggleTextureRendering();
 	void ToggleNormalMapRendering();
-	void ToggleReflectivity();
 
 	void drawScene();
 
@@ -88,8 +88,7 @@ private:
 	bool mCameraInvertX = false;
 	bool mCameraInvertY = false;
 	bool mCameraInvertZ = false; //Zoom/Radius
-	Vector3f getCameraLocation() const
-	{
+	Vector3f getCameraLocation() const {
 		return Vector3f();//HACK: return 0 vector for now
 	};
 
@@ -101,8 +100,8 @@ private:
 	Cubemap* mSkybox;
 
 	//Material Data
-	BaseMaterial*	mPhongMaterial;
-	BaseMaterial*	mGouradMaterial;
+	BaseMaterial* mPhongMaterial;
+	BaseMaterial* mGouradMaterial;
 	ReflectiveMaterial* mAdvancedMaterial;
 
 	//Objects
@@ -119,7 +118,7 @@ private:
 		mCurrentTarget++;
 		if (mCurrentTarget >= m_Objects.size())
 			mCurrentTarget = 0;//back to start
-	}
+	};
 
 protected:
 	void UpdateInputs(float dt);

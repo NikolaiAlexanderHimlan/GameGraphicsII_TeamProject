@@ -63,8 +63,7 @@ void BaseObject3D::BuildTexCoord()
 	VertexPNT::Decl->GetDeclaration(elements, &numElements);
 
 	ID3DXMesh* temp = 0;
-	HR(mObjectMesh->CloneMesh(D3DXMESH_SYSTEMMEM,
-		elements, gd3dDevice, &temp));
+	HR(mObjectMesh->CloneMesh(D3DXMESH_SYSTEMMEM, elements, gd3dDevice, &temp));
 
 
 	//********************

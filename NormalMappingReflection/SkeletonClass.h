@@ -103,6 +103,7 @@ private:
 	BaseMaterial* mPhongMaterial;
 	BaseMaterial* mGouradMaterial;
 	ReflectiveMaterial* mAdvancedMaterial;
+	BaseMaterial* getCurrentMaterial() const;
 
 	//Objects
 	std::vector<BaseObject3D*> m_Objects;
@@ -112,15 +113,19 @@ private:
 	{
 		if (targetNum < m_Objects.size())
 			mCurrentTarget = targetNum;
+		GfxStats::GetInstance()->mCurTarget = mCurrentTarget;
 	};
 	inline void NextTarget(void)
 	{
 		mCurrentTarget++;
 		if (mCurrentTarget >= m_Objects.size())
 			mCurrentTarget = 0;//back to start
+		GfxStats::GetInstance()->mCurTarget = mCurrentTarget;
 	};
 
 protected:
+	void InitializeGfxStatValues();
+
 	void UpdateInputs(float dt);
 	void UpdateCamera(float dt);
 

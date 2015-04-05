@@ -95,6 +95,9 @@
     <ClInclude Include="ReflectiveMaterial.h">
       <Filter>Materials</Filter>
     </ClInclude>
+    <ClInclude Include="CodingDefines.h">
+      <Filter>Defines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Primitives">
@@ -111,6 +114,9 @@
     </Filter>
     <Filter Include="Materials">
       <UniqueIdentifier>{d85448a7-6533-4d39-bb66-93f4bf95e8e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Defines">
+      <UniqueIdentifier>{9448d156-54b8-4876-9fb4-53bc2665fc82}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

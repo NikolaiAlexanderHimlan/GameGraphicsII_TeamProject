@@ -20,6 +20,18 @@ class GfxStats
     DECLARE_SINGLETON(GfxStats);
 
 public:
+	Vector3f mCameraPos;
+	bool mAbientEnable;
+	bool mDiffuseEnable;
+	bool mSpecularEnable;
+	bool mReflectionEnable;
+	bool mTextureEnable;
+	bool mNormalMapEnable;
+	float mReflectBlend;
+	float mNormalStr;
+	float mSpecularStr;
+	int mCurTarget;
+
 	~GfxStats();
 
 	void onLostDevice();
@@ -47,7 +59,6 @@ private:
 	ID3DXFont* mFont;
 	float mFPS;
 	float mMilliSecPerFrame;
-	Vector3f mCameraPos;
 	DWORD mNumTris;
 	DWORD mNumVertices;
 };

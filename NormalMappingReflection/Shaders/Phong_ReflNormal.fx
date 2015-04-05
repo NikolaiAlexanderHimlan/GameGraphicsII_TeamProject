@@ -27,7 +27,7 @@ uniform extern float4 gDiffuseMtrl;
 uniform extern float4 gDiffuseLight;
 uniform extern float4 gAmbientMtrl;
 uniform extern float4 gAmbientLight;
-uniform extern float gReflectPower;
+uniform extern float gReflectBlending;
 uniform extern float gNormalPower;//strength of the normal mapping
 
 uniform extern texture gTexture;
@@ -111,6 +111,8 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 	// Compute Reflection
 	float3 r = reflect(-gLightVecW, normalW);
 	float3 envColor = texCUBE(EnvMapSampler, r).rgb;
+	float3 reflVal = envColor * gReflectBlending;
+	float reflBlend = 1.0f - gReflectBlending;//amount to blend existing colors into the reflection
 	
 	// Determine how much (if any) specular light makes it into the eye.
 	float t = pow(max(dot(r, toEye), 0.0f), gSpecularPower);
@@ -122,6 +124,15 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 	float3 ambientVal = (gAmbientMtrl*gAmbientLight).xyz;
 	float3 diffuseVal = s*(gDiffuseMtrl*gDiffuseLight).rgb;
 	float3 specVal = t*(gSpecularMtrl*gSpecularLight).rgb;
+
+	//Combine the reflection into the lighting values
+	[flatten] if (gRenderReflection)
+	{
+		ambientVal *= reflBlend;
+		ambientVal += reflVal;
+		diffuseVal *= reflBlend;
+		diffuseVal += reflVal;
+	}
 
 	float3 texColor;//color of the texture at this coord
 	float3 pixColor;//final pixel color

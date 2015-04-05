@@ -10,18 +10,28 @@ I certify that this assignment is entirely my own work.
 class ReflectiveMaterial :
 	public NormalMaterial
 {
+	bool		mEnvironmentInitialized = false;
 public:
 	bool		mRenderReflections = true;
+	float		mReflectionBlending;
 
 protected:
 	//---------- Shader Handles ----------
+	D3DXHANDLE	mhRenderReflectionsHandle;
+	D3DXHANDLE	mhReflectionBlendingHandle;
+	D3DXHANDLE	mhEnvironmentMapHandle;
+
+	virtual void RefreshEffectValues() const;
 
 public:
 
 	ReflectiveMaterial();
 	virtual ~ReflectiveMaterial();
 
-	void ToggleReflections() { ToggleReflections(!mRenderReflections); };
-	void ToggleReflections(bool enabled) { mRenderReflections = enabled;	};
+	virtual void ConnectToEffect(ID3DXEffect* effect);
+	void EnableEnvironmentReflection(IDirect3DTexture9* environmentTexure);
+
+	void ToggleReflection() { ToggleReflection(!mRenderReflections);	};
+	void ToggleReflection(bool enabled) { mRenderReflections = enabled && mEnvironmentInitialized;	};
 };
 

@@ -81,6 +81,9 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mAdvancedMaterial->LoadEffect(ADVANCED_FX_FILENAME);
 	mAdvancedMaterial->LoadTexture(TEXTURE_FILENAME);
 	//mAdvancedMaterial->LoadNormalMap(NORMALMAP_FILENAME);
+	IDirect3DTexture9* envTexture;
+	HR(D3DXCreateTextureFromFile(gd3dDevice, SKYBOX_TEXTURE_FILENAME.c_str(), &envTexture));
+	mAdvancedMaterial->EnableEnvironmentReflection(envTexture);
 
 	//set Phong lighting data
 	mPhongMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
@@ -109,6 +112,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	mAdvancedMaterial->mAmbientLight = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
 	mAdvancedMaterial->mSpecularMtrl = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
 	mAdvancedMaterial->mSpecularLight = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	mAdvancedMaterial->mReflectionBlending = 0.5f;
 	
 	SetSpecularCoefficient(8.0f);
 
@@ -405,7 +409,7 @@ void SkeletonClass::ToggleAmbientRendering()
 }
 void SkeletonClass::ToggleReflectivity()
 {
-	mAdvancedMaterial->ToggleReflections();
+	mAdvancedMaterial->ToggleReflection();
 }
 void SkeletonClass::ToggleTextureRendering()
 {
@@ -420,11 +424,19 @@ void SkeletonClass::ToggleNormalMapRendering()
 
 void SkeletonClass::AddReflectionBlend(float blendAmount)
 {
-	throw std::logic_error("The method or operation is not implemented.");
+	mAdvancedMaterial->mReflectionBlending += blendAmount;
+	if (mAdvancedMaterial->mReflectionBlending < 0.0f)
+		mAdvancedMaterial->mReflectionBlending = 0.0f;
+	else if (mAdvancedMaterial->mReflectionBlending > 1.0f)
+		mAdvancedMaterial->mReflectionBlending = 1.0f;
 }
 void SkeletonClass::AddNormalMapStrength(float normalAmount)
 {
-	throw std::logic_error("The method or operation is not implemented.");
+	mAdvancedMaterial->mNormalMapStrength += normalAmount;
+	if (mAdvancedMaterial->mNormalMapStrength < 0.0f)
+		mAdvancedMaterial->mNormalMapStrength = 0.0f;
+	else if (mAdvancedMaterial->mNormalMapStrength > 1.0f)
+		mAdvancedMaterial->mNormalMapStrength = 1.0f;
 }
 void SkeletonClass::AddSpecularCoefficient(float specularAmount)
 {

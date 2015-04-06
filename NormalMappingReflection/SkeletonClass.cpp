@@ -158,6 +158,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	//Call setters at the end to avoid null material errors
 	SetSpecularCoefficient(8.0f);
+	AddNormalMapStrength(1.0f);//guarantee max value to start
 
 	InitializeGfxStatValues();
 

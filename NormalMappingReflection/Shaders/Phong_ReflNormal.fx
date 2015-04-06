@@ -72,12 +72,39 @@ struct OutputVS {
 	float3 normalW	: TEXCOORD0;
 	float3 posW		: TEXCOORD1;
 	float2 tex0		: TEXCOORD2;
+	float3 toEyeT	: TEXCOORD3;
+	float3 lightDirT: TEXCOORD4;
 };
 
-OutputVS PhongVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0 : TEXCOORD0)
+OutputVS PhongVS(float3 posL	 : POSITION0, 
+				float3 tangentL	 : TANGENT0, 
+				float3 binormalL : BINORMAL0, 
+				float3 normalL	 : NORMAL0, 
+				float2 tex0		 : TEXCOORD0)
 {
 	// Zero out our output.
 	OutputVS outVS = (OutputVS)0;
+
+	// Build TBN-basis.
+	float3x3 TBN;
+	TBN[0] = tangentL;
+	TBN[1] = binormalL;
+	TBN[2] = normalL;
+
+	// Matrix transforms from object space to tangent space.
+	float3x3 toTangentSpace = transpose(TBN);
+
+	// Transform world eye position to local space.
+	float3 eyePosL = mul(float4(gEyePosW, 1.0f), gWorldInverseTranspose).xyz;
+
+	// Transform local to-eye vector to tangent space.
+	float3 toEyeL = eyePosL - posL;
+	outVS.toEyeT = mul(toEyeL, toTangentSpace);
+
+	float3 lightDirW = -gLightVecW;//light dir is opposite light vector
+	// Transform local light direction to tangent space.
+	float3 lightDirL = mul(float4(lightDirW, 0.0f), gWorldInverseTranspose).xyz;
+	outVS.lightDirT  = mul(lightDirL, toTangentSpace);
 
 	// Transform normal to world space.
 	outVS.normalW = mul(float4(normalL, 0.0f), gWorldInverseTranspose).xyz;
@@ -99,24 +126,49 @@ OutputVS PhongVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0 
 	return outVS;
 }
 
-float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 : TEXCOORD2) : COLOR
+float4 PhongPS( float3 normalW	 : TEXCOORD0,
+				float3 posW		 : TEXCOORD1, 
+				float2 tex0		 : TEXCOORD2,
+				float3 toEyeT	 : TEXCOORD3,
+				float3 lightDirT : TEXCOORD4) : COLOR
 {
 	// Interpolated normals can become unnormal--so normalize.
-	normalW = normalize(normalW);
+	normalW		= normalize(normalW);
+	toEyeT		= normalize(toEyeT);
+	lightDirT	= normalize(lightDirT);
 
 	// Compute the vector from the vertex to the eye position.
-	float3 toEye = normalize(gEyePosW - posW);
-	// Compute Reflection
-	float3 r = reflect(-gLightVecW, normalW);
+	float3 toEyeW = normalize(gEyePosW - posW);
+
+	// Get data from the normal map
+	float3 normalT = tex2D(NormalSampler, tex0);
+
+	// Expand from [0, 1] compressed interval to true [-1, 1] interval.
+	normalT = 2.0f*normalT - 1.0f;
+	normalT = normalize(normalT);//need unit vector for normal
+
+	float3 normalCalc;//normal value to use for calculations
+	float3 normTVal = normalT * gNormalPower;
+	float3 normWVal = normalW * (1.0-gNormalPower);
+	[flatten] if (gRenderNormalMap)
+	{
+		//use normal map tangent normal
+		normalCalc = normalize(normTVal + normWVal);
+	}
+	else
+		normalCalc = normalW;//use regular world normal
+
+	// Compute Reflection (using normal map value)
+	float3 r = reflect(-gLightVecW, normalCalc);
 	float3 envColor = texCUBE(EnvMapSampler, r).rgb;
 	float3 reflVal = envColor * gReflectBlending;
 	float reflBlend = 1.0f - gReflectBlending;//amount to blend existing colors into the reflection
 
 	// Determine how much (if any) specular light makes it into the eye.
-	float t = pow(max(dot(r, toEye), 0.0f), gSpecularPower);
+	float t = pow(max(dot(r, toEyeW), 0.0f), gSpecularPower);
 
 	// Determine the diffuse light intensity that strikes the vertex.
-	float s = max(dot(gLightVecW, normalW), 0.0f);
+	float s = max(dot(gLightVecW, normalCalc), 0.0f);
 
 	// Compute the ambient, diffuse, and specular terms separately.
 	float3 ambientVal = (gAmbientMtrl*gAmbientLight).xyz;

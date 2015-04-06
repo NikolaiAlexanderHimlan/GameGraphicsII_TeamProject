@@ -33,6 +33,7 @@ void BaseMaterial::LoadTexture(const std::string& filename)
 }
 void BaseMaterial::setTexture(IDirect3DTexture9* texture)
 {
+	clearTexture();
 	mImageTexture = texture;
 	HR(m_Effect->SetTexture(mTextureHandle, mImageTexture));
 }

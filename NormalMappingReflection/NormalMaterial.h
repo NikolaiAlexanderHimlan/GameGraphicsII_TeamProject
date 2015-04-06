@@ -16,7 +16,14 @@ public:
 	float		mNormalMapStrength;
 
 protected:
+	IDirect3DTexture9*	mNormalMapTexture = nullptr;
+
 	//---------- Shader Handles ----------
+	D3DXHANDLE			mhRenderNormalMapHandle;
+	D3DXHANDLE			mhNormalMapStrengthHandle;
+	D3DXHANDLE			mhNormalMapHandle;
+
+	virtual void RefreshEffectValues() const;
 
 public:
 	NormalMaterial()
@@ -24,6 +31,17 @@ public:
 	};
 	virtual ~NormalMaterial()
 	{
+	};
+
+	virtual void ConnectToEffect(ID3DXEffect* effect);
+
+	inline bool ShouldRenderNormalMap(void) const
+	{ return mRenderNormalMap && (mNormalMapTexture != nullptr);	};
+	void LoadNormalMap(const std::string& filename);
+	void setNormalMap(IDirect3DTexture9* texture);
+	void clearNormalMap() {
+		if (mNormalMapTexture != nullptr)
+			ReleaseCOM(mNormalMapTexture);
 	};
 
 	void ToggleNormalMapRender();

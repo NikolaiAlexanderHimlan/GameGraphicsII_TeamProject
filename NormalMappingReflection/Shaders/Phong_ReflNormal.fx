@@ -42,7 +42,7 @@ sampler TextureSampler = sampler_state
 	MipFilter = LINEAR;
 	MaxAnisotropy = 8;
 	AddressU  = WRAP;
-    AddressV  = WRAP;
+	AddressV  = WRAP;
 };
 sampler NormalSampler = sampler_state
 {
@@ -52,7 +52,7 @@ sampler NormalSampler = sampler_state
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;
 	AddressU  = WRAP;
-    AddressV  = WRAP;
+	AddressV  = WRAP;
 };
 sampler EnvMapSampler = sampler_state
 {
@@ -61,7 +61,7 @@ sampler EnvMapSampler = sampler_state
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;
 	AddressU  = WRAP;
-    AddressV  = WRAP;
+	AddressV  = WRAP;
 };
 
 struct InputVS {
@@ -78,11 +78,11 @@ OutputVS PhongVS(float3 posL : POSITION0, float3 normalL : NORMAL0, float2 tex0 
 {
 	// Zero out our output.
 	OutputVS outVS = (OutputVS)0;
-	
+
 	// Transform normal to world space.
 	outVS.normalW = mul(float4(normalL, 0.0f), gWorldInverseTranspose).xyz;
 	outVS.normalW = normalize(outVS.normalW);
-	
+
 	// Transform vertex position to world space.
 	outVS.posW = mul(float4(posL, 1.0f), gWorld).xyz;
 
@@ -103,22 +103,21 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 {
 	// Interpolated normals can become unnormal--so normalize.
 	normalW = normalize(normalW);
-	
+
 	// Compute the vector from the vertex to the eye position.
 	float3 toEye = normalize(gEyePosW - posW);
-	
 	// Compute Reflection
 	float3 r = reflect(-gLightVecW, normalW);
 	float3 envColor = texCUBE(EnvMapSampler, r).rgb;
 	float3 reflVal = envColor * gReflectBlending;
 	float reflBlend = 1.0f - gReflectBlending;//amount to blend existing colors into the reflection
-	
+
 	// Determine how much (if any) specular light makes it into the eye.
 	float t = pow(max(dot(r, toEye), 0.0f), gSpecularPower);
-	
+
 	// Determine the diffuse light intensity that strikes the vertex.
 	float s = max(dot(gLightVecW, normalW), 0.0f);
-	
+
 	// Compute the ambient, diffuse, and specular terms separately.
 	float3 ambientVal = (gAmbientMtrl*gAmbientLight).xyz;
 	float3 diffuseVal = s*(gDiffuseMtrl*gDiffuseLight).rgb;

@@ -17,7 +17,7 @@
 
 class GfxStats
 {
-    DECLARE_SINGLETON(GfxStats);
+	DECLARE_SINGLETON(GfxStats);
 
 public:
 	Vector3f mCameraPos;

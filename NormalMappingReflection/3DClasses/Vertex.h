@@ -33,7 +33,7 @@ struct VertexCol
 	VertexCol(const D3DXVECTOR3& v, D3DCOLOR c):pos(v),col(c){}
 
 	D3DXVECTOR3 pos;
-	D3DCOLOR    col;
+	D3DCOLOR	col;
 	static IDirect3DVertexDeclaration9* Decl;
 };
 

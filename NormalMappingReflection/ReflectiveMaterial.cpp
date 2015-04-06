@@ -19,8 +19,8 @@ void ReflectiveMaterial::ConnectToEffect(ID3DXEffect* effect)
 	__super::ConnectToEffect(effect);
 
 	mhRenderReflectionsHandle = m_Effect->GetParameterByName(0, "gRenderReflection");
-	mhReflectionBlendingHandle = m_Effect->GetParameterByName(0, "gReflectBlending");;
-	mhEnvironmentMapHandle = m_Effect->GetParameterByName(0, "gEnvMap");;
+	mhReflectionBlendingHandle = m_Effect->GetParameterByName(0, "gReflectBlending");
+	mhEnvironmentMapHandle = m_Effect->GetParameterByName(0, "gEnvMap");
 }
 void ReflectiveMaterial::EnableEnvironmentReflection(IDirect3DCubeTexture9* environmentTexure)
 {

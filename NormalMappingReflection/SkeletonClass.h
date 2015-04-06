@@ -36,6 +36,7 @@ private:
 
 	//Textures
 	const std::string TEXTURE_FILENAME = ASSET_DIR + "Original_Utah_Teapot.bmp";
+	const std::string NORMALMAP_FILENAME = ASSET_DIR + "Original_Utah_Teapot_NRM.png";
 	const std::string SKYBOX_TEXTURE_FILENAME = ASSET_DIR + "cubeMap.dds";
 
 	//Shaders

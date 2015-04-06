@@ -168,13 +168,26 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 	}
 	else
 	{
-		pixColor = texColor;
+		[flatten] if (gRenderTexture)
+			pixColor = texColor;
+		else
+			pixColor = float3(0.0f,0.0f,0.0f);//no more multiplication, remove value of empty texture
 	}
 
 	//if diffuse and ambient are both disabled,, reflections will need to be reapplied
 	[flatten] if (gRenderReflection)
 	{
-		pixColor *= reflVal * 2;//multiplied by 2 as the reflection is multiplied by 2 values which make up the pixel color, and both need to be compensated for.
+		//reapply reflection for each effect disabled
+		[flatten] if (!gRenderDiffuse)
+		{
+			//if textures are also disabled, then the color should be the reflection
+			[flatten] if (!gRenderTexture)
+				pixColor = reflVal;
+			else
+				pixColor += reflVal;
+		}
+		[flatten] if (!gRenderAmbient)
+			pixColor += reflVal;
 	}
 
 	//combine specular into the pixel color

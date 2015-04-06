@@ -26,15 +26,15 @@ public:
 
 	D3DXVECTOR3 mLightVecW;
 	bool		mRenderAmbient = true;
-	D3DXCOLOR   mAmbientMtrl;
-	D3DXCOLOR   mAmbientLight;
+	D3DXCOLOR	mAmbientMtrl;
+	D3DXCOLOR	mAmbientLight;
 	bool		mRenderDiffuse = true;
-	D3DXCOLOR   mDiffuseMtrl;
-	D3DXCOLOR   mDiffuseLight;
+	D3DXCOLOR	mDiffuseMtrl;
+	D3DXCOLOR	mDiffuseLight;
 	bool		mRenderSpecular = true;
-	D3DXCOLOR   mSpecularMtrl;
-	D3DXCOLOR   mSpecularLight;
-	float       mSpecularPower;
+	D3DXCOLOR	mSpecularMtrl;
+	D3DXCOLOR	mSpecularLight;
+	float		mSpecularPower;
 
 	bool mRenderTexture = true;
 
@@ -69,8 +69,8 @@ protected:
 	virtual void RefreshEffectValues() const;
 
 public:
-    BaseMaterial(void);
-    virtual ~BaseMaterial(void);
+	BaseMaterial(void);
+	virtual ~BaseMaterial(void);
 
 	//Effect
 	void LoadEffect(const std::string& filename);
@@ -100,7 +100,7 @@ public:
 	virtual void ToggleTextureRender();
 
 	//Render
-    void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ) const; 
+	void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ) const; 
 	void Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh) const;
 };
 //=============================================================================

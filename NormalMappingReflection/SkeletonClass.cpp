@@ -59,9 +59,9 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	InitAllVertexDeclarations();
 
-	mCameraRadius    = 10.0f;
+	mCameraRadius	= 10.0f;
 	mCameraRotationY = 1.2 * D3DX_PI;
-	mCameraHeight    = 5.0f;
+	mCameraHeight	= 5.0f;
 
 	//Create skybox
 	mSkybox = new Cubemap(10000.0f, SKYBOX_TEXTURE_FILENAME, CUBEMAP_FX_FILENAME);
@@ -158,6 +158,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	//Call setters at the end to avoid null material errors
 	SetSpecularCoefficient(8.0f);
+	AddNormalMapStrength(1.0f);//guarantee max value to start
 
 	InitializeGfxStatValues();
 
@@ -166,11 +167,11 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 SkeletonClass::~SkeletonClass()
 {
-    GfxStats::DeleteInstance();
+	GfxStats::DeleteInstance();
 
-    for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
-        delete m_Objects[obj];
-    m_Objects.clear();
+	for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
+		delete m_Objects[obj];
+	m_Objects.clear();
 
 	delete mPhongMaterial;
 	mPhongMaterial = nullptr;
@@ -318,7 +319,6 @@ void SkeletonClass::UpdateCamera(float dt)
 	buildViewMtx();
 }
 
-
 void SkeletonClass::drawScene()
 {
 	// Clear the backbuffer and depth buffer.
@@ -326,7 +326,7 @@ void SkeletonClass::drawScene()
 
 	HR(gd3dDevice->BeginScene());
 
-    // Set render states for the entire scene here:
+	// Set render states for the entire scene here:
 	if (mIsWireframe) {
 		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME));
 	} else {
@@ -337,17 +337,17 @@ void SkeletonClass::drawScene()
 	mSkybox->Render(gd3dDevice, mView, mProj);
 
 	/*
-    // Render all the objects
-    for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
-    {
-        m_Objects[obj]->Render( gd3dDevice, mView, mProj );
-    }
+	// Render all the objects
+	for ( unsigned int obj=0 ; obj<m_Objects.size() ; obj++ )
+	{
+		m_Objects[obj]->Render( gd3dDevice, mView, mProj );
+	}
 	//*/
 	// Render the current target
 	m_Objects[mCurrentTarget]->Render( gd3dDevice, mView, mProj );
 
-    // display the render statistics
-    GfxStats::GetInstance()->display();
+	// display the render statistics
+	GfxStats::GetInstance()->display();
 
 	HR(gd3dDevice->EndScene());
 

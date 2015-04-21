@@ -20,6 +20,7 @@
 //=============================================================================
 struct IDirect3DVertexBuffer9;
 struct IDirect3DIndexBuffer9;
+class CameraView;
 //=============================================================================
 class BaseObject3D
 {
@@ -80,7 +81,7 @@ public:
 			mObjectMaterial = nullptr;
 		}
 	};
-	virtual void Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection ) const final;
+	virtual void Render( IDirect3DDevice9* gd3dDevice, CameraView* viewCamera ) const final;
 };
 //=============================================================================
 #endif // _BASE_OBJECT_3D_H

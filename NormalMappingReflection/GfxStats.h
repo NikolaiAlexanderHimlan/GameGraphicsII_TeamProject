@@ -14,6 +14,7 @@
 #include "d3dUtil.h"
 
 #include "Vector3f.h"
+#include "Rotation3D.h"
 
 class GfxStats
 {
@@ -21,6 +22,7 @@ class GfxStats
 
 public:
 	Vector3f mCameraPos;
+	Rotation3D mCameraRot;
 	bool mAbientEnable;
 	bool mDiffuseEnable;
 	bool mSpecularEnable;

@@ -30,6 +30,7 @@
 #include "Color.h"
 #include "Cubemap.h"
 #include "ReflectiveMaterial.h"
+#include "NAH_lib\CameraView.h"
 //=============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 				   PSTR cmdLine, int showCmd)
@@ -59,9 +60,8 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	InitAllVertexDeclarations();
 
-	mCameraRadius	= 10.0f;
-	mCameraRotationY = 1.2 * D3DX_PI;
-	mCameraHeight	= 5.0f;
+	mViewCamera = new CameraView(Vector3f(0.0f, 5.0f, -10.0f));
+	mViewCamera->refLocalTransform().rotation.SwitchToRadians();//switch while rotation is 0
 
 	//Create skybox
 	mSkybox = new Cubemap(10000.0f, SKYBOX_TEXTURE_FILENAME, CUBEMAP_FX_FILENAME);
@@ -295,23 +295,37 @@ void SkeletonClass::UpdateCamera(float dt)
 	if (gDInput->keyPress(DIK_Z))
 		mCameraInvertZ = !mCameraInvertZ;
 
+	float movForAmnt = 0.0f, movUpAmnt = 0.0f, movRghtAmnt = 0.0f;
+
+	//Camera Key Controls
 	if (gDInput->keyDown(DIK_Y))
-		mCameraRadius += 25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
+		movForAmnt = 25.0f * dt * ((mCameraInvertZ) ? -1.0f : 1.0f);
 	if (gDInput->keyDown(DIK_H))
-		mCameraRadius -= 25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
+		movForAmnt = -25.0f * dt * ((mCameraInvertZ) ? -1.0f : 1.0f);
+	if (gDInput->keyDown(DIK_I))	movUpAmnt = 25.0f * dt * ((mCameraInvertZ) ? -1.0f : 1.0f);
+	if (gDInput->keyDown(DIK_K))	movUpAmnt = -25.0f * dt * ((mCameraInvertZ) ? -1.0f : 1.0f);
+	if (gDInput->keyDown(DIK_J))	movRghtAmnt = 25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
+	if (gDInput->keyDown(DIK_L))	movRghtAmnt = -25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
 
+	//Camera Mouse Controls
 	// Divide by 50 to make mouse less sensitive. 
-	mCameraRotationY	+= gDInput->mouseDX() / 100.0f * ((mCameraInvertX) ? -1.0f : 1.0f);
-	mCameraHeight		+= gDInput->mouseDY() / 25.0f * ((mCameraInvertY) ? 1.0f : -1.0f);
-	mCameraRadius		+= gDInput->mouseDZ() / 25.0f * ((mCameraInvertZ) ? 1.0f : -1.0f);
+	movForAmnt += gDInput->mouseDZ() * ((mCameraInvertZ) ? -1.0f : 1.0f) / 25.0f;
+	movUpAmnt += gDInput->mouseDY() / 25.0f * ((mCameraInvertY) ? 1.0f : -1.0f);
+	movRghtAmnt += gDInput->mouseDX() / 25.0f * ((mCameraInvertX) ? -1.0f : 1.0f);
 
-	// If we rotate over 360 degrees, just roll back to 0
-	if( fabsf(mCameraRotationY) >= 2.0f * D3DX_PI ) 
-		mCameraRotationY = 0.0f;
+	mViewCamera->refLocalTransform().position.y += movUpAmnt;
+	Vector3f prevPos = mViewCamera->getLocalTransform().position;//save position
+	mViewCamera->refLocalTransform().moveForward(movForAmnt);
+	mViewCamera->refLocalTransform().moveRight(movRghtAmnt);
 
-	// Don't let radius get too small.
-	if( mCameraRadius < 5.0f )
-		mCameraRadius = 5.0f;
+
+	// Don't let radius gets too small.
+	const float MIN_DIST = 5.0f;
+	float dist = //length squared of the x and z camera position
+		powf(mViewCamera->refLocalTransform().position.x, 2) + 
+		powf(mViewCamera->refLocalTransform().position.z, 2);
+	if (dist < (MIN_DIST*MIN_DIST))//reset position if too close
+		mViewCamera->refLocalTransform().position = prevPos;//TODO: move to the edge of the zoom limit
 
 	// The camera position/orientation relative to world space can 
 	// change every frame based on input, so we need to rebuild the
@@ -333,8 +347,8 @@ void SkeletonClass::drawScene()
 		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
 	}
 
-	mSkybox->position = getCameraLocation();
-	mSkybox->Render(gd3dDevice, mView, mProj);
+	mSkybox->position = mViewCamera->getLocalTransform().position;
+	mSkybox->Render(gd3dDevice, mViewCamera);
 
 	/*
 	// Render all the objects
@@ -344,7 +358,7 @@ void SkeletonClass::drawScene()
 	}
 	//*/
 	// Render the current target
-	m_Objects[mCurrentTarget]->Render( gd3dDevice, mView, mProj );
+	m_Objects[mCurrentTarget]->Render( gd3dDevice, mViewCamera );
 
 	// display the render statistics
 	GfxStats::GetInstance()->display();
@@ -357,21 +371,18 @@ void SkeletonClass::drawScene()
 
 void SkeletonClass::buildViewMtx()
 {
-	float x = mCameraRadius * cosf(mCameraRotationY);
-	float z = mCameraRadius * sinf(mCameraRotationY);
-	D3DXVECTOR3 pos(x, mCameraHeight, z);
 	D3DXVECTOR3 target(m_Objects[mCurrentTarget]->getLocalTransform().position);
-	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
-	D3DXMatrixLookAtLH(&mView, &pos, &target, &up);
+	mViewCamera->lookAt(target);
 
-	GfxStats::GetInstance()->setCameraPosition(pos);
+	GfxStats::GetInstance()->setCameraPosition(mViewCamera->getWorldTransform().position);
+	GfxStats::GetInstance()->mCameraRot = (mViewCamera->getWorldTransform().rotation);
 }
 
 void SkeletonClass::buildProjMtx()
 {
 	float w = (float)md3dPP.BackBufferWidth;
 	float h = (float)md3dPP.BackBufferHeight;
-	D3DXMatrixPerspectiveFovLH(&mProj, D3DX_PI * 0.25f, w/h, 1.0f, 5000.0f);
+	D3DXMatrixPerspectiveFovLH(mViewCamera->viewFrustum, D3DX_PI * 0.25f, w/h, 1.0f, 5000.0f);
 }
 
 void SkeletonClass::InitializeGfxStatValues()

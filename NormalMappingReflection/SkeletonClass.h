@@ -26,6 +26,7 @@ class BaseObject3D;
 class BaseMaterial;
 class Cubemap;
 class ReflectiveMaterial;
+class CameraView;
 //=============================================================================
 class SkeletonClass : public D3DApp
 {
@@ -82,20 +83,10 @@ public:
 	void buildProjMtx();
 
 private:
-#pragma region Camera Data
-	float mCameraRotationY;
-	float mCameraRadius;
-	float mCameraHeight;
 	bool mCameraInvertX = false;
 	bool mCameraInvertY = false;
 	bool mCameraInvertZ = false; //Zoom/Radius
-	Vector3f getCameraLocation() const {
-		return Vector3f();//HACK: return 0 vector for now
-	};
-
-	D3DXMATRIX mView;
-	D3DXMATRIX mProj;
-#pragma endregion Camera Data
+	CameraView* mViewCamera;
 
 	//World/Environment Data
 	Cubemap* mSkybox;

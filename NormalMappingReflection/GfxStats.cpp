@@ -114,7 +114,7 @@ void GfxStats::update(float dt)
 void GfxStats::display()
 {
 	// Make static so memory is not allocated every frame.
-	static const int NUM_LINES = 17;
+	static const int NUM_LINES = 18;
 	static const int CHAR_PER_LINE = 64;
 	static char buffer[CHAR_PER_LINE * NUM_LINES];
 
@@ -122,6 +122,7 @@ void GfxStats::display()
 		"Frames Per Second = %.2f\n"
 		"Milliseconds Per Frame = %.4f\n"
 		"Camera Position = %s\n"
+		"Camera Rotation = %s\n"
 		"Triangle Count = %d\n"
 		"Vertex Count = %d\n"
 
@@ -141,6 +142,7 @@ void GfxStats::display()
 		
 		, mFPS, mMilliSecPerFrame
 		, Vect3_toString(mCameraPos).c_str()
+		, Vect3_toString(mCameraRot).c_str()
 		, mNumTris, mNumVertices
 		, EnableToStr(mAbientEnable)
 		, EnableToStr(mDiffuseEnable)

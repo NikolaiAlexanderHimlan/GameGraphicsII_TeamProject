@@ -10,6 +10,7 @@
 #include <D3dx9math.h>
 #include "Vertex.h"
 #include "../GfxStats.h"
+#include "../NAH_lib/CameraView.h"
 //=============================================================================
 BaseObject3D::BaseObject3D(void)
 {
@@ -143,8 +144,12 @@ void BaseObject3D::BuildTexCoord()
 }
 
 //-----------------------------------------------------------------------------
-void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice, D3DXMATRIX& view, D3DXMATRIX& projection ) const
+void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,  CameraView* viewCamera  ) const
 {
+	D3DXMATRIX view, projection;
+	viewCamera->calcViewMatrix(&view);
+	viewCamera->getViewProjection(&projection);
+
 	// Update the statistics singleton class
 	GfxStats::GetInstance()->addVertices(getVertexCount());
 	GfxStats::GetInstance()->addTriangles(getTriangleCount());

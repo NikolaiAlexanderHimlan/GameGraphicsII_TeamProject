@@ -19,13 +19,15 @@
     <ClCompile Include="3DClasses\Cube3D.cpp">
       <Filter>Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Datatypes</Filter>
+    <ClCompile Include="NAH_lib\Transform.cpp">
+      <Filter>NAH_lib</Filter>
     </ClCompile>
     <ClCompile Include="NAH_lib\RotationMath.cpp">
       <Filter>NAH_lib</Filter>
     </ClCompile>
-    <ClCompile Include="Rotation.cpp" />
+    <ClCompile Include="Rotation3D.cpp">
+      <Filter>Datatypes</Filter>
+    </ClCompile>
     <ClCompile Include="Vector3f.cpp">
       <Filter>Datatypes</Filter>
     </ClCompile>
@@ -67,7 +69,7 @@
     <ClInclude Include="3DClasses\Teapot3D.h">
       <Filter>Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="Rotation.h">
+    <ClInclude Include="Rotation3D.h">
       <Filter>Datatypes</Filter>
     </ClInclude>
     <ClInclude Include="Vector3f.h">
@@ -76,8 +78,8 @@
     <ClInclude Include="Color.h">
       <Filter>Datatypes</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Datatypes</Filter>
+    <ClInclude Include="NAH_lib\Transform.h">
+      <Filter>NAH_lib</Filter>
     </ClInclude>
     <ClInclude Include="NAH_lib\RotationMath.h">
       <Filter>NAH_lib</Filter>

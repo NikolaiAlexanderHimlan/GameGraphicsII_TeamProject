@@ -7,8 +7,8 @@ Assignment: Shader Materials
 Certification of Authenticity:
 I certify that this assignment is entirely my own work.
 */
-#include "Vector3f.h"
-#include "Rotation.h"
+#include "../Vector3f.h"
+#include "../Rotation3D.h"
 
 struct D3DXMATRIX;
 class Transform

@@ -16,7 +16,7 @@
 #include "../d3dUtil.h"
 
 #include "../BaseMaterial.h"
-#include "../Transform.h"
+#include "../NAH_lib/Transform.h"
 //=============================================================================
 struct IDirect3DVertexBuffer9;
 struct IDirect3DIndexBuffer9;

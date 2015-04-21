@@ -9,21 +9,33 @@ I certify that this assignment is entirely my own work.
 
 #include ".\NAH_lib\RotationMath.h"
 
-const Rotation Rotation::asRadians() const
+float Rotation3D::getPitchDeg() const	{ return isRadians ? nah::RadiansToDegrees(x) : x;	}
+float Rotation3D::getYawDeg() const		{ return isRadians ? nah::RadiansToDegrees(y) : y;	}
+float Rotation3D::getRollDeg() const	{ return isRadians ? nah::RadiansToDegrees(z) : z;	}
+float Rotation3D::getPitchRad() const	{ return !isRadians ? nah::DegreesToRadians(x) : x;	}
+float Rotation3D::getYawRad() const		{ return !isRadians ? nah::DegreesToRadians(y) : y;	}
+float Rotation3D::getRollRad() const	{ return !isRadians ? nah::DegreesToRadians(z) : z;	}
+
+bool Rotation3D::SwitchToDegrees(void)
 {
-	return isRadians ? *this : 
-		Rotation(
-			nah::DegToRad(getPitch()),
-			nah::DegToRad(getYaw()),
-			nah::DegToRad(getRoll())
-		);
+	if (isRadians)
+	{
+		setPitch(getPitchDeg());
+		setYaw(getYawDeg());
+		setRoll(getRollDeg());
+		isRadians = false;
+	}
+	return isRadians;
 }
-const Rotation Rotation::asDegrees() const
+bool Rotation3D::SwitchToRadians(void)
 {
-	return !isRadians ? *this :
-		Rotation(
-			nah::RadToDeg(getPitch()),
-			nah::RadToDeg(getYaw()),
-			nah::RadToDeg(getRoll())
-		);
+	if (!isRadians)
+	{
+		setPitch(getPitchRad());
+		setYaw(getYawRad());
+		setRoll(getRollRad());
+		isRadians = true;
+	}
+	return isRadians;
 }
+

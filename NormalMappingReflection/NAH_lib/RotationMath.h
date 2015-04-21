@@ -1,3 +1,6 @@
+#ifndef RotationMath_h__
+#define RotationMath_h__
+
 /*
 Author: Nikolai Alexander-Himlan
 Class: EPG-310 <Section 02>
@@ -5,11 +8,11 @@ Assignment: midterm
 Certification of Authenticity:
 I certify that this assignment is entirely my own work.
 */
-#pragma once
+
+#include "PrecisionMath.h"
 
 namespace nah
 {
-	//struct Rotation;
 	//namespace math {
 	//TODO: CONSIDER: should the Degrees/Radians be denoted at the beginning or end of the function?
 #pragma region Degrees Math
@@ -76,76 +79,37 @@ namespace nah
 #pragma region Conversion
 	//make these constants so the program doesn't keep having to do the same division
 	//TODO: make private/move from header to source file
-	extern const float TO_RADIAN;
-	extern const float TO_DEGREE;
+	extern const double TO_RADIAN;
+	extern const double TO_DEGREE;
 
+	//TODO: find alternative shortening which obeys scope.
 #define DegToRad DegreesToRadians
 	static inline float DegreesToRadians(float degrees)
 	{
 		//trace("radical",degrees * Math.PI / 180);
-		float radians = degrees * TO_RADIAN;
+		float radians = (float)(degrees * TO_RADIAN);
 		return (radians);
 	}
 #define RadToDeg RadiansToDegrees
 	static inline float RadiansToDegrees(float radians)
 	{
 		//trace("severity",radians * 180/Math.PI);
-		float degrees = radians * TO_DEGREE;
+		float degrees = (float)(radians * TO_DEGREE);
 		return (degrees);
 	}
 #pragma endregion
+
+#pragma region Precision adjusted trig
+	//TODO: change case to match sin, cos, tan function case
+	//CONSIDER: overloaded functions instead of type indication character suffix
+	static inline float SinF_Precise(const float& radians) { return LimitPrecision(sin(radians));	};
+	static inline float CosF_Precise(const float& radians) { return LimitPrecision(cos(radians));	};
+	static inline float TanF_Precise(const float& radians);
+
+	static inline double SinD_Precise(const double& radians);
+	static inline double CosD_Precise(const double& radians);
+	static inline double TanD_Precise(const double& radians);
+#pragma endregion
 	//}
-
-	/*Implementing as child of Vector3f first
-	//TODO: in progress
-	struct Rotation
-	{
-		Rotation(float newRotation, bool isRadians = true) : mRotationValue(newRotation), mIsRadians(isRadians) {};
-		Rotation(const Rotation& otherRotation) : mRotationValue(otherRotation), mIsRadians(otherRotation.isRad()) {};
-
-		//Getters
-		inline bool isRad() const { return mIsRadians;	};
-		inline bool isDeg() const { return !isRad();	};
-
-		inline float Rad() const { isRad() ? mRotationValue : DegreesToRadians(mRotationValue);	};
-		inline float Deg() const { isDeg() ? mRotationValue : RadiansToDegrees(mRotationValue);	};
-		
-		//Setters
-		inline void makeRad(bool nowRad) { if (nowRad == mIsRadians) return; /*do nothing* /	else SwpRot(nowRad);	};
-		inline void makeDeg(bool nowDeg) { makeRad(!nowDeg);	};
-
-		inline void setRad(float newRadians);
-		inline void setDeg(float newDegrees);
-
-		//Actions
-		inline void SwpRot() { SwpRot(!mIsRadians);	};
-		inline void SwpRot(bool nowRad);
-		
-		inline Rotation& operator +(float rhs) const;
-		inline Rotation& operator +(const Rotation& rhs) const;
-		inline Rotation& operator -(float rhs) const;
-		inline Rotation& operator -(const Rotation& rhs) const;
-		inline Rotation& operator *(float rhs) const;
-		inline Rotation& operator *(const Rotation& rhs) const;
-		inline Rotation& operator /(float rhs) const;
-		inline Rotation& operator /(const Rotation& rhs) const;
-
-		inline Rotation& operator =(float rhs);
-		inline Rotation& operator =(const Rotation& rhs);
-		inline Rotation& operator +=(float rhs);
-		inline Rotation& operator +=(const Rotation& rhs);
-		inline Rotation& operator -=(float rhs);
-		inline Rotation& operator -=(const Rotation& rhs);
-		inline Rotation& operator *=(float rhs);
-		inline Rotation& operator *=(const Rotation& rhs);
-		inline Rotation& operator /=(float rhs);
-		inline Rotation& operator /=(const Rotation& rhs);
-
-		inline operator float() const { return isRad() ? Rad() : Deg();	};
-	private:
-		//bool mIsDegrees = true;
-		bool mIsRadians = true;
-		float mRotationValue;
-	};
-	//*/
 }
+#endif // RotationMath_h__

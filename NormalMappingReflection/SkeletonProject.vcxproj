@@ -104,6 +104,7 @@
     <ClCompile Include="d3dApp.cpp" />
     <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="GfxStats.cpp" />
+    <ClCompile Include="NAH_lib\CameraView.cpp" />
     <ClCompile Include="NAH_lib\RotationMath.cpp" />
     <ClCompile Include="NAH_lib\Transform.cpp" />
     <ClCompile Include="NormalMaterial.cpp" />
@@ -130,8 +131,13 @@
     <ClInclude Include="DirectInput.h" />
     <ClInclude Include="GfxStats.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="NAH_lib\CameraView.h" />
+    <ClInclude Include="NAH_lib\GeneralMath.h" />
+    <ClInclude Include="NAH_lib\MathDefines.h" />
+    <ClInclude Include="NAH_lib\PrecisionMath.h" />
     <ClInclude Include="NAH_lib\RotationMath.h" />
     <ClInclude Include="NAH_lib\Transform.h" />
+    <ClInclude Include="NAH_lib\TransformObject.h" />
     <ClInclude Include="NormalMaterial.h" />
     <ClInclude Include="ReflectiveMaterial.h" />
     <ClInclude Include="Rotation3D.h" />

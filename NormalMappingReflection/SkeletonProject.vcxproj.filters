@@ -42,6 +42,9 @@
       <Filter>Materials</Filter>
     </ClCompile>
     <ClCompile Include="NormalMaterial.cpp" />
+    <ClCompile Include="NAH_lib\CameraView.cpp">
+      <Filter>NAH_lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h" />
@@ -99,6 +102,21 @@
     </ClInclude>
     <ClInclude Include="CodingDefines.h">
       <Filter>Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="NAH_lib\CameraView.h">
+      <Filter>NAH_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="NAH_lib\TransformObject.h">
+      <Filter>NAH_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="NAH_lib\PrecisionMath.h">
+      <Filter>NAH_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="NAH_lib\GeneralMath.h">
+      <Filter>NAH_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="NAH_lib\MathDefines.h">
+      <Filter>NAH_lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

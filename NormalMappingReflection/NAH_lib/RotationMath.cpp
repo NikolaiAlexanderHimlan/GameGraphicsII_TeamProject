@@ -10,5 +10,5 @@ I certify that this assignment is entirely my own work.
 #define _USE_MATH_DEFINES // for C++
 #include <math.h>
 
-const float nah::TO_RADIAN = (float)(M_PI / 180);
-const float nah::TO_DEGREE = (float)(180 / M_PI);
+const double nah::TO_RADIAN = (M_PI / 180);
+const double nah::TO_DEGREE = (180 / M_PI);

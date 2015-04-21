@@ -9,7 +9,7 @@ I certify that this assignment is entirely my own work.
 
 #include <string>
 
-const std::string toString(const Vector3f& vect)
+const std::string Vect3_toString(const Vector3f& vect)
 {
 	return 
 			"( x=" + std::to_string(vect.x) + 

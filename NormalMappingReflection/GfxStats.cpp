@@ -128,7 +128,7 @@ void GfxStats::display()
 		"\nControls: \n"
 		"Ambient %s (E - Toggle)\n"
 		"Diffuse %s (D - Toggle)\n"
-		"Specular %s (Q - Toggle) Specular Rendering\n"
+		"Specular %s (Q - Toggle)\n"
 		"Reflection %s (R - Toggle)\n"
 		"Textures %s (T - Toggle)\n"
 		"Normal Map %s (N - Toggle)\n"
@@ -140,7 +140,7 @@ void GfxStats::display()
 		"Current target object %i (O - Cycle between objects)\n"
 		
 		, mFPS, mMilliSecPerFrame
-		, toString(mCameraPos).c_str()
+		, Vect3_toString(mCameraPos).c_str()
 		, mNumTris, mNumVertices
 		, EnableToStr(mAbientEnable)
 		, EnableToStr(mDiffuseEnable)

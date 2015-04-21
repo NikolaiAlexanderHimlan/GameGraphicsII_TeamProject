@@ -125,13 +125,13 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	addObject = new Cone3D(2.0f, 1.0f, 8);
 	addObject->Create( gd3dDevice );
 	//addObject->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
-	addObject->setWorldRotationDegrees(Rotation(90.0f, 0.0f, 0.0f));
+	addObject->setWorldRotationDegrees(Rotation3D(90.0f, 0.0f, 0.0f));
 	m_Objects.push_back(addObject);
 
 	addObject = new Cylinder3D(2.0f, 1.0f, 8);
 	addObject->Create( gd3dDevice );
 	//addObject->setWorldPosition(Vector3f(0.0f, -5.0f, -5.0f));
-	addObject->setWorldRotationDegrees(Rotation(90.0f, 0.0f, 0.0f));
+	addObject->setWorldRotationDegrees(Rotation3D(90.0f, 0.0f, 0.0f));
 	m_Objects.push_back(addObject);
 
 	addObject = new Sphere3D(1.0f, 8);

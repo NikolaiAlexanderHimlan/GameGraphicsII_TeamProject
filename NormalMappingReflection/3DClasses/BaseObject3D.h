@@ -59,8 +59,8 @@ public:
 		setWorldScale(newTransform.scale);
 	}
 	void setWorldPosition(const Vector3f& newPosition);
-	void setWorldRotationDegrees(const Rotation& newDegrees);
-	void setWorldRotationRadians(const Rotation& newRadians);
+	void setWorldRotationDegrees(const Rotation3D& newDegrees);
+	void setWorldRotationRadians(const Rotation3D& newRadians);
 	void setWorldScale(const Vector3f& newScale);
 
 	//Actions

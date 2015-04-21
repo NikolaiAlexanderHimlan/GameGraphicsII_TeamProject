@@ -35,14 +35,14 @@ void BaseObject3D::setWorldPosition(const Vector3f& newPosition)
 }
 
 //-----------------------------------------------------------------------------
-void BaseObject3D::setWorldRotationDegrees(const Rotation& newDegrees)
+void BaseObject3D::setWorldRotationDegrees(const Rotation3D& newDegrees)
 {
 	//TODO: Handle relative world
 	mLocalTransform.rotation = newDegrees.asRadians();
 }
 
 //-----------------------------------------------------------------------------
-void BaseObject3D::setWorldRotationRadians(const Rotation& newRadians)
+void BaseObject3D::setWorldRotationRadians(const Rotation3D& newRadians)
 {
 	//TODO: Handle relative world
 	mLocalTransform.rotation = newRadians;

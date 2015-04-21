@@ -28,7 +28,7 @@ GfxStats::GfxStats()
     fontDesc.OutputPrecision = OUT_DEFAULT_PRECIS;
     fontDesc.Quality         = DEFAULT_QUALITY;
     fontDesc.PitchAndFamily  = DEFAULT_PITCH | FF_DONTCARE;
-    _tcscpy(fontDesc.FaceName, _T("Times New Roman"));
+    _tcscpy_s(fontDesc.FaceName, _T("Times New Roman"));
 
 	HR(D3DXCreateFontIndirect(gd3dDevice, &fontDesc, &mFont));
 }
@@ -118,7 +118,7 @@ void GfxStats::display()
 	static const int CHAR_PER_LINE = 64;
 	static char buffer[CHAR_PER_LINE * NUM_LINES];
 
-	sprintf(buffer, 
+	sprintf_s(buffer, 
 		"Frames Per Second = %.2f\n"
 		"Milliseconds Per Frame = %.4f\n"
 		"Camera Position = %s\n"

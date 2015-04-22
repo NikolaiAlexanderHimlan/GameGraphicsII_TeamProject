@@ -13,7 +13,7 @@ class ReflectiveMaterial :
 	bool		mEnvironmentInitialized = false;
 public:
 	bool		mRenderReflections = true;
-	float		mReflectionBlending;
+	float		mReflectionBlending = 0.5f;
 
 protected:
 	//---------- Shader Handles ----------

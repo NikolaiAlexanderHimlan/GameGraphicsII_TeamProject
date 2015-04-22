@@ -13,7 +13,7 @@ class NormalMaterial :
 public:
 	//-------- Material Parameters -------
 	bool		mRenderNormalMap = true;
-	float		mNormalMapStrength;
+	float		mNormalMapStrength = 1.0f;
 
 protected:
 	IDirect3DTexture9*	mNormalMapTexture = nullptr;

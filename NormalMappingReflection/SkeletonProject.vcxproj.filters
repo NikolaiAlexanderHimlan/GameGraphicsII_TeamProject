@@ -41,9 +41,11 @@
     <ClCompile Include="ReflectiveMaterial.cpp">
       <Filter>Materials</Filter>
     </ClCompile>
-    <ClCompile Include="NormalMaterial.cpp" />
     <ClCompile Include="NAH_lib\CameraView.cpp">
       <Filter>NAH_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalMaterial.cpp">
+      <Filter>Materials</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

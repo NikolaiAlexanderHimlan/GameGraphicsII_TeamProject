@@ -10,6 +10,8 @@
 #pragma once
 #include "d3dApp.h"
 //=============================================================================
+class CameraView;
+//=============================================================================
 class BaseMaterial
 {
 protected:
@@ -66,7 +68,7 @@ protected:
 	D3DXHANDLE			mRenderTextureHandle;
 	D3DXHANDLE			mTextureHandle;
 
-	virtual void RefreshEffectValues() const;
+	virtual void RefreshEffectValues(CameraView* viewCamera) const;
 
 public:
 	BaseMaterial(void);
@@ -101,7 +103,7 @@ public:
 
 	//Render
 	void Render( D3DXMATRIX& worldMat, D3DXMATRIX& viewProjMat ) const; 
-	void Render(const D3DXMATRIX& worldMat, const D3DXMATRIX& viewMat, const D3DXMATRIX& projMat, ID3DXMesh* objMesh) const;
+	void Render(const D3DXMATRIX& worldMat, CameraView* viewCamera, ID3DXMesh* objMesh) const;
 };
 //=============================================================================
 

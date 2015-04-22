@@ -134,7 +134,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	addObject->setWorldRotationDegrees(Rotation3D(90.0f, 0.0f, 0.0f));
 	m_Objects.push_back(addObject);
 
-	addObject = new Sphere3D(1.0f, 8);
+	addObject = new Sphere3D(1.0f, 16);
 	addObject->Create( gd3dDevice );
 	//addObject->setWorldPosition(Vector3f(5.0f, 5.0f, 5.0f));
 	m_Objects.push_back(addObject);

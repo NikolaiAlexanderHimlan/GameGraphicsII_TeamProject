@@ -43,9 +43,9 @@ void NormalMaterial::ToggleNormalMapRender()
 	}
 }
 
-void NormalMaterial::RefreshEffectValues() const
+void NormalMaterial::RefreshEffectValues(CameraView* viewCamera) const
 {
-	__super::RefreshEffectValues();
+	__super::RefreshEffectValues(viewCamera);
 
 	HR(m_Effect->SetBool(mhRenderNormalMapHandle, mRenderNormalMap));
 	if (mRenderNormalMap)

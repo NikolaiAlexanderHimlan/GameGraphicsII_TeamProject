@@ -28,9 +28,9 @@ void ReflectiveMaterial::EnableEnvironmentReflection(IDirect3DCubeTexture9* envi
 	mEnvironmentInitialized = true;
 }
 
-void ReflectiveMaterial::RefreshEffectValues() const
+void ReflectiveMaterial::RefreshEffectValues(CameraView* viewCamera) const
 {
-	__super::RefreshEffectValues();
+	__super::RefreshEffectValues(viewCamera);
 
 	HR(m_Effect->SetBool(mhRenderReflectionsHandle, mRenderReflections));
 	if(mRenderReflections)

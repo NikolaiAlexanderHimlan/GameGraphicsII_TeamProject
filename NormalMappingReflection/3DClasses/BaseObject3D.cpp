@@ -66,7 +66,6 @@ void BaseObject3D::BuildTexCoord()
 	ID3DXMesh* temp = 0;
 	HR(mObjectMesh->CloneMesh(D3DXMESH_SYSTEMMEM, elements, gd3dDevice, &temp));
 
-
 	//********************
 	//CODE IS IN PROGRESS OF BEING MADE TO WORK
 	ID3DXMesh* tempMesh = mObjectMesh;
@@ -79,10 +78,6 @@ void BaseObject3D::BuildTexCoord()
 	// Clone the mesh to the NMapVertex format.
 	ID3DXMesh* clonedTempMesh = 0;
 	HR(tempMesh->CloneMesh(D3DXMESH_MANAGED, elems, gd3dDevice, &clonedTempMesh));
-
-
-
-
 
 	// Now use D3DXComputeTangentFrameEx to build the TNB-basis for each vertex
 	// in the mesh.  
@@ -103,12 +98,9 @@ void BaseObject3D::BuildTexCoord()
 	ReleaseCOM(tempMesh);
 	ReleaseCOM(clonedTempMesh);
 
-
-
 	//********************
 
-
-
+	/*
 	ReleaseCOM(mObjectMesh);
 
 	// Now generate texture coordinates for each vertex.
@@ -139,17 +131,13 @@ void BaseObject3D::BuildTexCoord()
 	// Clone back to a hardware mesh.
 	HR(temp->CloneMesh(D3DXMESH_MANAGED | D3DXMESH_WRITEONLY,
 		elements, gd3dDevice, &mObjectMesh));
-
+	//*/
 	ReleaseCOM(temp);
 }
 
 //-----------------------------------------------------------------------------
 void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,  CameraView* viewCamera  ) const
 {
-	D3DXMATRIX view, projection;
-	viewCamera->calcViewMatrix(&view);
-	viewCamera->getViewProjection(&projection);
-
 	// Update the statistics singleton class
 	GfxStats::GetInstance()->addVertices(getVertexCount());
 	GfxStats::GetInstance()->addTriangles(getTriangleCount());
@@ -159,6 +147,11 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,  CameraView* viewCamera
 	mLocalTransform.calcRenderMatrix(&transformationMat);
 
 	/*Vertex + Index buffer Render
+	//Calculate the view and projection matrices
+	D3DXMATRIX view, projection;
+	viewCamera->calcViewMatrix(&view);
+	viewCamera->getViewProjection(&projection);
+
     // Set the buffers and format
     HR(gd3dDevice->SetStreamSource(0, m_VertexBuffer, 0, sizeof(VertexPos)));
 	HR(gd3dDevice->SetIndices(m_IndexBuffer));
@@ -178,6 +171,6 @@ void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,  CameraView* viewCamera
 	if (mObjectMaterial == nullptr)
 		mObjectMesh->DrawSubset(0);
 	else //Render Material
-		mObjectMaterial->Render(transformationMat, view, projection, mObjectMesh);
+		mObjectMaterial->Render(transformationMat, viewCamera, mObjectMesh);
 }
 //=============================================================================

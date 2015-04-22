@@ -23,7 +23,7 @@ protected:
 	D3DXHANDLE			mhNormalMapStrengthHandle;
 	D3DXHANDLE			mhNormalMapHandle;
 
-	virtual void RefreshEffectValues() const;
+	virtual void RefreshEffectValues(CameraView* viewCamera) const;
 
 public:
 	NormalMaterial()

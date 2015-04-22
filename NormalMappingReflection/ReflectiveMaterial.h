@@ -21,7 +21,7 @@ protected:
 	D3DXHANDLE	mhReflectionBlendingHandle;
 	D3DXHANDLE	mhEnvironmentMapHandle;
 
-	virtual void RefreshEffectValues() const;
+	virtual void RefreshEffectValues(CameraView* viewCamera) const;
 
 public:
 

@@ -53,18 +53,7 @@ public:
 	float addRollRad(float radians);
 
 	//Calculations
-	inline Rotation3D calcLookAtRotation(const Vector3f lookHere) const //calculates the necessary rotation in order to look at a given location from this location
-	{
-		Rotation3D lookRotation = Rotation3D(true);
-
-		Vector3f diff = lookHere - position;
-		float xzdistance = sqrt(diff.x * diff.x + diff.z * diff.z);
-		lookRotation.x = (-atan2(diff.y, xzdistance)); // rotation around x
-		lookRotation.y = (atan2(diff.x, diff.z)); // rotation around y
-		lookRotation.z = (0); // rotation around z
-
-		return lookRotation;
-	}; 
+	Rotation3D calcLookAtRotation(const Vector3f lookHere) const; //calculates the necessary rotation in order to look at a given location from this location
 	void calcRenderMatrix(D3DXMATRIX* outMatrix) const;
 
 	//Actions

@@ -50,5 +50,8 @@ public:
 	//Actions
 	bool SwitchToDegrees(void);
 	bool SwitchToRadians(void);
+	//@param zeroMin Is the minimum value 0 or the negative half rotation?
+	bool TruncateRotations(bool zeroMin = true);//limit rotations to the min and max
+	bool WrapRotations(bool zeroMin = true);//wrap rotation values around
 };
 #endif // Rotation_h__

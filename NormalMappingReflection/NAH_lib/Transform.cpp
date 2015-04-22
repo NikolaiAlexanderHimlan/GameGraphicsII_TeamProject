@@ -46,7 +46,7 @@ Vector3f Transform::getUpVector(char axis) const
 	//WARNING: WILL NOT WORK WITH ROLL!
 	Vector3f forVect = getForwardVector();
 	upX = 0.0f;//no x-axis without roll// forVect.x;
-	upY = -forVect.z;
+	upY = forVect.z;
 	upZ = forVect.y;
 
 	Vector3f emptyOut = Vect3_zero;//because nullptr broke it
@@ -66,6 +66,19 @@ Vector3f Transform::getRightVector(char axis) const
 	return *D3DXVec3Normalize(&emptyOut, &Vector3f(rightX, rightY, rightZ));
 }
 
+
+Rotation3D Transform::calcLookAtRotation(const Vector3f lookHere) const //calculates the necessary rotation in order to look at a given location from this location
+{
+	Rotation3D lookRotation = Rotation3D(true);
+
+	Vector3f diff = lookHere - position;
+	float xzdistance = sqrt(diff.x * diff.x + diff.z * diff.z);
+	lookRotation.x = (-atan2(diff.y, xzdistance)); // rotation around x
+	lookRotation.y = (atan2(diff.x, diff.z)); // rotation around y
+	lookRotation.z = (0); // rotation around z
+
+	return lookRotation;
+}
 void Transform::calcRenderMatrix(D3DXMATRIX* outMatrix) const
 {
 	D3DXMATRIX trans, rot, scl, tempMat;
@@ -74,21 +87,15 @@ void Transform::calcRenderMatrix(D3DXMATRIX* outMatrix) const
 	D3DXMatrixRotationYawPitchRoll(&rot, rotation.y, rotation.x, rotation.z);
 	D3DXMatrixScaling(&scl, scale.x, scale.y, scale.z);
 
+//*Original DX9 version
 	D3DXMatrixMultiply(&tempMat, &rot, &trans);
 	D3DXMatrixMultiply(outMatrix, &scl, &tempMat);
-}
-/*Test Fix
-{
-	D3DXMATRIX trans, rot, scl, tempMat;
-
-	D3DXMatrixTranslation(&trans, position.x, position.y, -position.z);
-	D3DXMatrixRotationYawPitchRoll(&rot, rotation.y, rotation.x, rotation.z);
-	D3DXMatrixScaling(&scl, scale.x, scale.y, scale.z);
-
+//*/
+/*NAH_lib version
 	D3DXMatrixMultiply(&tempMat, &rot, &scl);
 	D3DXMatrixMultiply(outMatrix, &trans, &tempMat);
-}
 //*/
+}
 
 void Transform::setScale(float newScale)
 {

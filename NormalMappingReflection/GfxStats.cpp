@@ -114,36 +114,42 @@ void GfxStats::update(float dt)
 void GfxStats::display()
 {
 	// Make static so memory is not allocated every frame.
-	static const int NUM_LINES = 18;
+	static const int NUM_LINES = 21;
 	static const int CHAR_PER_LINE = 64;
 	static char buffer[CHAR_PER_LINE * NUM_LINES];
 
 	sprintf_s(buffer, 
 		"Frames Per Second = %.2f\n"
 		"Milliseconds Per Frame = %.4f\n"
-		"Camera Position = %s\n"
-		"Camera Rotation = %s\n"
 		"Triangle Count = %d\n"
-		"Vertex Count = %d\n"
+		"Vertex Count   = %d\n"
+		"Camera Position   = %s\n"
+		"Camera Rotation  = %s\n"
+		"Camera Forward  = %s\n"
+		"Camera Right       = %s\n"
+		"Camera Up          = %s\n"
 
 		"\nControls: \n"
-		"Ambient %s (E - Toggle)\n"
-		"Diffuse %s (D - Toggle)\n"
-		"Specular %s (Q - Toggle)\n"
-		"Reflection %s (R - Toggle)\n"
-		"Textures %s (T - Toggle)\n"
-		"Normal Map %s (N - Toggle)\n"
+		"Ambient                   %s (E - Toggle)\n"
+		"Diffuse                     %s (D - Toggle)\n"
+		"Specular                   %s (Q - Toggle)\n"
+		"Reflection                 %s (R - Toggle)\n"
+		"Textures                   %s (T - Toggle)\n"
+		"Normal Map             %s (N - Toggle)\n"
 
-		"Reflection Blending %.1f (-/= - Adjust by 0.1)\n"
+		"Reflection Blending    %.1f (-/= - Adjust by 0.1)\n"
 		"Normal Map Strength %.1f (A/S - Adjust by 0.1)\n"
-		"Specular Coefficient %.1f (1-7 - Select preset)\n"
+		"Specular Coefficient   %.1f (1-7 - Select preset)\n"
 
-		"Current target object %i (O - Cycle between objects)\n"
+		"Current target object    %i   (O - Cycle between objects)\n"
 		
 		, mFPS, mMilliSecPerFrame
+		, mNumTris, mNumVertices
 		, Vect3_toString(mCameraPos).c_str()
 		, Vect3_toString(mCameraRot).c_str()
-		, mNumTris, mNumVertices
+		, Vect3_toString(mCameraVects[0]).c_str()
+		, Vect3_toString(mCameraVects[1]).c_str()
+		, Vect3_toString(mCameraVects[2]).c_str()
 		, EnableToStr(mAbientEnable)
 		, EnableToStr(mDiffuseEnable)
 		, EnableToStr(mSpecularEnable)

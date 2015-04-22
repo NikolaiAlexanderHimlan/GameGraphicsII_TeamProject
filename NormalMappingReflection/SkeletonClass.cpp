@@ -60,7 +60,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	InitAllVertexDeclarations();
 
-	mViewCamera = new CameraView(Vector3f(0.0f, 5.0f, -10.0f));
+	mViewCamera = new CameraView(mCamStartPos);
 	mViewCamera->refLocalTransform().rotation.SwitchToRadians();//switch while rotation is 0
 
 	//Create skybox
@@ -313,9 +313,12 @@ void SkeletonClass::UpdateCamera(float dt)
 	movUpAmnt += gDInput->mouseDY() / 25.0f * ((mCameraInvertY) ? 1.0f : -1.0f);
 	movRghtAmnt += gDInput->mouseDX() / 25.0f * ((mCameraInvertX) ? -1.0f : 1.0f);
 
-	mViewCamera->refLocalTransform().position.y += movUpAmnt;
+	if(movUpAmnt != 0.0f)
+		mViewCamera->refLocalTransform().moveUp(movUpAmnt);
 	Vector3f prevPos = mViewCamera->getLocalTransform().position;//save position
+	if (movForAmnt != 0.0f)
 	mViewCamera->refLocalTransform().moveForward(movForAmnt);
+	if (movRghtAmnt != 0.0f)
 	mViewCamera->refLocalTransform().moveRight(movRghtAmnt);
 
 
@@ -326,6 +329,10 @@ void SkeletonClass::UpdateCamera(float dt)
 		powf(mViewCamera->refLocalTransform().position.z, 2);
 	if (dist < (MIN_DIST*MIN_DIST))//reset position if too close
 		mViewCamera->refLocalTransform().position = prevPos;//TODO: move to the edge of the zoom limit
+
+	//Check camera reset
+	if (gDInput->keyPress(DIK_PERIOD))
+		mViewCamera->setWorldPosition(mCamStartPos);
 
 	// The camera position/orientation relative to world space can 
 	// change every frame based on input, so we need to rebuild the
@@ -347,6 +354,8 @@ void SkeletonClass::drawScene()
 		HR(gd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID));
 	}
 
+	//wrap rotation of the camera
+	//mViewCamera->refLocalTransform().rotation.WrapRotations();
 	mSkybox->position = mViewCamera->getLocalTransform().position;
 	mSkybox->Render(gd3dDevice, mViewCamera);
 
@@ -376,6 +385,9 @@ void SkeletonClass::buildViewMtx()
 
 	GfxStats::GetInstance()->setCameraPosition(mViewCamera->getWorldTransform().position);
 	GfxStats::GetInstance()->mCameraRot = (mViewCamera->getWorldTransform().rotation);
+	GfxStats::GetInstance()->mCameraVects[0] = mViewCamera->getWorldTransform().getForwardVector();
+	GfxStats::GetInstance()->mCameraVects[1] = mViewCamera->getWorldTransform().getRightVector();
+	GfxStats::GetInstance()->mCameraVects[2] = mViewCamera->getWorldTransform().getUpVector();
 }
 
 void SkeletonClass::buildProjMtx()

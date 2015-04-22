@@ -43,7 +43,7 @@ void NormalMaterial::ToggleNormalMapRender()
 	}
 }
 
-void NormalMaterial::RefreshEffectValues(CameraView* viewCamera) const
+void NormalMaterial::RefreshEffectValues(const CameraView* viewCamera) const
 {
 	__super::RefreshEffectValues(viewCamera);
 

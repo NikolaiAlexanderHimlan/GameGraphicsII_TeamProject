@@ -105,7 +105,7 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 }
 
 //-----------------------------------------------------------------------------
-void BaseMaterial::RefreshEffectValues(CameraView* viewCamera) const
+void BaseMaterial::RefreshEffectValues(const CameraView* viewCamera) const
 {
 	HR(m_Effect->SetValue(m_ViewerPosWHandle, &viewCamera->getWorldTransform(), sizeof(D3DXVECTOR3)));
 	HR(m_Effect->SetValue(m_LightPosWHandle, &mLightVecW, sizeof(D3DXVECTOR3)));
@@ -135,7 +135,7 @@ void BaseMaterial::RefreshEffectValues(CameraView* viewCamera) const
 	HR(m_Effect->SetBool(mRenderTextureHandle, ShouldRenderTexture()));
 }
 //-----------------------------------------------------------------------------
-void BaseMaterial::Render(const D3DXMATRIX& worldMat, CameraView* viewCamera, ID3DXMesh* objMesh) const
+void BaseMaterial::Render(const D3DXMATRIX& worldMat, const CameraView* viewCamera, ID3DXMesh* objMesh) const
 {
 	D3DXMATRIX viewMat, projMat;
 	viewCamera->calcViewMatrix(&viewMat);

@@ -81,7 +81,7 @@ public:
 			mObjectMaterial = nullptr;
 		}
 	};
-	virtual void Render( IDirect3DDevice9* gd3dDevice, CameraView* viewCamera ) const final;
+	virtual void Render(IDirect3DDevice9* gd3dDevice, const CameraView* viewCamera) const final;
 };
 //=============================================================================
 #endif // _BASE_OBJECT_3D_H

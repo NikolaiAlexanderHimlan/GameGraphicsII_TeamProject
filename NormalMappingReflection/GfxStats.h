@@ -23,6 +23,7 @@ class GfxStats
 public:
 	Vector3f mCameraPos;
 	Rotation3D mCameraRot;
+	Vector3f mCameraVects[3];
 	bool mAbientEnable;
 	bool mDiffuseEnable;
 	bool mSpecularEnable;

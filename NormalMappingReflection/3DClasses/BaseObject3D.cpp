@@ -66,7 +66,7 @@ void BaseObject3D::BuildTexCoord()
 	ID3DXMesh* temp = 0;
 	HR(mObjectMesh->CloneMesh(D3DXMESH_SYSTEMMEM, elements, gd3dDevice, &temp));
 
-	//********************
+	/********************
 	//CODE IS IN PROGRESS OF BEING MADE TO WORK
 	ID3DXMesh* tempMesh = mObjectMesh;
 
@@ -98,7 +98,7 @@ void BaseObject3D::BuildTexCoord()
 	ReleaseCOM(tempMesh);
 	ReleaseCOM(clonedTempMesh);
 
-	//********************
+	//********************/
 
 	/*
 	ReleaseCOM(mObjectMesh);
@@ -136,7 +136,7 @@ void BaseObject3D::BuildTexCoord()
 }
 
 //-----------------------------------------------------------------------------
-void BaseObject3D::Render( IDirect3DDevice9* gd3dDevice,  CameraView* viewCamera  ) const
+void BaseObject3D::Render(IDirect3DDevice9* gd3dDevice, const CameraView* viewCamera) const
 {
 	// Update the statistics singleton class
 	GfxStats::GetInstance()->addVertices(getVertexCount());

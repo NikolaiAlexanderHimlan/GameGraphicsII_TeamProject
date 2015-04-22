@@ -144,11 +144,13 @@ float4 PhongPS( float3 normalW	 : TEXCOORD0,
 	float3 normalT = tex2D(NormalSampler, tex0);
 
 	// Expand from [0, 1] compressed interval to true [-1, 1] interval.
-	normalT = 2.0f*normalT - 1.0f;
+	//normalT = 2.0f*normalT - 1.0f;
+	normalT = gNormalPower* 2.0f* normalT - 1.0f;
+	//normalT = gNormalPower* (2.0f* normalT - 1.0f);
 	normalT = normalize(normalT);//need unit vector for normal
 
 	float3 normalCalc;//normal value to use for calculations
-	float3 normTVal = normalT * gNormalPower;
+	float3 normTVal = normalT;// * gNormalPower;
 	float3 normWVal = normalW * (1.0-gNormalPower);
 	[flatten] if (gRenderNormalMap)
 	{

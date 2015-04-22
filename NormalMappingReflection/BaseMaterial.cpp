@@ -10,6 +10,7 @@
 #include <d3dx9.h>
 #include <D3dx9math.h>
 #include "3DClasses/BaseObject3D.h"
+#include "NAH_lib/CameraView.h"
 //=============================================================================
 BaseMaterial::BaseMaterial(void)
 {

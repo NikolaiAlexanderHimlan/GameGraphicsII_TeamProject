@@ -32,7 +32,7 @@ Vector3f Transform::getForwardVector(char axis) const
 
 	//* My sourced method
 	forwardX = nah::SinF_Precise(rotation.getYawRad());
-	forwardY = nah::SinF_Precise(rotation.getPitchRad());
+	forwardY = -nah::SinF_Precise(rotation.getPitchRad());
 	forwardZ = nah::CosF_Precise(rotation.getPitchRad()) * nah::CosF_Precise(rotation.getYawRad());
 	//*/
 
@@ -43,11 +43,11 @@ Vector3f Transform::getUpVector(char axis) const
 {
 	float upX = 0.0f, upY = 0.0f, upZ = 0.0f;
 
-	//WARNING: WILL NOT WORK WITH ROLL!
-	Vector3f forVect = getForwardVector();
-	upX = 0.0f;//no x-axis without roll// forVect.x;
-	upY = forVect.z;
-	upZ = forVect.y;
+	Vector3f forVect;
+	D3DXVec3Cross(&forVect, &getForwardVector(), &getRightVector());
+	upX = forVect.x;
+	upY = forVect.y;
+	upZ = forVect.z;
 
 	Vector3f emptyOut = Vect3_zero;//because nullptr broke it
 	return *D3DXVec3Normalize(&emptyOut, &Vector3f(upX, upY, upZ));
@@ -57,13 +57,14 @@ Vector3f Transform::getRightVector(char axis) const
 	float rightX=0.0f, rightY=0.0f, rightZ=0.0f;
 
 	//WARNING: WILL NOT WORK WITH ROLL!
-	Vector3f forVect = getForwardVector();
-	rightX = forVect.z;
-	rightY = 0.0f;//no y-axis without roll// forVect.y;
-	rightZ = -forVect.x;
+	Vector3f forVect;
+	D3DXVec3Cross(&forVect, &getForwardVector(), &Vector3f(0.0f, 1.0f, 0.0f));
+	rightX = forVect.x;
+	rightY = forVect.y;
+	rightZ = forVect.z;
 
 	Vector3f emptyOut = Vect3_zero;//because nullptr broke it
-	return *D3DXVec3Normalize(&emptyOut, &Vector3f(rightX, rightY, rightZ));
+	return -*D3DXVec3Normalize(&emptyOut, &Vector3f(rightX, rightY, rightZ));
 }
 
 

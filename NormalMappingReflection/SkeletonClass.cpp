@@ -62,6 +62,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 
 	mViewCamera = new CameraView(mCamStartPos);
 	mViewCamera->refLocalTransform().rotation.SwitchToRadians();//switch while rotation is 0
+	GfxStats::GetInstance()->mSkeletonCamera = mViewCamera;//save the camera to the GfxStats
 
 	//Create skybox
 	mSkybox = new Cubemap(10000.0f, SKYBOX_TEXTURE_FILENAME, CUBEMAP_FX_FILENAME);
@@ -122,13 +123,13 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	//addObject->setWorldPosition(Vector3f(0.0f, 0.0f, 0.0f));
 	m_Objects.push_back( addObject );
 
-	addObject = new Cone3D(2.0f, 1.0f, 8);
+	addObject = new Cone3D(2.0f, 1.0f, 16);
 	addObject->Create( gd3dDevice );
 	//addObject->setWorldPosition(Vector3f(-5.0f, -5.0f, 0.0f));
 	addObject->setWorldRotationDegrees(Rotation3D(90.0f, 0.0f, 0.0f));
 	m_Objects.push_back(addObject);
 
-	addObject = new Cylinder3D(2.0f, 1.0f, 8);
+	addObject = new Cylinder3D(2.0f, 1.0f, 16);
 	addObject->Create( gd3dDevice );
 	//addObject->setWorldPosition(Vector3f(0.0f, -5.0f, -5.0f));
 	addObject->setWorldRotationDegrees(Rotation3D(90.0f, 0.0f, 0.0f));
@@ -139,7 +140,7 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	//addObject->setWorldPosition(Vector3f(5.0f, 5.0f, 5.0f));
 	m_Objects.push_back(addObject);
 
-	addObject = new Torus3D(0.5f, 1.0f, 8, 8);
+	addObject = new Torus3D(0.5f, 1.0f, 16, 16);
 	addObject->Create(gd3dDevice);
 	//addObject->setWorldPosition(Vector3f(-5.0f, 5.0f, 5.0f));
 	m_Objects.push_back(addObject);
@@ -181,6 +182,9 @@ SkeletonClass::~SkeletonClass()
 
 	delete mSkybox;
 	mSkybox = nullptr;
+
+	delete mViewCamera;
+	mViewCamera = nullptr;
 
 	DestroyAllVertexDeclarations();
 }
@@ -268,7 +272,7 @@ void SkeletonClass::UpdateInputs(float dt)
 		setGouradMaterial();
 	if (gDInput->keyPress(DIK_P))
 		setPhongMaterial();
-	if (gDInput->keyPress(DIK_I))// I because it's next to P and I have no other ideas?
+	if (gDInput->keyPress(DIK_L))// I because it's near P and I have no other ideas?
 		setAdvancedMaterial();
 
 	//Set target
@@ -310,25 +314,27 @@ void SkeletonClass::UpdateCamera(float dt)
 	//Camera Mouse Controls
 	// Divide by 50 to make mouse less sensitive. 
 	movForAmnt += gDInput->mouseDZ() * ((mCameraInvertZ) ? -1.0f : 1.0f) / 25.0f;
-	movUpAmnt += gDInput->mouseDY() / 25.0f * ((mCameraInvertY) ? 1.0f : -1.0f);
-	movRghtAmnt += gDInput->mouseDX() / 25.0f * ((mCameraInvertX) ? -1.0f : 1.0f);
+	movUpAmnt += gDInput->mouseDY() / 20.0f * ((mCameraInvertY) ? 1.0f : -1.0f);
+	movRghtAmnt += gDInput->mouseDX() / 20.0f * ((mCameraInvertX) ? -1.0f : 1.0f);
 
 	if(movUpAmnt != 0.0f)
 		mViewCamera->refLocalTransform().moveUp(movUpAmnt);
+	if (movRghtAmnt != 0.0f)
+		mViewCamera->refLocalTransform().moveRight(movRghtAmnt);
 	Vector3f prevPos = mViewCamera->getLocalTransform().position;//save position
 	if (movForAmnt != 0.0f)
-	mViewCamera->refLocalTransform().moveForward(movForAmnt);
-	if (movRghtAmnt != 0.0f)
-	mViewCamera->refLocalTransform().moveRight(movRghtAmnt);
+		mViewCamera->refLocalTransform().moveForward(movForAmnt);
 
-
+	//*Zoom limit
 	// Don't let radius gets too small.
 	const float MIN_DIST = 5.0f;
 	float dist = //length squared of the x and z camera position
-		powf(mViewCamera->refLocalTransform().position.x, 2) + 
-		powf(mViewCamera->refLocalTransform().position.z, 2);
+		powf(mViewCamera->getLocalTransform().position.x, 2) + 
+		powf(mViewCamera->getLocalTransform().position.y, 2) + 
+		powf(mViewCamera->getLocalTransform().position.z, 2);
 	if (dist < (MIN_DIST*MIN_DIST))//reset position if too close
 		mViewCamera->refLocalTransform().position = prevPos;//TODO: move to the edge of the zoom limit
+	//*/
 
 	//Check camera reset
 	if (gDInput->keyPress(DIK_PERIOD))
@@ -356,6 +362,7 @@ void SkeletonClass::drawScene()
 
 	//wrap rotation of the camera
 	//mViewCamera->refLocalTransform().rotation.WrapRotations();
+
 	mSkybox->position = mViewCamera->getLocalTransform().position;
 	mSkybox->Render(gd3dDevice, mViewCamera);
 
@@ -382,12 +389,6 @@ void SkeletonClass::buildViewMtx()
 {
 	D3DXVECTOR3 target(m_Objects[mCurrentTarget]->getLocalTransform().position);
 	mViewCamera->lookAt(target);
-
-	GfxStats::GetInstance()->setCameraPosition(mViewCamera->getWorldTransform().position);
-	GfxStats::GetInstance()->mCameraRot = (mViewCamera->getWorldTransform().rotation);
-	GfxStats::GetInstance()->mCameraVects[0] = mViewCamera->getWorldTransform().getForwardVector();
-	GfxStats::GetInstance()->mCameraVects[1] = mViewCamera->getWorldTransform().getRightVector();
-	GfxStats::GetInstance()->mCameraVects[2] = mViewCamera->getWorldTransform().getUpVector();
 }
 
 void SkeletonClass::buildProjMtx()

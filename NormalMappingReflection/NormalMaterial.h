@@ -31,6 +31,7 @@ public:
 	};
 	virtual ~NormalMaterial()
 	{
+		clearNormalMap();
 	};
 
 	virtual void ConnectToEffect(ID3DXEffect* effect);

@@ -10,6 +10,7 @@
 
 #include "Vector3f.h"
 #include "CodingDefines.h"
+#include "NAH_lib\CameraView.h"
 
 //=============================================================================
 DEFINE_SINGLETON(GfxStats);
@@ -114,7 +115,7 @@ void GfxStats::update(float dt)
 void GfxStats::display()
 {
 	// Make static so memory is not allocated every frame.
-	static const int NUM_LINES = 21;
+	static const int NUM_LINES = 22;
 	static const int CHAR_PER_LINE = 64;
 	static char buffer[CHAR_PER_LINE * NUM_LINES];
 
@@ -123,6 +124,7 @@ void GfxStats::display()
 		"Milliseconds Per Frame = %.4f\n"
 		"Triangle Count = %d\n"
 		"Vertex Count   = %d\n"
+		"Camera Distance = %.2f\n"
 		"Camera Position   = %s\n"
 		"Camera Rotation  = %s\n"
 		"Camera Forward  = %s\n"
@@ -145,11 +147,12 @@ void GfxStats::display()
 		
 		, mFPS, mMilliSecPerFrame
 		, mNumTris, mNumVertices
-		, Vect3_toString(mCameraPos).c_str()
-		, Vect3_toString(mCameraRot).c_str()
-		, Vect3_toString(mCameraVects[0]).c_str()
-		, Vect3_toString(mCameraVects[1]).c_str()
-		, Vect3_toString(mCameraVects[2]).c_str()
+		, Vect3_Distance(Vect3_zero, mSkeletonCamera->getWorldTransform().position)
+		, Vect3_toString(mSkeletonCamera->getWorldTransform().position).c_str()
+		, Vect3_toString(mSkeletonCamera->getWorldTransform().rotation).c_str()
+		, Vect3_toString(mSkeletonCamera->getWorldTransform().getForwardVector()).c_str()
+		, Vect3_toString(mSkeletonCamera->getWorldTransform().getRightVector()).c_str()
+		, Vect3_toString(mSkeletonCamera->getWorldTransform().getUpVector()).c_str()
 		, EnableToStr(mAbientEnable)
 		, EnableToStr(mDiffuseEnable)
 		, EnableToStr(mSpecularEnable)

@@ -68,7 +68,10 @@ public:
 	inline void rotateTurnRight(float degrees) { return rotateYaw(degrees);	};
 	inline void rotateTurnUp(float degrees) { return rotatePitch(degrees);	};
 
-	inline void lookAt(const Transform& worldTransform) { rotation = calcLookAtRotation(worldTransform.position).asRadians();	};//look at the transform once
+	inline void lookAt(const Transform& worldTransform) { //look at the target transform once
+		rotation = calcLookAtRotation(worldTransform.position).asRadians();
+		rotation.WrapRotations();
+	};
 
 	//Type Conversions
 	std::string toString(bool pos = true, bool rot = true, bool scl = true) const;

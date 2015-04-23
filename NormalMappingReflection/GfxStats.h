@@ -13,17 +13,14 @@
 #include <d3dx9.h>
 #include "d3dUtil.h"
 
-#include "Vector3f.h"
-#include "Rotation3D.h"
+class CameraView;
 
 class GfxStats
 {
 	DECLARE_SINGLETON(GfxStats);
 
 public:
-	Vector3f mCameraPos;
-	Rotation3D mCameraRot;
-	Vector3f mCameraVects[3];
+	const CameraView* mSkeletonCamera;
 	bool mAbientEnable;
 	bool mDiffuseEnable;
 	bool mSpecularEnable;
@@ -47,8 +44,6 @@ public:
 
 	void setTriCount(DWORD n);
 	void setVertexCount(DWORD n);
-
-	void setCameraPosition(const Vector3f& pos) { mCameraPos = pos;	};
 
 	void update(float dt);
 	void display();

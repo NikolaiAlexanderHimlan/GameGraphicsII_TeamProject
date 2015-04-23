@@ -14,15 +14,16 @@
 //=============================================================================
 BaseMaterial::BaseMaterial(void)
 {
-    m_Effect = NULL;
+	m_Effect = nullptr;
 }
 
 //-----------------------------------------------------------------------------
 // Release shader, blah...
 BaseMaterial::~BaseMaterial(void)
 {
-	ReleaseCOM(m_Effect);
+	clearEffect();
 	clearTexture();
+	ReleaseCOM(mBlankTexture);
 }
 
 //-----------------------------------------------------------------------------

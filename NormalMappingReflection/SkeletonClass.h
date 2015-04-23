@@ -21,6 +21,8 @@
 #include "d3dApp.h"
 
 #include <vector>
+
+#include "Vector3f.h"
 //=============================================================================
 class BaseObject3D;
 class BaseMaterial;

@@ -26,7 +26,7 @@ protected:
 		//buildCubeVertexBuffer( gd3dDevice );
 		//buildCubeIndexBuffer( gd3dDevice );
 	};
-	void BuildTexCoord() { __super::BuildTexCoord(); }; //HACK: placeholder, implement TexCoord
+	void BuildTexCoord() { __super::BuildTexCoord();	}; //HACK: placeholder, implement TexCoord
 
 public:
 	Cube3D(float width, float height, float depth)

@@ -103,7 +103,6 @@ private:
 	//Objects
 	std::vector<BaseObject3D*> m_Objects;
 	unsigned int mCurrentTarget = 3;
-
 	inline void SetTarget(unsigned int targetNum)
 	{
 		if (targetNum < m_Objects.size())

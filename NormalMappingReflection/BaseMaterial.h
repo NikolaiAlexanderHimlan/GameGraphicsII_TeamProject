@@ -94,11 +94,11 @@ public:
 
 	//Render Toggles
 	inline void ToggleDiffuse() { ToggleDiffuse(!mRenderDiffuse);	};
-	inline void ToggleDiffuse(bool enabled) { mRenderDiffuse = enabled; };
+	inline void ToggleDiffuse(bool enabled) { mRenderDiffuse = enabled;	};
 	inline void ToggleSpecular() { ToggleSpecular(!mRenderSpecular);	};
-	inline void ToggleSpecular(bool enabled) { mRenderSpecular = enabled; };
+	inline void ToggleSpecular(bool enabled) { mRenderSpecular = enabled;	};
 	inline void ToggleAmbient() { ToggleAmbient(!mRenderAmbient);	};
-	inline void ToggleAmbient(bool enabled) { mRenderAmbient = enabled; };
+	inline void ToggleAmbient(bool enabled) { mRenderAmbient = enabled;	};
 	virtual void ToggleTextureRender();
 
 	//Render

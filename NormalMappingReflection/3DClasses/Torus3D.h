@@ -27,7 +27,7 @@ protected:
 		//buildTorusVertexBuffer( gd3dDevice );
 		//buildTorusIndexBuffer( gd3dDevice );
 	};
-	void BuildTexCoord() { __super::BuildTexCoord(); }; //HACK: placeholder, implement TexCoord
+	void BuildTexCoord() { __super::BuildTexCoord();	}; //HACK: placeholder, implement TexCoord
 
 public:
 	Torus3D(float innerRadius, float outerRadius, int numSections, int numRings)

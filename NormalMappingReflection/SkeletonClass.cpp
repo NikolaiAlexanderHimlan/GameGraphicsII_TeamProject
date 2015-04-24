@@ -306,24 +306,22 @@ void SkeletonClass::UpdateInputs(float dt)
 void SkeletonClass::UpdateCamera(float dt)
 {
 	// Check inverts
-	if (gDInput->keyPress(DIK_C))
+	if (gDInput->keyPress(DIK_RBRACKET))
 		mCameraInvertY = !mCameraInvertY;
-	if (gDInput->keyPress(DIK_X))
+	if (gDInput->keyPress(DIK_LBRACKET))
 		mCameraInvertX = !mCameraInvertX;
-	if (gDInput->keyPress(DIK_Z))
+	if (gDInput->keyPress(DIK_APOSTROPHE))
 		mCameraInvertZ = !mCameraInvertZ;
 
 	float movForAmnt = 0.0f, movUpAmnt = 0.0f, movRghtAmnt = 0.0f;
 
 	//Camera Key Controls
-	if (gDInput->keyDown(DIK_Y))
-		movForAmnt = 25.0f * dt * ((mCameraInvertZ) ? -1.0f : 1.0f);
-	if (gDInput->keyDown(DIK_H))
-		movForAmnt = -25.0f * dt * ((mCameraInvertZ) ? -1.0f : 1.0f);
-	if (gDInput->keyDown(DIK_I))	movUpAmnt = 25.0f * dt * ((mCameraInvertZ) ? -1.0f : 1.0f);
-	if (gDInput->keyDown(DIK_K))	movUpAmnt = -25.0f * dt * ((mCameraInvertZ) ? -1.0f : 1.0f);
-	if (gDInput->keyDown(DIK_J))	movRghtAmnt = 25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
-	if (gDInput->keyDown(DIK_L))	movRghtAmnt = -25.0f * dt * ((mCameraInvertZ) ? 1.0f : -1.0f);
+	if (gDInput->keyDown(DIK_Y))	movForAmnt = 25.0f * dt * ((mCameraInvertZ) ? -1.0f : 1.0f);
+	if (gDInput->keyDown(DIK_H))	movForAmnt = -25.0f * dt * ((mCameraInvertZ) ? -1.0f : 1.0f);
+	if (gDInput->keyDown(DIK_I))	movUpAmnt = 25.0f * dt * ((mCameraInvertY) ? -1.0f : 1.0f);
+	if (gDInput->keyDown(DIK_K))	movUpAmnt = -25.0f * dt * ((mCameraInvertY) ? -1.0f : 1.0f);
+	if (gDInput->keyDown(DIK_J))	movRghtAmnt = 25.0f * dt * ((mCameraInvertX) ? 1.0f : -1.0f);
+	if (gDInput->keyDown(DIK_L))	movRghtAmnt = -25.0f * dt * ((mCameraInvertX) ? 1.0f : -1.0f);
 
 	//Camera Mouse Controls
 	// Divide by 50 to make mouse less sensitive. 
@@ -331,22 +329,18 @@ void SkeletonClass::UpdateCamera(float dt)
 	movUpAmnt += gDInput->mouseDY() / 20.0f * ((mCameraInvertY) ? 1.0f : -1.0f);
 	movRghtAmnt += gDInput->mouseDX() / 20.0f * ((mCameraInvertX) ? -1.0f : 1.0f);
 
-	Vector3f prevPos = mViewCamera->getLocalTransform().position;//save position
 	if(movUpAmnt != 0.0f)
 		mViewCamera->refLocalTransform().moveUp(movUpAmnt);
 	if (movRghtAmnt != 0.0f)
 		mViewCamera->refLocalTransform().moveRight(movRghtAmnt);
+	Vector3f prevPos = mViewCamera->getLocalTransform().position;//save position, only forward should be able to move the camera closer
 	if (movForAmnt != 0.0f)
 		mViewCamera->refLocalTransform().moveForward(movForAmnt);
 
 	//*Zoom limit
 	// Don't let radius gets too small.
 	const float MIN_DIST = 5.0f;
-	float dist = //length squared of the x and z camera position
-		powf(mViewCamera->getLocalTransform().position.x, 2) + 
-		powf(mViewCamera->getLocalTransform().position.y, 2) + 
-		powf(mViewCamera->getLocalTransform().position.z, 2);
-	if (dist < (MIN_DIST*MIN_DIST))//reset position if too close
+	if (MIN_DIST > Vect3_Distance(Vect3_zero, mViewCamera->getWorldTransform().position))//reset position if too close
 		mViewCamera->refLocalTransform().position = prevPos;//TODO: move to the edge of the zoom limit
 	//*/
 

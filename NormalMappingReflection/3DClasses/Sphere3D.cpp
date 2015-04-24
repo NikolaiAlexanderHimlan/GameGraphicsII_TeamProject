@@ -21,8 +21,7 @@ void Sphere3D::BuildTexCoord()
 	VertexPNT::Decl->GetDeclaration(elements, &numElements);
 
 	ID3DXMesh* temp = 0;
-	HR(mObjectMesh->CloneMesh(D3DXMESH_SYSTEMMEM,
-		elements, gd3dDevice, &temp));
+	HR(mObjectMesh->CloneMesh(D3DXMESH_SYSTEMMEM, elements, gd3dDevice, &temp));
 
 	ReleaseCOM(mObjectMesh);
 
@@ -30,6 +29,8 @@ void Sphere3D::BuildTexCoord()
 	VertexPNT* vertices = 0;
 	HR(temp->LockVertexBuffer(0, (void**)&vertices));
 
+	int vertCount = temp->GetNumVertices();
+	bool suchens;
 	for (UINT i = 0; i < temp->GetNumVertices(); ++i)
 	{
 		// Convert to spherical coordinates.
@@ -44,6 +45,9 @@ void Sphere3D::BuildTexCoord()
 		float u = theta / (2.0f*D3DX_PI);
 		float v = phi / D3DX_PI;
 
+		if (u > 1.0f || v > 1.0f || u < 0.0f || v < 0.0f)
+			suchens = true;
+
 		// Save texture coordinates.
 
 		vertices[i].tex.x = u;
@@ -52,8 +56,7 @@ void Sphere3D::BuildTexCoord()
 	HR(temp->UnlockVertexBuffer());
 
 	// Clone back to a hardware mesh.
-	HR(temp->CloneMesh(D3DXMESH_MANAGED | D3DXMESH_WRITEONLY,
-		elements, gd3dDevice, &mObjectMesh));
+	HR(temp->CloneMesh(D3DXMESH_MANAGED | D3DXMESH_WRITEONLY, elements, gd3dDevice, &mObjectMesh));
 
 	ReleaseCOM(temp);
 }

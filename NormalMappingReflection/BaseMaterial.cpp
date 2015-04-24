@@ -85,6 +85,10 @@ void BaseMaterial::ConnectToEffect( ID3DXEffect* effect )
 	
 	m_ViewerPosWHandle = m_Effect->GetParameterByName(0, "gEyePosW");
 	m_LightPosWHandle = m_Effect->GetParameterByName(0, "gLightVecW");
+
+	//TODO: move to separate function, only pass when changed
+	//NOTE: do the above for ALL values
+	mDefaultColorHandle = m_Effect->GetParameterByName(0, "gDefaultColor");
 	
 	mRenderSpecularHandle = m_Effect->GetParameterByName(0, "gRenderSpecular");
 	m_ShininessHandle = m_Effect->GetParameterByName(0, "gSpecularPower");
@@ -111,6 +115,8 @@ void BaseMaterial::RefreshEffectValues(const CameraView* viewCamera) const
 {
 	HR(m_Effect->SetValue(m_ViewerPosWHandle, &viewCamera->getWorldTransform(), sizeof(D3DXVECTOR3)));
 	HR(m_Effect->SetValue(m_LightPosWHandle, &mLightVecW, sizeof(D3DXVECTOR3)));
+
+	HR(m_Effect->SetValue(mDefaultColorHandle, &mDefaultColor, sizeof(Color)));
 
 	HR(m_Effect->SetBool(mRenderDiffuseHandle, mRenderDiffuse));
 	if (mRenderDiffuse)//don't update values if not rendering

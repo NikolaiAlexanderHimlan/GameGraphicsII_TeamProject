@@ -14,6 +14,8 @@ uniform extern bool gRenderSpecular;
 uniform extern bool gRenderAmbient;
 uniform extern bool gRenderTexture;
 
+uniform extern float4 gDefaultColor;
+
 uniform extern texture gTexture;
 
 sampler EnvMapS = sampler_state

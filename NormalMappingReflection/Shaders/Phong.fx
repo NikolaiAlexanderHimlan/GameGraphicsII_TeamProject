@@ -13,6 +13,8 @@ uniform extern float4x4 gWVP;
 uniform extern float3 gEyePosW;
 uniform extern float3 gLightVecW;
 
+uniform extern float4 gDefaultColor;
+
 uniform extern bool gRenderDiffuse;
 uniform extern bool gRenderSpecular;
 uniform extern bool gRenderAmbient;
@@ -128,7 +130,7 @@ float4 PhongPS(float3 normalW : TEXCOORD0, float3 posW : TEXCOORD1, float2 tex0 
 	}
 	else
 	{
-		texColor = float3(1.0f,1.0f,1.0f); //1.0f will not affect the diffuse
+		texColor = gDefaultColor;
 	}
 	
 	float3 texVal;

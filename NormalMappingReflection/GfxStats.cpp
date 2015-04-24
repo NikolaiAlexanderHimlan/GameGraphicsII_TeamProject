@@ -115,7 +115,7 @@ void GfxStats::update(float dt)
 void GfxStats::display()
 {
 	// Make static so memory is not allocated every frame.
-	static const int NUM_LINES = 22;
+	static const int NUM_LINES = 23;
 	static const int CHAR_PER_LINE = 64;
 	static char buffer[CHAR_PER_LINE * NUM_LINES];
 
@@ -132,9 +132,10 @@ void GfxStats::display()
 		"Camera Up          = %s\n"
 
 		"\nControls: \n"
+		"All Lighting                           (X - Toggle)\n"
 		"Ambient                   %s (E - Toggle)\n"
 		"Diffuse                     %s (D - Toggle)\n"
-		"Specular                   %s (Q - Toggle)\n"
+		"Specular                   %s (C - Toggle)\n"
 		"Reflection                 %s (R - Toggle)\n"
 		"Textures                   %s (T - Toggle)\n"
 		"Normal Map             %s (N - Toggle)\n"

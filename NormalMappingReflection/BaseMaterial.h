@@ -9,6 +9,7 @@
 //=============================================================================
 #pragma once
 #include "d3dApp.h"
+#include "Color.h"
 //=============================================================================
 class CameraView;
 //=============================================================================
@@ -27,6 +28,9 @@ public:
     float				m_Shininess;            // specular power
 
 	D3DXVECTOR3 mLightVecW;
+
+	Color		mDefaultColor = Color(0.5f, 0.5f, 0.5f, 1.0f);//default color when no effects are active
+
 	bool		mRenderAmbient = true;
 	D3DXCOLOR	mAmbientMtrl;
 	D3DXCOLOR	mAmbientLight;

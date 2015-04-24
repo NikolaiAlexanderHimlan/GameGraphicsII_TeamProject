@@ -225,9 +225,11 @@ void SkeletonClass::UpdateInputs(float dt)
 	UpdateCamera(dt);
 
 	//Toggle render properties
+	if (gDInput->keyPress(DIK_X))
+		ToggleAllLighting();
 	if (gDInput->keyPress(DIK_D))
 		ToggleDiffuseRendering();
-	if (gDInput->keyPress(DIK_Q))//Q is close to A/S, which controls the Specular coefficient
+	if (gDInput->keyPress(DIK_C))//Q is close to A/S, which controls the Specular coefficient
 		ToggleSpecularRendering();
 	if (gDInput->keyPress(DIK_E))//E for Environment lighting, also grouped together with other toggle keys
 		ToggleAmbientRendering();
@@ -272,7 +274,7 @@ void SkeletonClass::UpdateInputs(float dt)
 		setGouradMaterial();
 	if (gDInput->keyPress(DIK_P))
 		setPhongMaterial();
-	if (gDInput->keyPress(DIK_L))// I because it's near P and I have no other ideas?
+	if (gDInput->keyPress(DIK_M))// Because it's near P and I have no other ideas?
 		setAdvancedMaterial();
 
 	//Set target
@@ -317,11 +319,11 @@ void SkeletonClass::UpdateCamera(float dt)
 	movUpAmnt += gDInput->mouseDY() / 20.0f * ((mCameraInvertY) ? 1.0f : -1.0f);
 	movRghtAmnt += gDInput->mouseDX() / 20.0f * ((mCameraInvertX) ? -1.0f : 1.0f);
 
+	Vector3f prevPos = mViewCamera->getLocalTransform().position;//save position
 	if(movUpAmnt != 0.0f)
 		mViewCamera->refLocalTransform().moveUp(movUpAmnt);
 	if (movRghtAmnt != 0.0f)
 		mViewCamera->refLocalTransform().moveRight(movRghtAmnt);
-	Vector3f prevPos = mViewCamera->getLocalTransform().position;//save position
 	if (movForAmnt != 0.0f)
 		mViewCamera->refLocalTransform().moveForward(movForAmnt);
 
@@ -361,7 +363,7 @@ void SkeletonClass::drawScene()
 	}
 
 	//wrap rotation of the camera
-	//mViewCamera->refLocalTransform().rotation.WrapRotations();
+	//mViewCamera->refLocalTransform().rotation.WrapRotations(false);
 
 	mSkybox->position = mViewCamera->getLocalTransform().position;
 	mSkybox->Render(gd3dDevice, mViewCamera);
@@ -436,6 +438,41 @@ void SkeletonClass::setAdvancedMaterial()
 }
 
 //Material Render properties
+void SkeletonClass::ToggleAllLighting()
+{
+	bool tAll = true;//toggle all, disabled if any are enabled
+
+	//check if lighting effect is enabled, disable if it is and set tAll to false
+	if (getCurrentMaterial()->mRenderAmbient)
+	{
+		ToggleAmbientRendering();
+		tAll = false;
+	}
+	if (getCurrentMaterial()->mRenderDiffuse)
+	{
+		ToggleDiffuseRendering();
+		tAll = false;
+	}
+	if (getCurrentMaterial()->mRenderSpecular)
+	{
+		ToggleSpecularRendering();
+		tAll = false;
+	}
+	if(mAdvancedMaterial->mRenderReflections)
+	{
+		ToggleReflectivity();
+		tAll = false;
+	}
+
+	//if all were disabled, toggle all so they are on
+	if(tAll)
+	{
+		ToggleAmbientRendering();
+		ToggleDiffuseRendering();
+		ToggleSpecularRendering();
+		ToggleReflectivity();
+	}
+}
 void SkeletonClass::ToggleDiffuseRendering()
 {
 	mPhongMaterial->ToggleDiffuse();

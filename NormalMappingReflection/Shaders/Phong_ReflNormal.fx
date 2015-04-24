@@ -20,6 +20,8 @@ uniform extern bool gRenderReflection;
 uniform extern bool gRenderTexture;
 uniform extern bool gRenderNormalMap;
 
+uniform extern float4 gDefaultColor;
+
 uniform extern float gSpecularPower;
 uniform extern float4 gSpecularMtrl;
 uniform extern float4 gSpecularLight;
@@ -167,7 +169,7 @@ float4 PhongPS( float3 normalW	 : TEXCOORD0,
 	float reflBlend = 1.0f - gReflectBlending;//amount to blend existing colors into the reflection
 
 	// Determine how much (if any) specular light makes it into the eye.
-	float t = pow(max(dot(r, toEyeW), 0.0f), gSpecularPower);
+	float t = pow(saturate(dot(r, toEyeW)), gSpecularPower);
 
 	// Determine the diffuse light intensity that strikes the vertex.
 	float s = max(dot(gLightVecW, normalCalc), 0.0f);
@@ -224,7 +226,7 @@ float4 PhongPS( float3 normalW	 : TEXCOORD0,
 		[flatten] if (gRenderTexture)
 			pixColor = texColor;
 		else
-			pixColor = float3(0.0f,0.0f,0.0f);//no more multiplication, remove value of empty texture
+			pixColor = gDefaultColor;//no more multiplication, remove value of empty texture
 	}
 
 	//if diffuse and ambient are both disabled,, reflections will need to be reapplied

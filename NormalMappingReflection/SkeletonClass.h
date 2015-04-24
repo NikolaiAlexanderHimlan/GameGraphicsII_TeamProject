@@ -38,8 +38,8 @@ private:
 	const std::string SHADER_DIR = ".\\Shaders\\";
 
 	//Textures
-	const std::string TEXTURE_FILENAME = ASSET_DIR + "Original_Utah_Teapot.bmp";
 	const std::string NORMALMAP_FILENAME = ASSET_DIR + "Original_Utah_Teapot_NRM.png";
+	const std::string TEXTURE_FILENAME = ASSET_DIR + "checker_test_texture.png";
 	const std::string SKYBOX_TEXTURE_FILENAME = ASSET_DIR + "cubeMap.dds";
 
 	//Shaders
@@ -71,6 +71,7 @@ public:
 	void setAdvancedMaterial();
 
 	//Rendering Toggle functions (to toggle rendering for all materials)
+	void ToggleAllLighting();//disables all lighting if any are enabled, enables all lighting if all are disabled.
 	void ToggleDiffuseRendering(); //Toggle Diffuse rendering
 	void ToggleSpecularRendering(); //Toggle Specular rendering
 	void ToggleAmbientRendering();

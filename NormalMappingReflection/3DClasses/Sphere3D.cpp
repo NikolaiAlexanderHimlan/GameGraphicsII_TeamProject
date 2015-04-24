@@ -12,10 +12,9 @@
 //=============================================================================
 void Sphere3D::BuildTexCoord()
 {
-	// D3DXCreate* functions generate vertices with position 
-	// and normal data.  But for texturing, we also need
-	// tex-coords.  So clone the mesh to change the vertex
-	// format to a format with tex-coords.
+	// D3DXCreate* functions generate vertices with position and normal data.
+	// But for texturing, we also need tex-coords.
+	// So clone the mesh to change the vertex format to a format with tex-coords.
 
 	D3DVERTEXELEMENT9 elements[64];
 	UINT numElements = 0;

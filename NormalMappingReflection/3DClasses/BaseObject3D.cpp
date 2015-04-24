@@ -100,7 +100,7 @@ void BaseObject3D::BuildTexCoord()
 
 	//********************/
 
-	/*
+	//*
 	ReleaseCOM(mObjectMesh);
 
 	// Now generate texture coordinates for each vertex.

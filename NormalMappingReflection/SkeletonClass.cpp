@@ -86,6 +86,11 @@ SkeletonClass::SkeletonClass(HINSTANCE hInstance, std::string winCaption, D3DDEV
 	HR(D3DXCreateCubeTextureFromFile(gd3dDevice, SKYBOX_TEXTURE_FILENAME.c_str(), &envTexture));
 	mAdvancedMaterial->EnableEnvironmentReflection(envTexture);
 
+	//load materials into device list
+	d3dDevice::s_d3dDeviceList.push_back(mPhongMaterial);
+	d3dDevice::s_d3dDeviceList.push_back(mGouradMaterial);
+	d3dDevice::s_d3dDeviceList.push_back(mAdvancedMaterial);
+
 	//set Phong lighting data
 	mPhongMaterial->mLightVecW = D3DXVECTOR3(0.0, 0.0f, -1.0f);
 	mPhongMaterial->mDiffuseMtrl = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
@@ -200,11 +205,15 @@ bool SkeletonClass::checkDeviceCaps()
 void SkeletonClass::onLostDevice()
 {
 	GfxStats::GetInstance()->onLostDevice();
+	
+	d3dDevice::allDeviceLost();
 }
 
 void SkeletonClass::onResetDevice()
 {
 	GfxStats::GetInstance()->onResetDevice();
+
+	d3dDevice::allDeviceReset();
 
 	// The aspect ratio depends on the backbuffer dimensions, which can 
 	// possibly change after a reset.  So rebuild the projection matrix.

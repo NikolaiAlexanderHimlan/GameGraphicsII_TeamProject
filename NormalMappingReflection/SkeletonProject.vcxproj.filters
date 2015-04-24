@@ -47,6 +47,9 @@
     <ClCompile Include="NormalMaterial.cpp">
       <Filter>Materials</Filter>
     </ClCompile>
+    <ClCompile Include="d3dDevice.cpp">
+      <Filter>BaseClasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DClasses\BaseObject3D.h" />
@@ -120,6 +123,9 @@
     <ClInclude Include="NAH_lib\MathDefines.h">
       <Filter>NAH_lib</Filter>
     </ClInclude>
+    <ClInclude Include="d3dDevice.h">
+      <Filter>BaseClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Primitives">
@@ -139,6 +145,9 @@
     </Filter>
     <Filter Include="Defines">
       <UniqueIdentifier>{9448d156-54b8-4876-9fb4-53bc2665fc82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BaseClasses">
+      <UniqueIdentifier>{d2c82a55-3b7f-49be-bea1-9e1b2a3ba6d0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

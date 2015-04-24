@@ -27,6 +27,16 @@ BaseMaterial::~BaseMaterial(void)
 }
 
 //-----------------------------------------------------------------------------
+void BaseMaterial::onLostDevice()
+{
+	HR(m_Effect->OnLostDevice());
+}
+void BaseMaterial::onResetDevice()
+{
+	HR(m_Effect->OnResetDevice());
+}
+
+//-----------------------------------------------------------------------------
 void BaseMaterial::LoadTexture(const std::string& filename)
 {
 	IDirect3DTexture9* texture;

@@ -8,12 +8,14 @@
 // lighting / shaders effects.
 //=============================================================================
 #pragma once
+#include "d3dDevice.h"
 #include "d3dApp.h"
 #include "Color.h"
 //=============================================================================
 class CameraView;
 //=============================================================================
 class BaseMaterial
+	: public d3dDevice
 {
 protected:
     ID3DXEffect*        m_Effect;               // the shader associate effect file
@@ -79,6 +81,10 @@ protected:
 public:
 	BaseMaterial(void);
 	virtual ~BaseMaterial(void);
+
+	//Device
+	virtual void onLostDevice();
+	virtual void onResetDevice();
 
 	//Effect
 	void LoadEffect(const std::string& filename);

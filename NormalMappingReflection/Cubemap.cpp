@@ -25,6 +25,9 @@ Cubemap::Cubemap(float cubeSize, const std::string& cubeTextureFilename, const s
 	
 	//assign cube material
 	setMaterial(cubeMaterial);
+
+	//load the cube material into the device list
+	d3dDevice::s_d3dDeviceList.push_back(cubeMaterial);
 }
 //*/
 

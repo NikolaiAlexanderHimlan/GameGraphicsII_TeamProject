@@ -57,6 +57,8 @@ protected:
     D3DXHANDLE          m_LightPosWHandle;       // Position (spot/point) / Direction (directional)
     D3DXHANDLE          m_ViewerPosWHandle;
 
+	D3DXHANDLE			mDefaultColorHandle;
+
     // Material specific shader handles
 	D3DXHANDLE			mRenderDiffuseHandle;
     D3DXHANDLE          m_DIffuseColHandle;    

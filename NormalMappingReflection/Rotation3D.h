@@ -9,7 +9,7 @@ I certify that this assignment is entirely my own work.
 */
 #include "Vector3f.h"
 
-class Rotation3D
+struct Rotation3D
 	: public Vector3f
 {
 	bool isRadians = false;

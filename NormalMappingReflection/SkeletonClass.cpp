@@ -180,6 +180,9 @@ SkeletonClass::~SkeletonClass()
 	delete mGouradMaterial;
 	mGouradMaterial = nullptr;
 
+	delete mAdvancedMaterial;
+	mAdvancedMaterial = nullptr;
+
 	delete mSkybox;
 	mSkybox = nullptr;
 

@@ -37,8 +37,8 @@ sampler TextureSampler = sampler_state
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;
 	MaxAnisotropy = 8;
-	AddressU  = WRAP;
-	AddressV  = WRAP;
+	AddressU  = CLAMP;
+	AddressV  = CLAMP;
 };
 
 struct InputVS {

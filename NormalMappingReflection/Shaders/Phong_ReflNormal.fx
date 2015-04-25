@@ -43,8 +43,8 @@ sampler TextureSampler = sampler_state
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;
 	MaxAnisotropy = 8;
-	AddressU  = WRAP;
-	AddressV  = WRAP;
+	AddressU  = CLAMP;
+	AddressV  = CLAMP;
 };
 sampler NormalSampler = sampler_state
 {
@@ -62,8 +62,8 @@ sampler EnvMapSampler = sampler_state
 	MinFilter = LINEAR;
 	MagFilter = LINEAR;
 	MipFilter = LINEAR;
-	AddressU  = WRAP;
-	AddressV  = WRAP;
+	AddressU  = CLAMP;
+	AddressV  = CLAMP;
 };
 
 struct InputVS {
@@ -147,8 +147,12 @@ float4 PhongPS( float3 normalW	 : TEXCOORD0,
 
 	// Expand from [0, 1] compressed interval to true [-1, 1] interval.
 	//normalT = 2.0f*normalT - 1.0f;
-	normalT = gNormalPower* 2.0f* normalT - 1.0f;
+	//normalT = gNormalPower* 2.0f* normalT - 1.0f;
 	//normalT = gNormalPower* (2.0f* normalT - 1.0f);
+	//normalT = gNormalPower * normalT - 1.0f;
+	//normalT = gNormalPower * (normalT - 1.0f);
+	normalT = gNormalPower * (normalT - 0.5f);
+	normalT += 0.5f;
 	normalT = normalize(normalT);//need unit vector for normal
 
 	float3 normalCalc;//normal value to use for calculations

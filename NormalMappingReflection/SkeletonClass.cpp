@@ -325,7 +325,7 @@ void SkeletonClass::UpdateCamera(float dt)
 
 	//Camera Mouse Controls
 	// Divide by 50 to make mouse less sensitive. 
-	movForAmnt += gDInput->mouseDZ() * ((mCameraInvertZ) ? -1.0f : 1.0f) / 25.0f;
+	movForAmnt += gDInput->mouseDZ() / 5.0f * ((mCameraInvertZ) ? -1.0f : 1.0f) / 25.0f;
 	movUpAmnt += gDInput->mouseDY() / 20.0f * ((mCameraInvertY) ? 1.0f : -1.0f);
 	movRghtAmnt += gDInput->mouseDX() / 20.0f * ((mCameraInvertX) ? -1.0f : 1.0f);
 

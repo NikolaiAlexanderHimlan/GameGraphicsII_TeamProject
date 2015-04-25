@@ -89,7 +89,7 @@ private:
 	bool mCameraInvertX = false;
 	bool mCameraInvertY = false;
 	bool mCameraInvertZ = false; //Zoom/Radius
-	Vector3f mCamStartPos = Vector3f(0.0f, 5.0f, -10.0f);
+	Vector3f mCamStartPos = Vector3f(0.0f, 0.0f, -10.0f);
 	CameraView* mViewCamera;
 
 	//World/Environment Data

@@ -9,8 +9,8 @@ I certify that this assignment is entirely my own work.
 #include "BaseMaterial.h"
 
 //BaseMaterial with a cube texture instead of a regular one.
-class CubeMaterial :
-	public BaseMaterial
+class CubeMaterial
+	: public BaseMaterial
 {
 protected:
 	IDirect3DCubeTexture9* mCubeTexture = nullptr;

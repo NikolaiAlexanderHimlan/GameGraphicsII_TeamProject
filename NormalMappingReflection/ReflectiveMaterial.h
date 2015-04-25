@@ -7,8 +7,8 @@ I certify that this assignment is entirely my own work.
 */
 #pragma once
 #include "NormalMaterial.h"
-class ReflectiveMaterial :
-	public NormalMaterial
+class ReflectiveMaterial
+	: public NormalMaterial
 {
 	bool		mEnvironmentInitialized = false;
 public:

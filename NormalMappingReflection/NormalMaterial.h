@@ -7,8 +7,8 @@ I certify that this assignment is entirely my own work.
 */
 #pragma once
 #include "BaseMaterial.h"
-class NormalMaterial :
-	public BaseMaterial
+class NormalMaterial
+	: public BaseMaterial
 {
 public:
 	//-------- Material Parameters -------

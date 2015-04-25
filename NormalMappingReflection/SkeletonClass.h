@@ -38,8 +38,8 @@ private:
 	const std::string SHADER_DIR = ".\\Shaders\\";
 
 	//Textures
-	const std::string NORMALMAP_FILENAME = ASSET_DIR + "Original_Utah_Teapot_NRM.png";
 	const std::string TEXTURE_FILENAME = ASSET_DIR + "checker_test_texture.png";
+	const std::string NORMALMAP_FILENAME = ASSET_DIR + "circle_grid_normal_map.png";
 	const std::string SKYBOX_TEXTURE_FILENAME = ASSET_DIR + "cubeMap.dds";
 
 	//Shaders

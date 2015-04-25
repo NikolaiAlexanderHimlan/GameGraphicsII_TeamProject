@@ -1,4 +1,3 @@
 *UV mapping is broken, fix compressed texture stripe
 *Manually create UV mapping for cube
 *if both specular and reflections are off, normal maps disapear
-*ambient only has an affect when diffuse is enabled

@@ -1,7 +1,8 @@
 E - Toggle Ambient Rendering
 D - Toggle Diffuse Rendering
-Q - Toggle Specular Rendering
+C - Toggle Specular Rendering
 R - Toggle Reflectivity
+X - Toggle All Lighting
 
 T - Toggle Texture Rendering
 N - Toggle Normal Map Rendering
@@ -13,8 +14,10 @@ A/S - Adjust the strength of the Normal Map
 
 G - Set the material of the objects to Gourad shading
 P - Set the material of the objects to Phong shading
-I - Set the material of the objects to Advanced Phong shading
+M - Set the material of the objects to Advanced Phong shading
 
 O - Iterate through each model
 F1-F10 - Switch between models
+
+shift+. - Reset the camera position
 

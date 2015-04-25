@@ -302,10 +302,7 @@ LRESULT D3DApp::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 		if( wParam == VK_ESCAPE )
 			enableFullScreenMode(false);
 		else if( wParam == 'F' )
-		{
-			//TODO: NOTE: fullscreen currently crashes the program, low priority to fix
-			//enableFullScreenMode(true);
-		}
+			enableFullScreenMode(true);
 		return 0;
 	}
 	return DefWindowProc(mhMainWnd, msg, wParam, lParam);

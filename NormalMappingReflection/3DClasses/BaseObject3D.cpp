@@ -122,6 +122,9 @@ void BaseObject3D::BuildTexCoord()
 		u += 0.5f;//shift u value over from negative
 		float v = phi / D3DX_PI;
 
+		if (u > 1.0f || v > 1.0f || u < 0.0f || v < 0.0f)
+			suchens = true;
+
 		// Save texture coordinates.
 		vertices[i].tex.x = u;
 		vertices[i].tex.y = v;

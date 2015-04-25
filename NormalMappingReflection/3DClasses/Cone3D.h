@@ -30,7 +30,7 @@ protected:
 		//buildConeVertexBuffer( gd3dDevice );
 		//buildConeIndexBuffer( gd3dDevice );
 	};
-	void BuildTexCoord();
+	void BuildTexCoord() { __super::BuildTexCoord(); }; //HACK: placeholder, implement TexCoord
 
 public:
 	/// <param name="numSplits"> Number of splits along the height of the cone. </param>

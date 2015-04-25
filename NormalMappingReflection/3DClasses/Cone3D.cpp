@@ -10,6 +10,7 @@
 #include <math.h>
 
 //=============================================================================
+/*Custom Cone TexCoords
 void Cone3D::BuildTexCoord()
 {
 	// D3DXCreate* functions generate vertices with position 
@@ -111,6 +112,7 @@ void Cone3D::BuildTexCoord()
 		// Save texture coordinates.
 
 		vertices[i].tex.x = u;
+		u += 0.5f;//shift u value over from negative
 		vertices[i].tex.y = v;
 	}
 
@@ -122,6 +124,7 @@ void Cone3D::BuildTexCoord()
 
 	ReleaseCOM(temp);
 }
+//*/
 
 //-----------------------------------------------------------------------------
 /*

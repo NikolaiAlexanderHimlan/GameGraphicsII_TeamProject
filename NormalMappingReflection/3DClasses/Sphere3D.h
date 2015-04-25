@@ -26,7 +26,7 @@ protected:
 		//buildSphereVertexBuffer( gd3dDevice );
 		//buildSphereIndexBuffer( gd3dDevice );
 	};
-	void BuildTexCoord();
+	void BuildTexCoord() { __super::BuildTexCoord();	}; //NOTE: default TexCoord is sphere coord.
 
 public:
 	Sphere3D(float radius, int numSegments)

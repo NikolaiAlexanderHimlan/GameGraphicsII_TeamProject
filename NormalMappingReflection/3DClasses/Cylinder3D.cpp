@@ -10,6 +10,7 @@
 #include <math.h>
 
 //=============================================================================
+/*Custom Cone TexCoords
 void Cylinder3D::BuildTexCoord()
 {
 	// D3DXCreate* functions generate vertices with position 
@@ -106,6 +107,7 @@ void Cylinder3D::BuildTexCoord()
 		// transform y2 from [-h, 0] to [0, 1].
 
 		float u = theta / (2.0f*D3DX_PI);
+		u += 0.5f;//shift u value over from negative
 		float v = y2 / -h;
 
 		// Save texture coordinates.
@@ -122,6 +124,7 @@ void Cylinder3D::BuildTexCoord()
 
 	ReleaseCOM(temp);
 }
+//*/
 
 //-----------------------------------------------------------------------------
 /*

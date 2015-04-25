@@ -18,16 +18,16 @@ class BaseMaterial
 	: public d3dDevice
 {
 protected:
-    ID3DXEffect*        m_Effect;               // the shader associate effect file
+	ID3DXEffect*	m_Effect;			   // the shader associate effect file
 
-    //-------- Material Parameters -------
-    D3DXMATRIX          m_WorldMat;
-    D3DXMATRIX          m_ViewProjectionMat;
+	//-------- Material Parameters -------
+	D3DXMATRIX	m_WorldMat;
+	D3DXMATRIX	m_ViewProjectionMat;
 
 public:
-    D3DXVECTOR3         m_DiffuseColor;
-    D3DXVECTOR3         m_SpecularColor;
-    float				m_Shininess;            // specular power
+	D3DXVECTOR3	m_DiffuseColor;
+	D3DXVECTOR3	m_SpecularColor;
+	float		m_Shininess; // specular power
 
 	D3DXVECTOR3 mLightVecW;
 
@@ -50,31 +50,31 @@ protected:
 	IDirect3DTexture9* mImageTexture = nullptr;
 	IDirect3DTexture9* mBlankTexture = nullptr;//blank texture used when texture is disabled
 
-    //---------- Shader Handles ----------
-    // Generic shader handles
-    D3DXHANDLE          m_WorldMatHandle;    
-	D3DXHANDLE			mWorldMatInvHandle;
-    D3DXHANDLE          m_ViewProjectionMatHandel;
+	//---------- Shader Handles ----------
+	// Generic shader handles
+	D3DXHANDLE		m_WorldMatHandle;
+	D3DXHANDLE		mWorldMatInvHandle;
+	D3DXHANDLE		m_ViewProjectionMatHandel;
 
-    D3DXHANDLE          m_LightPosWHandle;       // Position (spot/point) / Direction (directional)
-    D3DXHANDLE          m_ViewerPosWHandle;
+	D3DXHANDLE		m_LightPosWHandle; // Position (spot/point) / Direction (directional)
+	D3DXHANDLE		m_ViewerPosWHandle;
 
-	D3DXHANDLE			mDefaultColorHandle;
+	D3DXHANDLE		mDefaultColorHandle;
 
-    // Material specific shader handles
-	D3DXHANDLE			mRenderDiffuseHandle;
-    D3DXHANDLE          m_DIffuseColHandle;    
-	D3DXHANDLE			mDiffuseLightHandle;
-	D3DXHANDLE			mRenderSpecularHandle;
-    D3DXHANDLE          m_SpecularColHandle;
-	D3DXHANDLE			mSpecularLightHandle;
-    D3DXHANDLE          m_ShininessHandle;   
-	D3DXHANDLE			mRenderAmbientHandle;
-	D3DXHANDLE			mAmbientColorHandle;
-	D3DXHANDLE			mAmbientLightHandle;
+	// Material specific shader handles
+	D3DXHANDLE		mRenderDiffuseHandle;
+	D3DXHANDLE		m_DIffuseColHandle;	
+	D3DXHANDLE		mDiffuseLightHandle;
+	D3DXHANDLE		mRenderSpecularHandle;
+	D3DXHANDLE		m_SpecularColHandle;
+	D3DXHANDLE		mSpecularLightHandle;
+	D3DXHANDLE		m_ShininessHandle;   
+	D3DXHANDLE		mRenderAmbientHandle;
+	D3DXHANDLE		mAmbientColorHandle;
+	D3DXHANDLE		mAmbientLightHandle;
 
-	D3DXHANDLE			mRenderTextureHandle;
-	D3DXHANDLE			mTextureHandle;
+	D3DXHANDLE		mRenderTextureHandle;
+	D3DXHANDLE		mTextureHandle;
 
 	virtual void RefreshEffectValues(const CameraView* viewCamera) const;
 
